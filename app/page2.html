@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{background-color: #f2f3f8;}
+        /* 手风琴--start*/
+        .accordion .weui_cells{margin-top: 0;padding-top:10px;padding-bottom:10px;font-size: 15px;color: #4a527b;}
+        .accordion .weui_cell{padding: 5px 15px;}
+        .accordion .weui_cell.border-bottom{    padding-bottom: 15px;  margin-bottom: 10px;}
+        .weui_cells:before,.weui_cell:before{display: none;}
+        .accordion .weui_cell_hd{width: 90px;padding-right:10px;text-align: right;}
+        /* 手风琴--end */
+
+        /* checkbox */
+        .weui_cells_checkbox.weui_cells:after{display: none;}
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- 手风琴 -->
+    <ul id="accordion" class="accordion">
+        <li class="open">
+            <div class="link">投保信息<i class="iconfont icon-fangxiangshang"></i></div>
+            <div class="weui_cells submenu" >
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">保险起期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">2016-09-01</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">保险止期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">2017-09-01</div>
+                </div>
+                <div class="weui_cell border-bottom ">
+                    <div class="weui_cell_hd">保险时限:</div>
+                    <div class="weui_cell_bd weui_cell_primary">一年</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">被保人姓名:</div>
+                    <div class="weui_cell_bd weui_cell_primary">肖肖</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">性别:</div>
+                    <div class="weui_cell_bd weui_cell_primary">女</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">班级:</div>
+                    <div class="weui_cell_bd weui_cell_primary">三(1)班</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">身份证号:</div>
+                    <div class="weui_cell_bd weui_cell_primary">422422198812345432</div>
+                </div>
+                <div class="weui_cell border-bottom ">
+                    <div class="weui_cell_hd">出身日期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">2012-09-19</div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">投保人姓名:</div>
+                    <div class="weui_cell_bd weui_cell_primary">陈旭</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">手机:</div>
+                    <div class="weui_cell_bd weui_cell_primary">13414312345</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">身份证号:</div>
+                    <div class="weui_cell_bd weui_cell_primary">38571857561378651637</div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="link">保障内容<i class="iconfont icon-fangxiangshang"></i></div>
+
+            <ul class="submenu" style="display: none;">
+                保险条款...此处省略1000字
+            </ul>
+        </li>
+    </ul>
+
+    <!-- checkbox -->
+    <div class="weui_cells weui_cells_checkbox" style="margin-top:0;background-color: transparent; ">
+        <label class="weui_cell weui_check_label" for="s11">
+            <div class="weui_cell_hd" >
+                <input type="checkbox" class="weui_check" name="checkbox1" id="s11" checked="checked">
+                <i class="weui_icon_checked_primary"></i>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p style="font-size: 15px;color: #333;">我已阅读并同意<a href="#" style="color: #007de2;text-decoration: underline;">投保申明</a></p>
+            </div>
+        </label>
+    </div>
+
+    <div style="font-size: 16px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥69</span></div>
+    <a href="page3.html" class="weui_btn" style="margin: 20px 10px;">提交订单</a>
+
+    <div class="btn_kefu"></div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {}
+        },
+        methods: {},
+        created: function () {
+
+        }
+    })
+</script>
+
+</body>
+</html>
