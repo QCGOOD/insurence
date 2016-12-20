@@ -1,0 +1,27 @@
+[
+  {
+    "product":{
+      "title":"一年期综合意外险",
+      "price":88,
+      "maxAmount":"10万",
+      "num":223456,
+      "id":"xx12345678910xx",
+      "createdTime":"2016-09-23",
+      "startTime":"2016-09-19",
+      "endTime":"2017-09-18",
+      "limitTime":"一年"
+    },
+    "protectedPerson":{
+      "name":"林笑笑",
+      "sex":"女",
+      "identifyId":"421023198811035032",
+      "className":"三年级 2班",
+      "birthday":"2001-01-01"
+    },
+    "payProtectedPerson":{
+      "name":"时光",
+      "tel":"18812341234",
+      "identifyId":"420134********"
+    }
+  }
+]

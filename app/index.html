@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/project.css">
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/city-picker.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/project.js"></script>
     <style>
@@ -23,11 +24,16 @@
         .g-card-link-group{font-size:0;padding:8px 0;color: #007de2;border-top: dashed 1px #cfcfcf;text-align: center;width: 100%;}
         .g-card-link-group>a{width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
         .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
+
+        /* 选择城市与学校 */
+        .weui_dialog_bd .weui_input{color: #333;}
+
     </style>
 </head>
 <body>
 <div id="app">
-    <main>
+    <!-- 致家长的信 -->
+    <main @click="">
         <img width="100%" height="17" src="images/title.png">
         <h1 class="letter_title">致家长的一封信</h1>
         <article class="letter">
@@ -42,33 +48,145 @@
 
         <!-- 保险 -->
         <div class="u-card g-card">
-            <div class="g-card-title">一年期综合意外险（保费10万）</div>
-            <div class="g-card-price">￥69</div>
-            <div class="g-card-num">已售:25896</div>
+            <div class="g-card-title">{{product.title}}（保费{{product.maxAmount}}）</div>
+            <div class="g-card-price">￥{{product.price}}</div>
+            <div class="g-card-num">已售:{{product.num}}</div>
             <div class="g-card-link-group">
                 <a class="border-right">投保须知</a>
                 <a class="border-right">保险内容解读</a>
                 <a>理赔流程</a>
             </div>
         </div>
-
     </main>
 
-    <a href="page1.html" class="weui_btn fullSize fixed_bottom">立即投保</a>
+    <a href="page1-FillInformation.html" class="weui_btn_fixedBottom">立即投保</a>
 
     <div class="btn_kefu"></div>
+
+    <!-- 选择城市 -->
+    <div v-show="showDialog">
+        <div class="weui_mask weui_mask_visible"></div>
+        <div class="weui_dialog weui_dialog_visible " style="top:21%;">
+            <div class="weui_dialog_hd" style="border-bottom: 0;">
+                <div class="weui_dialog_title">选择城市与学校</div>
+            </div>
+            <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;">
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input " placeholder="请选择您所在城市" type="text" id='city-picker'>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input " placeholder="请选择您所在学校" type="text" id='school-picker'>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input " placeholder="请选择班级" type="text" id='class-picker'>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </div>
+
+            </div>
+            <div class="weui_dialog_ft">
+                <a onclick="submitAddress()" class="weui_btn_dialog primary">确定</a>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+
 <script>
     var vm = new Vue({
         el: '#app',
         data: function () {
-            return {}
+            return {
+                showDialog: true,           // 是否显示对话框
+                product:{
+                    title:"",
+                    price:0,
+                    maxAmount:"",
+                    num:0,
+                    id:''
+                },
+                address:'',
+                schoolName:'',
+                className:''
+            }
         },
-        methods: {},
-        created: function () {
+        methods: {
 
+        },
+        /* 初始化数据 */
+        created: function () {
+            /* 获取保险产品信息 */
+            $.get('./data/product.json', function (data) {
+                vm.product = data.product;
+            });
+
+            setTimeout(function () {
+                /* 初始化城市选择器 */
+                $("#city-picker").cityPicker({
+                    showDistrict: false,
+                    onChange: function (e) {
+                        vm.address = e.displayValue.join(" ");
+                    }
+                });
+
+                /* 初始化学校选择器 */
+                $("#school-picker").picker({
+                    title: "请选择您的学校",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['华师附中', '华师附小'],
+                            displayValues:['华师附中', '华师附小']
+                        }
+                    ],
+                    onChange: function (e) {
+                        vm.schoolName = e.value.join(" ");
+                    }
+                });
+
+                /* 初始化班级选择期 */
+                $("#class-picker").picker({
+                    title: "请选择班级",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
+                            displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
+                        },
+                        {
+                            textAlign: 'center',
+                            values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                            displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                        }
+                    ],
+                    onChange: function (e) {
+                        vm.className = e.value.join(" ");
+                    }
+                });
+
+            },1000);
         }
-    })
+    });
+
+    /* 点击确定时 */
+    function submitAddress() {
+        if(!vm.address || !vm.schoolName || !vm.className){
+            $.toast("信息不完整", "text");
+            return false
+        }
+        vm.showDialog = false;
+        console.log(vm.address, vm.schoolName, vm.className);
+    }
 </script>
 
 </body>

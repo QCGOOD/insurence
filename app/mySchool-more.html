@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{background-color: #f2f3f8;padding-top: 44px;}
+
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div class="header_title">我的学校</div>
+    </header>
+
+    <div class="weui_cells weui_cells_access">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">学校二维码</div>
+            <div class="weui_cell_ft"></div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+//              /* 具体班级购买情况 */
+                data: {
+                    time:'2016年春季',
+                    className: '一(1)班',
+                    totalNum:4,
+                    students: [
+                        {
+                            name: '周伦',
+                            title:'一年期综合意外险',
+                            deadline:'2017-09-08'
+                        },
+                        {
+                            name: '周伦1',
+                            title:'一年期综合意外险',
+                            deadline:'2017-09-08'
+                        },
+                        {
+                            name: '周伦2',
+                            title:'一年期综合意外险',
+                            deadline:'2017-09-08'
+                        },
+                        {
+                            name: '周伦3',
+                            title:'一年期综合意外险',
+                            deadline:'2017-09-08'
+                        }
+                    ]
+                },
+                /* 学期 */
+                semesters: [
+                    {
+                        label: '2016年春',
+                        value: '2016c'
+                    },
+                    {
+                        label: '2016年秋',
+                        value: '2016q'
+                    },
+                    {
+                        label: '2015年春',
+                        value: '2015c'
+                    },
+                    {
+                        label: '2015年秋',
+                        value: '2015q'
+                    }
+                ]
+            }
+        },
+        methods: {
+            /* 跳转到班级详情 */
+            jumpToDetail: function (id) {
+                console.log("班级的id为"+ id);
+            }
+        },
+        created: function () {
+
+        }
+    });
+
+    /* 发送到邮箱 */
+    function sendToEmail() {
+        $.prompt({
+            title: '填写邮箱',
+            empty: false, // 是否允许为空
+            onOK: function (input) {
+                //点击确认
+            },
+            onCancel: function () {
+                //点击取消
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

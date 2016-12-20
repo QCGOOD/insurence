@@ -1,108 +1,427 @@
-@charset "utf-8";
+@charset "UTF-8";
 /* 字体图标 */
-@import "../font/iconfont.css";
+@import url("//at.alicdn.com/t/font_y9bhlhvnefw7y14i.css");
 /* 引入weui.css */
-@import "./libs/weui.css";
-@import "./libs/jquery-weui.min.css";
-
+@import url(./libs/weui.css);
+@import url(./libs/jquery-weui.min.css);
 /* 重置样式 */
-html,body{max-width:640px !important;}
+html, body {
+  max-width: 640px !important; }
+
 /* ol ul */
-ol,ul{list-style: none;}
+ol, ul {
+  list-style: none; }
+
 /* border-box */
-div,ul,li,input,img,a,textarea,span{-webkit-box-sizing: border-box;}
+div, ul, li, input, img, a, textarea, span {
+  -webkit-box-sizing: border-box; }
 
 /* 布局样式.g- */
-.g-align-right{text-align: right;}
-
-
+.g-align-right {
+  text-align: right; }
 
 /* 自定义按钮 */
-.weui_btn{background-color: #007de2;line-height: 36px;}
-.weui_btn.fullSize{border-radius: 0; width: 100%; }
-.fixed_bottom{position: fixed;bottom: 0;left: 0;right: 0;}
+.weui_btn {
+  background-color: #007de2;
+  line-height: 36px; }
+
+.weui_btn_fixedBottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 40px;
+  background-color: #007de2;
+  color: #fff;
+  font-size: 16px;
+  text-align: center; }
+
+@media screen and (min-width: 375px) {
+  .weui_btn {
+    line-height: 44px; }
+  .weui_btn_fixedBottom {
+    line-height: 44px; } }
+
+.fixed_bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+.fixed_top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0; }
 
 /* 卡片样式-元件以u开头 */
-.u-card{
-    border: 1px solid #d3dce6;
-    border-radius: 4px;
-    background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
-}
+.u-card {
+  border: 1px solid #d3dce6;
+  border-radius: 5px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04); }
 
 /* 底部1px边框 */
-.border-bottom:after{
-    content: " ";
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    color: #D9D9D9;
-    bottom: 0;
-    border-top: 1px solid #D9D9D9;
-    -webkit-transform: scaleY(.5); -webkit-transform-origin: 0 0;  transform-origin: 0 0;  transform: scaleY(.5);  left: 15px;
-}
-.border-bottom.dashed:after{border-top-style: dashed;}
+.border-bottom:after {
+  content: " ";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  color: #D9D9D9;
+  bottom: 0;
+  border-top: 1px solid #D9D9D9;
+  -webkit-transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+  left: 15px; }
+
+.border-bottom.dashed:after {
+  border-top-style: dashed; }
 
 /* 悬浮客服按钮 */
-.btn_kefu{position: fixed;bottom: 70px;right: 10px;display: inline-block;width: 50px;height: 50px;background: url('../images/kefu.png')no-repeat;background-size: 50px 50px;}
-@media screen and (max-height: 450px){  .btn_kefu{display: none;}  }
+.btn_kefu {
+  position: fixed;
+  bottom: 70px;
+  right: 10px;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: url("../images/kefu.png") no-repeat;
+  background-size: 50px 50px; }
+
+@media screen and (max-height: 450px) {
+  .btn_kefu {
+    display: none; } }
 
 /* 自定义单选框 --start */
-.weui_cells_radio .weui_check:checked+.weui_icon_checked_primary:before{
-    font-family:"iconfont" !important;
-    display: inline-block;
-    content: '\e616';
-    color: #007de2;
-    font-size: 18px;
-}
+.weui_cells_radio .weui_check:checked + .weui_icon_checked_primary:before {
+  font-family: "iconfont" !important;
+  display: inline-block;
+  content: '\e616';
+  color: #007de2;
+  font-size: 18px; }
 
-.weui_cells_radio .weui_check+.weui_icon_checked_primary:before{
-    font-family:"iconfont" !important;
-    display: inline-block;
-    content: '\e6be';
-    color: #999;
-    font-size: 18px;
-}
+.weui_cells_radio .weui_check + .weui_icon_checked_primary:before {
+  font-family: "iconfont" !important;
+  display: inline-block;
+  content: '\e6be';
+  color: #999;
+  font-size: 18px; }
+
 /* 自定义单选框 --end */
-
 /* 自定义复选框 --start */
-.weui_cells_checkbox .weui_check:checked+.weui_icon_checked_primary:before{
-    font-family:"iconfont" !important;
-    display: inline-block;
-    vertical-align: text-bottom;
-    content: '\e683';
-    color: #007de2;
-    font-size: 18px;
-}
+.weui_icon_checked_primary {
+  vertical-align: text-bottom; }
 
-.weui_cells_checkbox .weui_check+.weui_icon_checked_primary:before{
-    font-family:"iconfont" !important;
-    display: inline-block;
-    vertical-align: text-bottom;
-    content: '\e626';
-    color: #afafaf;
-    font-size: 18px;
-}
+.weui_cells_checkbox .weui_check:checked + .weui_icon_checked_primary:before {
+  font-family: "iconfont" !important;
+  display: inline-block;
+  content: '\e61e';
+  color: #007de2;
+  font-size: 15px; }
+
+.weui_cells_checkbox .weui_check + .weui_icon_checked_primary:before {
+  font-family: "iconfont" !important;
+  display: inline-block;
+  vertical-align: text-bottom;
+  content: '\e626';
+  color: rgba(175, 175, 175, 0.75);
+  font-size: 15px; }
+
 /* 自定义复选框 --end */
-
-
 /* 定义输入框placeholder和输入字体颜色 */
-input::-webkit-input-placeholder{color: #8a90af; }
-input{color: #333;}
+input::-webkit-input-placeholder {
+  color: #8a90af; }
+
+input {
+  color: #333; }
 
 /* 封装一个手风琴插件 --start */
-.accordion {  width: 100%;  max-width: 360px;  background: #FFF;  -webkit-border-radius: 4px;  -moz-border-radius: 4px;  border-radius: 4px;  }
+.accordion .dropdown [data-toggle="dropdown"] {
+  position: relative;
+  font-size: 17px;
+  line-height: 53px;
+  height: 50px;
+  padding: 0 15px;
+  border-top: solid 1px #d0d0d5;
+  color: #000;
+  background: #fff; }
 
-.accordion .link {  cursor: pointer;  display: block;  padding: 15px ;  color: #333;  font-size: 17px;  font-weight: 600;  border-bottom: 1px solid #d6d8e0;  position: relative;  -webkit-transition: all 0.4s ease;  -o-transition: all 0.4s ease;  transition: all 0.4s ease;  }
-.accordion .submenu{padding-left: 15px;}
+.accordion .dropdown .icon-fangxiangshang {
+  position: absolute;
+  display: block;
+  font-size: 16px;
+  line-height: 50px;
+  color: #333;
+  top: 0;
+  right: 10px; }
 
-.accordion li:last-child .link {  border-bottom: 0;  }
+.accordion .dropdown .icon-fangxiangshang.open {
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+  -webkit-transition: -webkit-transform 0.6s;
+  transition: transform 0.6s; }
 
-.accordion li i {  position: absolute;  top: 16px;  left: 12px;  font-size: 18px;  color: #595959;  -webkit-transition: all 0.4s ease;  -o-transition: all 0.4s ease;  transition: all 0.4s ease;  }
+.accordion .dropdown .icon-fangxiangshang.close {
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: -webkit-transform 0.6s;
+  transition: transform 0.6s; }
 
-.accordion li i.icon-fangxiangshang {  right: 12px;  left: auto;  font-size: 16px;  -webkit-transform: rotate(180deg);  -ms-transform: rotate(180deg);  -o-transform: rotate(180deg);  transform: rotate(180deg);  }
+.accordion .dropdown .dropdown-menu {
+  overflow: hidden;
+  list-style: none;
+  padding: 0 0;
+  margin: 0; }
 
-.accordion li.open i.icon-fangxiangshang {  -webkit-transform: rotate(0deg);  -ms-transform: rotate(0deg);  -o-transform: rotate(0deg);  transform: rotate(0deg);  }
+.accordion .dropdown .show, .accordion .dropdown .hide {
+  -webkit-transform-origin: 50% 0%;
+  transform-origin: 50% 0%; }
+
+.accordion .dropdown .show {
+  display: block;
+  max-height: 600px;
+  -webkit-transform: scaleY(1);
+  transform: scaleY(1);
+  animation: showAnimation 0.5s ease-in-out;
+  -webkit-animation: showAnimation 0.5s ease-in-out;
+  -webkit-transition: max-height 0.8s ease-in-out;
+  transition: max-height 0.8s ease-in-out; }
+
+.accordion .dropdown .hide {
+  max-height: 0;
+  -webkit-transform: scaleY(0);
+  transform: scaleY(0);
+  animation: hideAnimation 0.4s ease-out;
+  -webkit-animation: hideAnimation 0.4s ease-out;
+  -webkit-transition: max-height 0.4s ease-out;
+  transition: max-height 0.4s ease-out; }
+
+.accordion .weui_cells {
+  margin-top: 0;
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #4a527b;
+  background-color: #f2f3f8; }
+
+.accordion .weui_cell {
+  padding: 5px 15px; }
+
+.accordion .weui_cell.border-bottom {
+  padding-bottom: 15px;
+  margin-bottom: 10px; }
+
+.accordion .weui_cells:before, .accordion .weui_cells:after, .accordion .weui_cell:before {
+  display: none; }
+
+.accordion .weui_cell_hd {
+  width: 90px;
+  padding-right: 10px;
+  text-align: right; }
+
+.accordion .weui_cell_ft {
+  display: inline-block;
+  width: 50px;
+  color: #007de2; }
+
+@keyframes showAnimation {
+  0% {
+    -webkit-transform: scaleY(0.1);
+    transform: scaleY(0.1); }
+  40% {
+    -webkit-transform: scaleY(1.04);
+    transform: scaleY(1.04); }
+  60% {
+    -webkit-transform: scaleY(0.98);
+    transform: scaleY(0.98); }
+  80% {
+    -webkit-transform: scaleY(1.02);
+    transform: scaleY(1.02); }
+  100% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1); } }
+
+@-webkit-keyframes showAnimation {
+  0% {
+    -webkit-transform: scaleY(0.1);
+    transform: scaleY(0.1); }
+  40% {
+    -webkit-transform: scaleY(1.04);
+    transform: scaleY(1.04); }
+  60% {
+    -webkit-transform: scaleY(0.98);
+    transform: scaleY(0.98); }
+  80% {
+    -webkit-transform: scaleY(1.02);
+    transform: scaleY(1.02); }
+  100% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1); } }
+
+@keyframes hideAnimation {
+  0% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1); }
+  60% {
+    -webkit-transform: scaleY(0.98);
+    transform: scaleY(0.98); }
+  80% {
+    -webkit-transform: scaleY(1.02);
+    transform: scaleY(1.02); }
+  100% {
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0); } }
+
+@-webkit-keyframes hideAnimation {
+  0% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1); }
+  60% {
+    -webkit-transform: scaleY(0.98);
+    transform: scaleY(0.98); }
+  80% {
+    -webkit-transform: scaleY(1.02);
+    transform: scaleY(1.02); }
+  100% {
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0); } }
 
 /* 封装一个手风琴插件 --end */
+/* 订单状态类样式 --start */
+[class^='z-order'] {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: url("../images/order_status.png") no-repeat;
+  background-size: 300px 50px;
+  vertical-align: middle; }
+
+/* 已受理订单 */
+.z-order-accepted {
+  background-position-x: -100px; }
+
+/* 已生效 */
+.z-order-success {
+  background-position-x: -50px; }
+
+/* 已过期 */
+.z-order-overdue {
+  background-position-x: 0; }
+
+/* 待支付 */
+.z-order-unPay {
+  background-position-x: -150px; }
+
+/* 订单状态类样式 --end */
+/* 步骤状态类样式 --start */
+.step-group {
+  position: relative;
+  min-height: 70px;
+  text-align: center; }
+
+[class^='z-step'] {
+  display: inline-block;
+  width: 280px;
+  max-width: 100%;
+  height: 22px;
+  background: url("../images/steps.png") no-repeat;
+  background-size: 100% 300%; }
+
+.z-step1 {
+  background-position-y: 0; }
+
+.z-step2 {
+  background-position-y: -22px; }
+
+.z-step3 {
+  background-position-y: -44px; }
+
+/* 步骤图片样式 */
+[class^='s-stepText'] {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  font-size: 13px;
+  color: #68709a;
+  width: 70px; }
+
+.active {
+  color: #007de2; }
+
+[class^='s-stepText'] .step-time {
+  font-size: 12px; }
+
+.s-stepText1 {
+  transform: translateX(-160px); }
+
+.s-stepText2 {
+  transform: translateX(-50%); }
+
+.s-stepText3 {
+  transform: translateX(85px); }
+
+/* 步骤状态类样式 --end */
+/* 头部导航 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 16px;
+  padding: 0 30px;
+  color: #333;
+  line-height: 44px;
+  border-bottom: solid 1px #cbceda;
+  text-align: center;
+  background-color: #fff;
+  z-index: 100; }
+
+header .header_left {
+  position: absolute;
+  left: 10px;
+  top: 0; }
+
+header .header_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+/* 微信alert弹框--start */
+/* 标题 */
+.weui_dialog {
+  border-radius: 4px;
+  overflow: hidden; }
+  .weui_dialog .weui_dialog_title {
+    font-size: 20px;
+    color: #1a1e36;
+    font-weight: 600; }
+  .weui_dialog .weui_dialog_bd {
+    color: #68709a; }
+  .weui_dialog .weui_btn_dialog.primary {
+    background-color: #007de2;
+    color: #fff; }
+  .weui_dialog .weui-prompt-input {
+    border: none;
+    border-bottom: solid 1px #ccc;
+    padding: 10px 15px; }
+
+/* 微信alert弹框--end */
+/* jquery weui Toast */
+.weui_toast_text {
+  border-radius: 12px; }
+
+/* icons */
+.iconfont {
+  color: #007de2; }
+
+.icon-weixin {
+  font-size: 24px;
+  color: #59a500; }
+
+.icon-xiangji {
+  font-size: 24px; }
+
+.toolbar .picker-button {
+  color: #007de2; }

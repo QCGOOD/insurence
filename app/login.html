@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{background-color: #f2f3f8;}
+
+        .weui_cells:after{display: none;}
+        .weui_cells{margin-top: 0;}
+        .login .icon-password,.icon-zhengjian{font-size: 20px;}
+        .login .weui_cell{height: 55px;}
+        .login .weui_cell_bd{padding-top: 3px;}
+        .login .weui_input{text-indent: 20px;}
+    </style>
+</head>
+<body>
+<div id="app">
+    <div style="text-align: center;padding: 32px;">
+        <img width="74" height="74" src="images/logo.png">
+        <p style="font-size: 20px; color: #333; line-height: 40px;">相书保险</p>
+    </div>
+    <div class="weui_cells weui_cells_checkbox">
+        <div class="weui_cell login">
+            <div class="weui_cell_hd"><i class="iconfont icon-zhengjian"></i></div>
+            <div class="weui_cell_bd">
+                <input type="text" class="weui_input" placeholder="请输入学校账户">
+            </div>
+        </div>
+        <div class="weui_cell login">
+            <div class="weui_cell_hd"><i class="iconfont icon-password"></i></div>
+            <div class="weui_cell_bd">
+                <input type="text" class="weui_input" placeholder="请输入登录密码">
+            </div>
+        </div>
+        <label class="weui_cell" for="s11" style="text-align: right;background-color: #f2f3f8;">
+            <div class="weui_cell_hd weui_cell_primary">
+                <input type="checkbox" name="checkbox1" id="s11" class="weui_check">
+                <i class="weui_icon_checked_primary"></i>
+            </div>
+            <div class="weui_cell_bd ">
+                <p style="font-size: 15px;color: #333;">绑定微信公众号登录</p>
+            </div>
+        </label>
+    </div>
+
+    <a href="" class="weui_btn" style="margin:30px 15px;">登录</a>
+    <div class="btn_kefu"></div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {}
+        },
+        methods: {},
+        created: function () {
+
+        }
+    })
+</script>
+
+</body>
+</html>

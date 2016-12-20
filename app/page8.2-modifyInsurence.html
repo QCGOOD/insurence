@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="css/project.css">
+
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+
+    <style>
+        body{background-color: #f2f3f8;padding-top: 44px;}
+        .weui_cells{font-size: 16px;margin-top: 0;}
+        /* 投保计划 */
+       .weui_cells:after{border: none;}
+        .weui_cells.plan{padding: 10px 0px 30px;}
+        .weui_cells.plan .weui_cell:before{display: none;}
+        .weui_cells.plan .weui_cell{padding: 4px 15px;}
+        .weui_cells.plan .weui_cell_ft{color: #333;}
+        /* 锯齿 */
+        .sawtooth{position:relative;}
+        .sawtooth:after{content: "";position: absolute;bottom: 0;width:100%;height: 10px;margin-top: 20px;background-size: 12px 20px;}
+        .sawtooth:after{background-color: #f2f3f8;background-position: 50% 15%;
+            background-image: linear-gradient(-45deg, #fff 25%, transparent 25%, transparent),
+            linear-gradient(-135deg, #fff 25%, transparent 25%, transparent),
+            linear-gradient(-45deg, transparent 75%, #fff 75%),
+            linear-gradient(-135deg, transparent 75%, #fff 75%);}
+        /* 投保计划 */
+
+        /* 信息填写 */
+        .weui_icon_checked{margin-right: 10px;}
+        .weui_cell_select {  padding: 0 15px;  }
+        .weui_cell_ft{color: #333;}
+        .toolbar .picker-button{color: #007de2;}
+
+        .weui_btn{font-size: 14px;border: solid 1px #007de2;}
+        .weui_btn.weui_btn_mini{margin-right: 10px;line-height: 25px;}
+        .weui_btn_plain_default{background-color: #fff;border: solid 1px #4a527b;color: #4a527b;}
+    </style>
+</head>
+<body>
+<div id="app" style="display: none;">
+
+    <!-- 头部 -->
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div class="header_title">修改保单</div>
+    </header>
+
+    <div style="font-size: 20px;color: #333;padding: 15px 10px;">
+        <strong>请填写您要修改的信息</strong>
+        <div style="font-size: 12px;color: #8a90af;">由于已经生成保单，故只能生成有限的项目！</div>
+    </div>
+
+    <!-- 手风琴 -->
+    <ul id="accordion" class="accordion">
+        <li class="dropdown">
+        <div data-toggle="dropdown">查看原保单<i class="iconfont icon-fangxiangshang"></i></div>
+            <div class="dropdown-menu hide">
+                <div class="weui_cells">
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">保险起期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.startTime}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">保险止期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.endTime}}</div>
+                    </div>
+                    <div class="weui_cell border-bottom ">
+                        <div class="weui_cell_hd">保险时限:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.limitTime}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">被保人姓名:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.name}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">性别:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.sex}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">班级:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">身份证号:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.identifyId}}</div>
+                    </div>
+                    <div class="weui_cell border-bottom ">
+                        <div class="weui_cell_hd">出身日期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.birthday}}</div>
+                    </div>
+
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">投保人姓名:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.name}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">手机:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.tel}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">身份证号:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.identifyId}}</div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li class="dropdown">
+            <div data-toggle="dropdown">查看原保单<i class="iconfont icon-fangxiangshang"></i></div>
+            <div  class="dropdown-menu show">
+                <div style="padding:10px 15px;text-align: center;background-color: #f2f3f8;">
+                    <!-- 允许修改的列表项 -->
+                    <div  class="weui_btn weui_btn_mini" :class="{'weui_btn_plain_default':item.codeName != ModifyItem.codeName }" v-for="(item, index) in allowedList" @click="chooseModifyItem(item)">{{item.label}}</div>
+
+                    <div style="margin-top:10px;line-height: 40px;border-bottom: dashed 1px #c3c6d4;">
+                        <input class="weui_input" v-model="oldVal" placeholder="请输入原内容">
+                    </div>
+                    <div style="line-height: 40px;border-bottom: dashed 1px #c3c6d4;">
+                        <input class="weui_input" v-model="ModifyItem.newValue" placeholder="请输入新内容">
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+
+    <a @click="submit" class="weui_btn" style="margin: 28px 15px;">提交申请</a>
+
+    <div class="btn_kefu"></div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                /* 保险产品 */
+                product: {
+                    id:'',
+                    startTime:'',
+                    endTime:'',
+                    limitTime:''
+                },
+                /* 被保人信息 */
+                protectedPerson:{
+                    name:'',
+                    sex:'',
+                    identifyId:'',
+                    className:'',
+                    birthday:''
+                },
+                /* 投保人信息 */
+                payProtectedPerson:{
+                    name:'',
+                    tel:'',
+                    identifyId:''
+                },
+                /* 允许修改的项目 */
+                allowedList:[
+                    {
+                        belong:'protectedPerson',
+                        codeName:'name',
+                        label:'被保人姓名',
+                        value:'林笑笑',
+                    },
+                    {
+                        belong:'protectedPerson',
+                        codeName:'className',
+                        label:'班级',
+                        value:'三年级 1班'
+                    },
+                    {
+                        belong:'payProtectedPerson',
+                        codeName:'tel',
+                        label:'手机号',
+                        value:'18812341234'
+                    }
+                ],
+                /* 原内容 */
+                ModifyItem: {
+                    belong:'',
+                    codeName:'',
+                    label:'',
+                    value:'',
+                    newValue:''
+                },
+                oldVal:''
+            }
+        },
+        /* 监控数据变化 */
+        watch: {
+            allowedList: {
+                /* 变化时执行函数 */
+                handler: function (val, oldVal) {
+                    vm.oldVal = '';
+                },
+                deep: true
+            }
+        },
+        methods: {
+            chooseModifyItem: function (val) {
+                vm.ModifyItem = val;
+            },
+            submit: function () {
+                var oldVal = vm.oldVal;                 // 用户输入的原内容
+                var relOldVal = vm.ModifyItem.value;   // 真正的原内容
+
+                /* 表单验证 */
+                if(!oldVal || !vm.ModifyItem.newValue){
+                    $.alert('信息填写不完整','温馨提示');
+                }else if(oldVal != relOldVal){
+                    $.alert('原内容输入有误','温馨提示');
+                } else if(oldVal == vm.ModifyItem.newValue){
+                    $.alert('原内容与新内容不能一样！','温馨提示');
+                }else {
+                    $.alert('填写正确','温馨提示');
+                }
+            }
+        },
+        created: function () {
+            /* 获取学校名 */
+            $.get('./data/order.json', function (data) {
+                vm.product = data.product;
+                vm.protectedPerson = data.protectedPerson;
+                vm.payProtectedPerson = data.payProtectedPerson;
+
+                vm.ModifyItem = vm.allowedList[0];
+            });
+
+            $('#app').show();
+        }
+    });
+
+</script>
+
+</body>
+</html>

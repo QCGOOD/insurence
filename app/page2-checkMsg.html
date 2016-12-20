@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{background-color: #f2f3f8;padding-top: 45px;}
+
+
+        /* checkbox */
+        .weui_cells_checkbox.weui_cells:after{display: none;}
+
+        /* 可点击链接 */
+        .s-link{
+            font-size:15px;color: #007de2;text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- 头部 -->
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div class="header_title">保单信息确认</div>
+    </header>
+
+    <div style="font-size: 20px;color: #333;line-height: 65px;text-align: center;">
+        一年综合意外险
+    </div>
+
+    <!-- 手风琴 -->
+    <ul id="accordion" class="accordion">
+        <li class="dropdown">
+            <div data-toggle="dropdown">投保信息<i class="iconfont icon-fangxiangshang"></i></div>
+            <div class="dropdown-menu show">
+                <div class="weui_cells ">
+                    <div class="s-link" style="position:absolute;right:15px;top:15px;">修改信息</div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">保险起期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.startTime}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">保险止期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.endTime}}</div>
+                    </div>
+                    <div class="weui_cell border-bottom ">
+                        <div class="weui_cell_hd">保险时限:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.limitTime}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">被保人姓名:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.name}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">性别:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.sex}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">班级:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">身份证号:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.identifyId}}</div>
+                    </div>
+                    <div class="weui_cell border-bottom ">
+                        <div class="weui_cell_hd">出身日期:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.birthday}}</div>
+                    </div>
+
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">投保人姓名:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.name}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">手机:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.tel}}</div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">身份证号:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.identifyId}}</div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="dropdown">
+            <div data-toggle="dropdown">保障内容<i class="iconfont icon-fangxiangshang"></i></div>
+
+            <ul class="submenu dropdown-menu hide">
+                保险条款...此处省略1000字
+            </ul>
+        </li>
+    </ul>
+
+    <!-- checkbox -->
+    <div class="weui_cells weui_cells_checkbox" style="margin-top:0;background-color: transparent; ">
+        <label class="weui_cell weui_check_label" for="s11">
+            <div class="weui_cell_hd" >
+                <input type="checkbox" class="weui_check" name="checkbox1" id="s11" v-model="hasRead">
+                <i class="weui_icon_checked_primary"></i>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p style="font-size: 15px;color: #333;">我已阅读并同意<a href="#" class="s-link">投保申明</a></p>
+            </div>
+        </label>
+    </div>
+
+    <div style="font-size: 16px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.price}}</span></div>
+    <a href="page3-pay.html" class="weui_btn" style="margin: 20px 15px;">立即支付</a>
+
+    <div class="btn_kefu"></div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                /* 保险产品 */
+                product: {
+                    id:'',
+                    startTime:'',
+                    endTime:'',
+                    limitTime:'',
+                    price:''
+                },
+                /* 被保人 */
+                protectedPerson:{
+                    name:'',
+                    sex:'',
+                    identifyId:'',
+                    className:'',
+                    birthday:''
+                },
+                /* 投保人 */
+                payProtectedPerson:{
+                    name:'',
+                    tel:'',
+                    identifyId:''
+                },
+                hasRead:false,
+            }
+        },
+        methods: {},
+        created: function () {
+            /* 获取保险信息 */
+            $.get('./data/order.json', function (data) {
+                vm.product = data.product;
+                vm.protectedPerson = data.protectedPerson;
+                vm.payProtectedPerson = data.payProtectedPerson;
+
+                console.log(data);
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

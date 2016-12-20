@@ -4,6 +4,7 @@ var browserSync = require('browser-sync').create();  // 静态服务器
 var reload = browserSync.reload;
 var watch = require('gulp-watch');
 var imagemin = require('gulp-imagemin');
+var gulpScss = require('gulp-sass');   // 编译sass文件
 var $ = require('gulp-load-plugins')();
 
 // 图片压缩
@@ -11,6 +12,17 @@ gulp.task('image', function() {
     return gulp.src('app/images/**/*')
         .pipe($.cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
         .pipe(gulp.dest('dist/images'));
+});
+
+// 编译sass文件
+gulp.task('scss-compile', function () {
+   gulp.src('app/css/**/*.scss')
+       .pipe(gulpScss().on('error',gulpScss.logError))
+       .pipe(gulp.dest('app/css'));
+});
+
+gulp.task('scss-watch', function () {
+    gulp.watch('app/**/*.scss',['scss-compile']);
 });
 
 // css压缩，自动添加前缀
@@ -51,6 +63,7 @@ gulp.task('serve', function () {
 
 // watch
 gulp.task('watch', function () {
+    gulp.watch(['app/**/*.scss'],['scss-compile']);
     gulp.watch(['app/**/*'],reload);
 });
 
@@ -67,4 +80,4 @@ gulp.task('clean', function (cb) {
    del(['dist/**/*'],cb);
 });
 
-gulp.task('default',['image','js','css','serve','watch']);
+gulp.task('default',['image','js','scss-compile','css','serve','watch']);

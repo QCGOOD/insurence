@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <title>CSS3手风琴菜单 下拉展开带弹性动画在线演示</title>
+
+    <style>
+        .container {
+            width: 100%;
+            margin: 50px auto;
+        }
+        .container > ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .title {
+            font-weight: normal;
+            font-size: 40px;
+            text-align: center;
+            line-height: 1.4;
+            color: #2980b9;
+        }
+        .dropdown a {
+            text-decoration: none;
+        }
+        .dropdown [data-toggle="dropdown"] {
+            position: relative;
+            display: block;
+            color: white;
+            background: #2980b9;
+            -webkit-box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset;
+            box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        .dropdown [data-toggle="dropdown"]:hover {
+            background: #2c89c6;
+        }
+        .dropdown .icon-arrow {
+            position: absolute;
+            display: block;
+            font-size: 0.7em;
+            color: #fff;
+            top: 14px;
+            right: 10px;
+        }
+        .dropdown .icon-arrow.open {
+            -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
+            -webkit-transition: -webkit-transform 0.6s;
+            transition: transform 0.6s;
+        }
+        .dropdown .icon-arrow.close {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+            -webkit-transition: -webkit-transform 0.6s;
+            transition: transform 0.6s;
+        }
+        .dropdown .icon-arrow:before {
+            content: '\25BC';
+        }
+        .dropdown .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .dropdown .dropdown-menu li {
+            padding: 0;
+        }
+        .dropdown .dropdown-menu li a {
+            display: block;
+            color: #6e6e6e;
+            background: #eeeeee;
+            -webkit-box-shadow: 0 1px 0 white inset, 0 -1px 0 #d4d4d4 inset;
+            box-shadow: 0 1px 0 white inset, 0 -1px 0 #d4d4d4 inset;
+            text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
+            padding: 10px 10px;
+        }
+        .dropdown .dropdown-menu li a:hover {
+            background: #f6f6f6;
+        }
+        .dropdown .show, .dropdown .hide {
+            -webkit-transform-origin: 50% 0%;
+            transform-origin: 50% 0%;
+        }
+        .dropdown .show {
+            display: block;
+            max-height: 300px;
+            /*-webkit-transform: scaleY(1);*/
+            /*transform: scaleY(1);*/
+            /*animation: showAnimation 0.5s ease-in-out;*/
+            /*-webkit-animation: showAnimation 0.5s ease-in-out;*/
+            -webkit-transition: max-height 0.8s ease-in-out;
+            transition: max-height 0.8s ease-in-out;
+        }
+        .dropdown .hide {
+            max-height: 0;
+            /*-webkit-transform: scaleY(0);*/
+            /*transform: scaleY(0);*/
+            /*animation: hideAnimation 0.4s ease-out;*/
+            /*-webkit-animation: hideAnimation 0.4s ease-out;*/
+            -webkit-transition: max-height 0.6s ease-out;
+            transition: max-height 0.6s ease-out;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+
+    <ul>
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown">First Menu <i class="icon-arrow"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown">Second Menu <i class="icon-arrow"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown">Third Menu <i class="icon-arrow"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<script >
+    // Dropdown Menu
+    var dropdown = document.querySelectorAll('.dropdown');
+    var dropdownArray = Array.prototype.slice.call(dropdown,0);
+    dropdownArray.forEach(function(el){
+        var button = el.querySelector('a[data-toggle="dropdown"]'),
+                menu = el.querySelector('.dropdown-menu'),
+                arrow = button.querySelector('i.icon-arrow');
+        button.onclick = function(event) {
+            if(!menu.hasClass('show')) {
+                menu.classList.add('show');
+                menu.classList.remove('hide');
+                arrow.classList.add('open');
+                arrow.classList.remove('close');
+                event.preventDefault();
+            }
+            else {
+                menu.classList.remove('show');
+                menu.classList.add('hide');
+                arrow.classList.remove('open');
+                arrow.classList.add('close');
+                event.preventDefault();
+            }
+        };
+    });
+    Element.prototype.hasClass = function(className) {
+        return this.className && new RegExp("(^|\\s)" + className + "(\\s|$)").test(this.className);
+    };
+</script>
+
+</body>
+
+</html>

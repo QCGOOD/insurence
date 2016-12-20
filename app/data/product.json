@@ -1,0 +1,16 @@
+{
+  "school":{
+    "schoolName":"华南师范大学",
+    "schoolId":"xx123qq1234ww1234"
+  },
+  "product":{
+    "title":"一年期综合意外险",
+    "price":88,
+    "maxAmount":"10万",
+    "num":223456,
+    "id":"xx12345678910xx",
+    "startTime":"2016-09-19",
+    "endTime":"2017-09-18",
+    "limitTime":"一年"
+  }
+}

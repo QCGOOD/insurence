@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{background-color: #f2f3f8;padding-top: 44px;}
+        /* 顶部区域,布局样式以.g-开头 */
+        .g-top{ position:relative;padding: 15px;text-align: center; }
+
+
+        .icon-yiguoqi{font-size: 50px; color: #b60e0e;}
+    </style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div class="header_title">我的保单</div>
+    </header>
+
+   <div class="g-top">
+       <h4 style="font-size: 20px;color: #333;line-height: 1.3;">一年期综合意外险</h4>
+       <p style="font-size: 16px;color: #68709a;">(已受理，将在**时间内生成保单)</p>
+       <div class="step-group"  style="display: none; margin: 20px 0 10px;">
+           <i class="z-step1"></i>
+           <div class="s-stepText1 active">
+               <p>已受理</p>
+               <div class="step-time">2016/10/10</div>
+           </div>
+           <div class="s-stepText2">
+               <p>已生效</p>
+               <div class="step-time"></div>
+           </div>
+           <div class="s-stepText3">
+               <p>保单到学校</p>
+               <div class="step-time"></div>
+           </div>
+       </div>
+       <div style="position: absolute;right: 20px;bottom: -40px;z-index: 1;">
+           <i class="iconfont icon-yiguoqi"></i>
+       </div>
+   </div>
+    <!-- 手风琴 -->
+    <ul id="accordion" class="accordion">
+        <li class="dropdown">
+            <div data-toggle="dropdown">投保信息<i class="iconfont icon-fangxiangshang"></i></div>
+            <div class="dropdown-menu show">
+                <div class="weui_cells" >
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">保险起期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{product.startTime}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">保险止期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{product.endTime}}</div>
+                </div>
+                <div class="weui_cell border-bottom ">
+                    <div class="weui_cell_hd">保险时限:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{product.limitTime}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">被保人姓名:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.name}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">性别:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.sex}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">班级:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">身份证号:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.identifyId}}</div>
+                </div>
+                <div class="weui_cell border-bottom ">
+                    <div class="weui_cell_hd">出身日期:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.birthday}}</div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">投保人姓名:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.name}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">手机:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.tel}}</div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">身份证号:</div>
+                    <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.identifyId}}</div>
+                </div>
+            </div>
+            </div>
+        </li>
+        <li class="dropdown">
+            <div data-toggle="dropdown">保障内容<i class="iconfont icon-fangxiangshang"></i></div>
+
+            <div class="dropdown-menu hide">
+                保险条款...此处省略1000字
+            </div>
+        </li>
+    </ul>
+
+    <div style="font-size: 16px;color: #333;margin: 20px 15px;">保费:{{product.price}}</div>
+
+</ul>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                /* 保险产品 */
+                product: {
+                    id:'',
+                    startTime:'',
+                    endTime:'',
+                    limitTime:'',
+                    price:'',
+                    status:''
+                },
+                /* 被保人 */
+                protectedPerson:{
+                    name:'',
+                    sex:'',
+                    identifyId:'',
+                    className:'',
+                    birthday:''
+                },
+                /* 投保人 */
+                payProtectedPerson:{
+                    name:'',
+                    tel:'',
+                    identifyId:''
+                },
+            }
+        },
+        methods: {},
+        created: function () {
+
+        }
+    })
+</script>
+
+</body>
+</html>

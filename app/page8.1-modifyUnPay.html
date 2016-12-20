@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="css/project.css">
+
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+
+    <style>
+        body{background-color: #f2f3f8;padding-top: 44px;}
+        .weui_cells{font-size: 16px;margin-top: 0;}
+        /* 投保计划 */
+       .weui_cells:after{border: none;}
+        .weui_cells.plan{padding: 10px 0px 30px;}
+        .weui_cells.plan .weui_cell:before{display: none;}
+        .weui_cells.plan .weui_cell{padding: 4px 15px;}
+        .weui_cells.plan .weui_cell_ft{color: #333;}
+        /* 锯齿 */
+        .sawtooth{position:relative;}
+        .sawtooth:after{content: "";position: absolute;bottom: 0;width:100%;height: 10px;margin-top: 20px;background-size: 12px 20px;}
+        .sawtooth:after{background-color: #f2f3f8;background-position: 50% 15%;
+            background-image: linear-gradient(-45deg, #fff 25%, transparent 25%, transparent),
+            linear-gradient(-135deg, #fff 25%, transparent 25%, transparent),
+            linear-gradient(-45deg, transparent 75%, #fff 75%),
+            linear-gradient(-135deg, transparent 75%, #fff 75%);}
+        /* 投保计划 */
+
+        /* 信息填写 */
+        .weui_icon_checked{margin-right: 10px;}
+        .weui_cell_select {  padding: 0 15px;  }
+        .weui_cell_ft{color: #333;}
+        .toolbar .picker-button{color: #007de2;}
+    </style>
+</head>
+<body>
+<div id="app" style="display: none;">
+
+    <!-- 头部 -->
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div class="header_title">修改订单</div>
+    </header>
+
+    <div style="font-size: 20px;color: #333;padding: 15px 10px;">
+        <strong>请直接修改您要变更的内容</strong>
+        <div style="font-size: 12px;color: #8a90af;">保单将以修改后的内容为准，请准确填写！</div>
+    </div>
+
+    <div class="weui_cells weui_cells_radio">
+        <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
+            <div class="weui_cell_hd weui_cell_primary">被保人信息</div>
+            <div class="weui_cell_ft" onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">姓名</div>
+            <div class="weui_cell_ft">
+                <input v-model="protectedPerson.name" class="weui_input g-align-right" placeholder="必填" >
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">性别</div>
+            <div class="weui_cell_ft ">
+                <label for="s11" style="margin-right: 20px;">
+                    <input type="radio" v-model="protectedPerson.sex" value="男" class="weui_check" name="sex" id="s11" >
+                    <span class="weui_icon_checked_primary"></span>
+                    <span>男</span>
+                </label>
+                <label for="s12">
+                    <input type="radio" v-model="protectedPerson.sex" value="女"  class="weui_check" name="sex" id="s12" >
+                    <span class="weui_icon_checked_primary"></span>
+                    <span>女</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input v-model="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" >
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">出生日期</div>
+            <div class="weui_cell_ft">
+                <input type="date" v-model="protectedPerson.birthday" class="weui_input g-align-right" placeholder="请选择出生日期" >
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">学校</div>
+            <div class="weui_cell_ft">
+                <input class="weui_input g-align-right" v-model="school.schoolName"  placeholder="必填" readonly>
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <label class="weui_label weui_cell_bd weui_cell_primary">
+                班级
+            </label>
+            <div class="weui_cell_ft">
+                <input class="weui_input g-align-right" placeholder="请选择班级" type="text" id='picker'>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui_cells">
+        <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
+            <div class="weui_cell_hd weui_cell_primary">投保人信息</div>
+            <div class="weui_cell_ft"  onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">姓名</div>
+            <div class="weui_cell_ft">
+                <input v-model="payProtectedPerson.name" class="weui_input g-align-right" placeholder="必填" >
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">手机号</div>
+            <div class="weui_cell_ft">
+                <input v-model="payProtectedPerson.tel" type="number" class="weui_input g-align-right" placeholder="必填" >
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input v-model="payProtectedPerson.identifyId" type="number" class="weui_input g-align-right" placeholder="必填" >
+            </div>
+        </div>
+    </div>
+
+    <a href="page2-checkMsg.html" class="weui_btn" style="margin: 28px 15px;">确认修改</a>
+
+    <div class="btn_kefu"></div>
+
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                /* 保险产品 */
+                product: {
+                    id:'',
+                    startTime:'',
+                    endTime:'',
+                    limitTime:'',
+                },
+                /* 学校信息 */
+                school:{
+                    schoolName:''
+                },
+                /* 被保人信息 */
+                protectedPerson:{
+                    name:'',
+                    sex:'',
+                    identifyId:'',
+                    className:'',
+                    birthday:''
+                },
+                /* 投保人信息 */
+                payProtectedPerson:{
+                    name:'',
+                    tel:'',
+                    identifyId:''
+                }
+            }
+        },
+        /* 监控数据变化 */
+        watch: {
+            protectedPerson: {
+                /* 变化时执行函数 */
+                handler: function (val, oldVal) {
+                    console.log(val);
+                },
+                deep: true
+            }
+        },
+        methods: {
+
+        },
+        created: function () {
+            /* 获取学校名 */
+            $.get('./data/product.json', function (data) {
+                console.log(data);
+                vm.product = data.product;
+                vm.school = data.school;
+            });
+
+            /* 初始化班级选择期 */
+            setTimeout(function () {
+                $("#picker").picker({
+                    title: "请选择班级",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
+                            displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
+                        },
+                        {
+                            textAlign: 'center',
+                            values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                            displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                        }
+                    ],
+                    onChange: function (e) {
+                        vm.protectedPerson.className = e.value.join(" ");
+                    }
+                });
+            },1000);
+
+            $('#app').show();
+        }
+    });
+    
+    /* 提交订单 */
+    function submit() {
+
+    }
+
+    /* 表单验证 */
+    function checkForm() {
+
+    }
+
+    /* 班级改变时 */
+    function classNameChange(val) {
+        console.log(val);
+    }
+</script>
+
+</body>
+</html>
