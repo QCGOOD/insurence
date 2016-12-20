@@ -54,9 +54,9 @@
         </div>
         <!-- 手风琴 -->
         <ul id="accordion" class="accordion">
-            <li v-for="(grade, index) in data.grades" class="dropdown">
+            <li v-for="(grade, index) in data.grades" class="dropdown" :class="{'hide': index, 'show':!index }">
                 <div data-toggle="dropdown">{{grade.grade}}<i class="iconfont icon-fangxiangshang"></i></div>
-                <div class="dropdown-menu" :class="{'hide': index, 'show':!index }">
+                <div class="dropdown-menu" >
                     <div class="weui_cells">
 
                         <!-- 表头 -->

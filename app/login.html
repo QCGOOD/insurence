@@ -50,7 +50,7 @@
         </label>
     </div>
 
-    <a href="" class="weui_btn" style="margin:30px 15px;">登录</a>
+    <a onclick="login()" class="weui_btn" style="margin:30px 15px;">登录</a>
     <div class="btn_kefu"></div>
 
 </div>
@@ -60,11 +60,19 @@
         data: function () {
             return {}
         },
-        methods: {},
+        methods: {
+
+        },
         created: function () {
 
         }
-    })
+    });
+
+    /* 登录 */
+    function login() {
+        // TODO:MD5加密
+
+    }
 </script>
 
 </body>

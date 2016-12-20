@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        .g-head{text-align: center;margin: 40px 0;}
+
+        .weui_cells:before{display: none;}
+        .weui_cells:after{left: 15px;}
+
+        .iconfont{padding: 0 15px 0 10px;font-size: 18px;}
+
+        /* 出身日期填写 */
+        .hidden{visibility: hidden;}
+        .placeholder{position: absolute;left: 0;top:1px;color: #8a90af;}
+    </style>
+</head>
+<body>
+<div id="app">
+    <main>
+        <div class="g-head">
+            <img width="80" height="80" src="./images/header.png" alt="">
+        </div>
+        <div class="weui_cells weui_cells_radio">
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><i class="iconfont icon-identity"></i></div>
+                <div class="weui_cell_bd">
+                    <input type="text" class="weui_input" placeholder="请填写您的身份证号">
+                </div>
+            </div>
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><i class="iconfont icon-name"></i></div>
+                <div class="weui_cell_bd">
+                    <input type="text" class="weui_input" placeholder="请输入您的姓名">
+                </div>
+            </div>
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><i class="iconfont icon-sex"></i></div>
+                <div class="weui_cell_bd">
+                    <label for="s11" style="padding-right: 20px;padding-left: 10px;">
+                        <span>男</span>
+                        <input type="radio" v-model="person.sex" value="男" class="weui_check" name="sex" id="s11" >
+                        <span class="weui_icon_checked_primary"></span>
+                    </label>
+                    <label for="s12" style="padding-right: 20px;">
+                        <span>女</span>
+                        <input type="radio" v-model="person.sex" value="女"  class="weui_check" name="sex" id="s12" >
+                        <span class="weui_icon_checked_primary"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><i class="iconfont icon-phone"></i></div>
+                <div class="weui_cell_bd">
+                    <input type="text" class="weui_input" placeholder="请输入您的手机号">
+                </div>
+            </div>
+
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><i class="iconfont icon-birthday"></i></div>
+                <div class="weui_cell_ft weui_cell_primary" style="min-width: 100px;position: relative;">
+                    <input id="date-picker" type="date" v-model="person.birthday" class="weui_input" :class="{'hidden': !person.birthday}">
+                    <label v-show="!person.birthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align: center;margin: 30px 15px;">
+            <a href="" class="weui_btn">保存</a>
+            <p style="font-size: 14px;line-height:30px;color: #8a90af;">请正确填写，默认为投保人信息</p>
+        </div>
+    </main>
+    <div class="btn_kefu"></div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                person: {
+                    name:'',
+                    sex:'',
+                    identifyId:'',
+                    className:'',
+                    birthday:''
+                }
+            }
+        },
+        methods: {},
+        created: function () {
+
+        }
+    })
+</script>
+
+</body>
+</html>

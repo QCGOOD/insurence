@@ -11,13 +11,13 @@
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/project.js"></script>
     <style>
-        body{padding: 30px 20px;}
+        body{padding: 30px 20px;min-height: 480px;}
         /* 信主体区域 */
         .letter{font-size: 13px;line-height:28px;color: #333;}
         .letter_title{text-align: center;font-size: 18px;color: #000;}
         .letter_content{text-indent: 20px;}
         /* 保险-布局样式以g-开头 */
-        .g-card{position: fixed;bottom: 50px;left: 20px;right: 20px;padding: 10px 10px 0;background-color: #f2f3f8;}
+        .g-card{position: fixed;bottom: 60px;left: 20px;right: 20px;padding: 10px 10px 0;background-color: #f2f3f8;}
         .g-card-title{font-size: 15px;line-height:1.2em;color: #000;font-weight: bold;}
         .g-card-price{font-size: 23px;color: #f14f44;}
         .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
@@ -39,10 +39,7 @@
         <article class="letter">
             <section>
                 <div class="letter_recipient">尊敬的家长们:</div>
-                <div class="letter_content">你们好！转眼到了开学季，您还在为还在这一年的安
-                    全问题担忧么？我们为您提供了一年期综合意外险，和您
-                    一起保障孩子安全。
-                </div>
+                <div class="letter_content">你们好！转眼到了开学季，您还在为还在这一年的安全问题担忧么？我们为您提供了一年期综合意外险，和您一起保障孩子安全。</div>
             </section>
         </article>
 
@@ -186,6 +183,15 @@
         }
         vm.showDialog = false;
         console.log(vm.address, vm.schoolName, vm.className);
+        // TODO:保存城市、学校、与班级
+
+        $.post('',{
+            "address":"广东省 广州",
+            "schoolName":"华师附中",
+            "className":"三年级 (1)班"
+        }, function (data) {
+
+        })
     }
 </script>
 

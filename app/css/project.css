@@ -34,7 +34,8 @@ div, ul, li, input, img, a, textarea, span {
   background-color: #007de2;
   color: #fff;
   font-size: 16px;
-  text-align: center; }
+  text-align: center;
+  -webkit-tap-highlight-color: transparent; }
 
 @media screen and (min-width: 375px) {
   .weui_btn {
@@ -139,92 +140,87 @@ input {
   color: #333; }
 
 /* 封装一个手风琴插件 --start */
-.accordion .dropdown [data-toggle="dropdown"] {
-  position: relative;
-  font-size: 17px;
-  line-height: 53px;
-  height: 50px;
-  padding: 0 15px;
-  border-top: solid 1px #d0d0d5;
-  color: #000;
-  background: #fff; }
-
-.accordion .dropdown .icon-fangxiangshang {
-  position: absolute;
-  display: block;
-  font-size: 16px;
-  line-height: 50px;
-  color: #333;
-  top: 0;
-  right: 10px; }
-
-.accordion .dropdown .icon-fangxiangshang.open {
-  -webkit-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-  -webkit-transition: -webkit-transform 0.6s;
-  transition: transform 0.6s; }
-
-.accordion .dropdown .icon-fangxiangshang.close {
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-  -webkit-transition: -webkit-transform 0.6s;
-  transition: transform 0.6s; }
-
-.accordion .dropdown .dropdown-menu {
-  overflow: hidden;
-  list-style: none;
-  padding: 0 0;
-  margin: 0; }
-
-.accordion .dropdown .show, .accordion .dropdown .hide {
-  -webkit-transform-origin: 50% 0%;
-  transform-origin: 50% 0%; }
-
-.accordion .dropdown .show {
-  display: block;
-  max-height: 600px;
-  -webkit-transform: scaleY(1);
-  transform: scaleY(1);
-  animation: showAnimation 0.5s ease-in-out;
-  -webkit-animation: showAnimation 0.5s ease-in-out;
-  -webkit-transition: max-height 0.8s ease-in-out;
-  transition: max-height 0.8s ease-in-out; }
-
-.accordion .dropdown .hide {
-  max-height: 0;
-  -webkit-transform: scaleY(0);
-  transform: scaleY(0);
-  animation: hideAnimation 0.4s ease-out;
-  -webkit-animation: hideAnimation 0.4s ease-out;
-  -webkit-transition: max-height 0.4s ease-out;
-  transition: max-height 0.4s ease-out; }
-
-.accordion .weui_cells {
-  margin-top: 0;
-  padding: 10px 15px;
-  font-size: 15px;
-  color: #4a527b;
-  background-color: #f2f3f8; }
-
-.accordion .weui_cell {
-  padding: 5px 15px; }
-
-.accordion .weui_cell.border-bottom {
-  padding-bottom: 15px;
-  margin-bottom: 10px; }
-
-.accordion .weui_cells:before, .accordion .weui_cells:after, .accordion .weui_cell:before {
-  display: none; }
-
-.accordion .weui_cell_hd {
-  width: 90px;
-  padding-right: 10px;
-  text-align: right; }
-
-.accordion .weui_cell_ft {
-  display: inline-block;
-  width: 50px;
-  color: #007de2; }
+.accordion {
+  /* 标题或者开关 */
+  /* 当为隐藏状态时 */
+  /* 当为显示状态时 */
+  /* 内容区详情 */ }
+  .accordion .dropdown [data-toggle="dropdown"] {
+    position: relative;
+    font-size: 17px;
+    line-height: 53px;
+    height: 50px;
+    padding: 0 15px;
+    border-top: solid 1px #d0d0d5;
+    color: #000;
+    background: #fff; }
+  .accordion .dropdown {
+    /* 内容区 */
+    /* 箭头 */ }
+    .accordion .dropdown .dropdown-menu {
+      overflow: hidden;
+      list-style: none;
+      padding: 0 0;
+      margin: 0;
+      -webkit-transform-origin: 50% 0%;
+      transform-origin: 50% 0%;
+      max-height: 0;
+      -webkit-transform: scaleY(0);
+      transform: scaleY(0);
+      animation: hideAnimation 0.4s ease-out;
+      -webkit-animation: hideAnimation 0.4s ease-out;
+      -webkit-transition: max-height 0.4s ease-out;
+      transition: max-height 0.4s ease-out; }
+    .accordion .dropdown .icon-fangxiangshang {
+      position: absolute;
+      display: block;
+      font-size: 16px;
+      line-height: 50px;
+      color: #333;
+      top: 0;
+      right: 10px;
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+      -webkit-transition: -webkit-transform 0.6s;
+      transition: transform 0.6s; }
+  .accordion .dropdown.show {
+    /* 内容 */
+    /* 箭头 */ }
+    .accordion .dropdown.show .dropdown-menu {
+      display: block;
+      max-height: 600px;
+      -webkit-transform: scaleY(1);
+      transform: scaleY(1);
+      animation: showAnimation 0.5s ease-in-out;
+      -webkit-animation: showAnimation 0.5s ease-in-out;
+      -webkit-transition: max-height 0.8s ease-in-out;
+      transition: max-height 0.8s ease-in-out; }
+    .accordion .dropdown.show .icon-fangxiangshang {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -webkit-transition: -webkit-transform 0.6s;
+      transition: transform 0.6s; }
+  .accordion .weui_cells {
+    margin-top: 0;
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #4a527b;
+    background-color: #f2f3f8; }
+  .accordion .weui_cell {
+    padding: 5px 15px; }
+  .accordion .weui_cell.border-bottom {
+    padding-bottom: 15px;
+    margin-bottom: 10px; }
+  .accordion .weui_cells:before, .accordion .weui_cells:after, .accordion .weui_cell:before {
+    display: none; }
+  .accordion .weui_cell_hd {
+    width: 90px;
+    padding-right: 10px;
+    text-align: right; }
+  .accordion .weui_cell_ft {
+    display: inline-block;
+    width: 50px;
+    color: #007de2; }
 
 @keyframes showAnimation {
   0% {
@@ -382,6 +378,8 @@ header .header_left {
   position: absolute;
   left: 10px;
   top: 0; }
+  header .header_left .icon-back {
+    color: #333; }
 
 header .header_title {
   overflow: hidden;
@@ -391,7 +389,7 @@ header .header_title {
 /* 微信alert弹框--start */
 /* 标题 */
 .weui_dialog {
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden; }
   .weui_dialog .weui_dialog_title {
     font-size: 20px;

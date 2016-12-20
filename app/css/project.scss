@@ -20,7 +20,7 @@ $background-color:#f2f3f8;
 
 /* 自定义按钮 */
 .weui_btn{background-color: $default-color;line-height: 36px;}
-.weui_btn_fixedBottom{position: fixed;bottom: 0;left: 0;right: 0;line-height:40px;background-color: #007de2;color: #fff;font-size: 16px;text-align: center;}
+.weui_btn_fixedBottom{position: fixed;bottom: 0;left: 0;right: 0;line-height:40px;background-color: #007de2;color: #fff;font-size: 16px;text-align: center;-webkit-tap-highlight-color: transparent;}
 
 @media screen and (min-width: 375px){
   .weui_btn{line-height: 44px;}
@@ -102,6 +102,7 @@ input{color: #333;}
 /* 封装一个手风琴插件 --start */
 .accordion{
 
+  /* 标题或者开关 */
   .dropdown [data-toggle="dropdown"] {
     position: relative;
     font-size: 17px;
@@ -112,61 +113,63 @@ input{color: #333;}
     color: #000;
     background: #fff;
   }
-
-  .dropdown .icon-fangxiangshang {
-    position: absolute;
-    display: block;
-    font-size: 16px;
-    line-height: 50px;
-    color: #333;
-    top:0;
-    right: 10px;
-  }
-  .dropdown .icon-fangxiangshang.open {
-    -webkit-transform: rotate(-180deg);
-    transform: rotate(-180deg);
-    -webkit-transition: -webkit-transform 0.6s;
-    transition: transform 0.6s;
-  }
-  .dropdown .icon-fangxiangshang.close {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-    -webkit-transition: -webkit-transform 0.6s;
-    transition: transform 0.6s;
-  }
-
-  .dropdown .dropdown-menu {
-    //max-height: 0;
-    overflow: hidden;
-    list-style: none;
-    padding: 0 0;
-    margin: 0;
-  }
-
-  .dropdown .show, .dropdown .hide {
-    -webkit-transform-origin: 50% 0%;
-    transform-origin: 50% 0%;
-  }
-  .dropdown .show {
-    display: block;
-    max-height: 600px;
-    -webkit-transform: scaleY(1);
-    transform: scaleY(1);
-    animation: showAnimation 0.5s ease-in-out;
-    -webkit-animation: showAnimation 0.5s ease-in-out;
-    -webkit-transition: max-height 0.8s ease-in-out;
-    transition: max-height 0.8s ease-in-out;
-  }
-  .dropdown .hide {
-    max-height: 0;
-    -webkit-transform: scaleY(0);
-    transform: scaleY(0);
-    animation: hideAnimation 0.4s ease-out;
-    -webkit-animation: hideAnimation 0.4s ease-out;
-    -webkit-transition: max-height 0.4s ease-out;
-    transition: max-height 0.4s ease-out;
+  /* 当为隐藏状态时 */
+  .dropdown{
+    /* 内容区 */
+    .dropdown-menu {
+      overflow: hidden;
+      list-style: none;
+      padding: 0 0;
+      margin: 0;
+      -webkit-transform-origin: 50% 0%;
+      transform-origin: 50% 0%;
+      max-height: 0;
+      -webkit-transform: scaleY(0);
+      transform: scaleY(0);
+      animation: hideAnimation 0.4s ease-out;
+      -webkit-animation: hideAnimation 0.4s ease-out;
+      -webkit-transition: max-height 0.4s ease-out;
+      transition: max-height 0.4s ease-out;
+    }
+    /* 箭头 */
+    .icon-fangxiangshang {
+      position: absolute;
+      display: block;
+      font-size: 16px;
+      line-height: 50px;
+      color: #333;
+      top:0;
+      right: 10px;
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+      -webkit-transition: -webkit-transform 0.6s;
+      transition: transform 0.6s;
+    }
   }
 
+  /* 当为显示状态时 */
+  .dropdown.show {
+    /* 内容 */
+    .dropdown-menu{
+      display: block;
+      max-height: 600px;
+      -webkit-transform: scaleY(1);
+      transform: scaleY(1);
+      animation: showAnimation 0.5s ease-in-out;
+      -webkit-animation: showAnimation 0.5s ease-in-out;
+      -webkit-transition: max-height 0.8s ease-in-out;
+      transition: max-height 0.8s ease-in-out;
+    }
+    /* 箭头 */
+    .icon-fangxiangshang {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -webkit-transition: -webkit-transform 0.6s;
+      transition: transform 0.6s;
+    }
+  }
+
+  /* 内容区详情 */
   .weui_cells{margin-top:0;padding:10px 15px;font-size: 15px;color: #4a527b;background-color: $background-color;}
   .weui_cell{padding: 5px 15px;}
 
@@ -329,14 +332,18 @@ $stepText-width:70px;
 
 /* 头部导航 */
 header{position: fixed;top:0;left: 0;right: 0;font-size: 16px;padding:0 30px;color: #333;line-height:44px;border-bottom:solid 1px #cbceda;text-align: center;background-color: #fff;z-index: 100;}
-header .header_left{position: absolute;left: 10px;top:0;}
+header .header_left{
+  position: absolute;left: 10px;top:0;
+  .icon-back{color: #333;}
+}
+
 header .header_title{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 header .header_right{}
 
 /* 微信alert弹框--start */
 /* 标题 */
 .weui_dialog {
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
   .weui_dialog_title{font-size: 20px;color: #1a1e36;font-weight: 600;}
   .weui_dialog_bd{color: $pain-color;}

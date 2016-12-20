@@ -18,7 +18,7 @@
         /* 投保计划 */
         .weui_cells:after{border: none;}
         .weui_cells.plan{padding: 10px 0px 30px;}
-        .weui_cells.plan .weui_cell:before{display: none;}
+        .weui_cells.plan .weui_cell:before,.noBorder.weui_cell:before{display: none;}
         .weui_cells.plan .weui_cell{padding: 4px 15px;}
         .weui_cells.plan .weui_cell_ft{color: #333;}
         /* 锯齿 */
@@ -36,6 +36,10 @@
         .weui_cell_select {  padding: 0 15px;  }
         .weui_cell_ft{color: #333;}
         .toolbar .picker-button{color: #007de2;}
+
+        /* 出身日期填写 */
+        .hidden{visibility: hidden;}
+        .placeholder{position: absolute;right: 15px;top:0;line-height: 42px;color: #8a90af;}
     </style>
 </head>
 <body>
@@ -69,7 +73,13 @@
             <div class="weui_cell_hd weui_cell_primary">被保人信息</div>
             <div class="weui_cell_ft" onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
         </div>
-        <div class="weui_cell">
+        <div class="weui_cell noBorder">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input v-model="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" >
+            </div>
+        </div>
+        <div class="weui_cell ">
             <div class="weui_cell_hd weui_cell_primary">姓名</div>
             <div class="weui_cell_ft">
                 <input v-model="protectedPerson.name" class="weui_input g-align-right" placeholder="必填" >
@@ -78,12 +88,12 @@
         <div class="weui_cell">
             <div class="weui_cell_hd weui_cell_primary">性别</div>
             <div class="weui_cell_ft ">
-                <label for="s11" style="margin-right: 20px;">
+                <label for="s11" style="padding-left: 20px;">
                     <input type="radio" v-model="protectedPerson.sex" value="男" class="weui_check" name="sex" id="s11" >
                     <span class="weui_icon_checked_primary"></span>
                     <span>男</span>
                 </label>
-                <label for="s12">
+                <label for="s12" style="padding-left: 20px;">
                     <input type="radio" v-model="protectedPerson.sex" value="女"  class="weui_check" name="sex" id="s12" >
                     <span class="weui_icon_checked_primary"></span>
                     <span>女</span>
@@ -91,17 +101,13 @@
             </div>
         </div>
 
-        <div class="weui_cell">
-            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
-            <div class="weui_cell_ft">
-                <input v-model="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" >
-            </div>
-        </div>
+
 
         <div class="weui_cell">
-            <div class="weui_cell_hd weui_cell_primary">出生日期</div>
-            <div class="weui_cell_ft">
-                <input type="date" v-model="protectedPerson.birthday" class="weui_input g-align-right" placeholder="请选择出生日期" >
+            <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
+            <div class="weui_cell_ft" style="min-width: 100px;">
+                <input id="date-picker" type="date" v-model="protectedPerson.birthday" class="weui_input" :class="{'hidden': !protectedPerson.birthday}">
+                <label v-show="!protectedPerson.birthday" for="date-picker" class="placeholder">请选择出生日期</label>
             </div>
         </div>
 
@@ -112,14 +118,14 @@
             </div>
         </div>
 
-        <div class="weui_cell">
+        <!--<div class="weui_cell">
             <label class="weui_label weui_cell_bd weui_cell_primary">
                 班级
             </label>
             <div class="weui_cell_ft">
                 <input class="weui_input g-align-right" placeholder="请选择班级" type="text" id='picker'>
             </div>
-        </div>
+        </div>-->
     </div>
 
     <div class="weui_cells">
@@ -127,7 +133,13 @@
             <div class="weui_cell_hd weui_cell_primary">投保人信息</div>
             <div class="weui_cell_ft"  onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
         </div>
-        <div class="weui_cell">
+        <div class="weui_cell noBorder">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input v-model="payProtectedPerson.identifyId" type="number" class="weui_input g-align-right" placeholder="有则填，避免纠纷" >
+            </div>
+        </div>
+        <div class="weui_cell ">
             <div class="weui_cell_hd weui_cell_primary">姓名</div>
             <div class="weui_cell_ft">
                 <input v-model="payProtectedPerson.name" class="weui_input g-align-right" placeholder="必填" >
@@ -139,12 +151,7 @@
                 <input v-model="payProtectedPerson.tel" type="number" class="weui_input g-align-right" placeholder="必填" >
             </div>
         </div>
-        <div class="weui_cell">
-            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
-            <div class="weui_cell_ft">
-                <input v-model="payProtectedPerson.identifyId" type="number" class="weui_input g-align-right" placeholder="必填" >
-            </div>
-        </div>
+
     </div>
 
     <a href="page2-checkMsg.html" class="weui_btn" style="margin: 28px 15px;">提交订单</a>

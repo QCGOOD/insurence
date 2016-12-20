@@ -27,37 +27,50 @@
 <body>
 <div id="app">
 
-
-    <div class="weui_cells_title">已生效</div>
-    <div class="weui_cells u-card" style="background-color: #fff;" @click="jumpToDetail('page5-myInsurenceDetail.html')">
-        <div class="weui_cell top" style="padding-bottom: 4px;">
-            <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-success"></i></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <div class="order_id">保单号:23112837862345</div>
-                <h4 class="order_title">一年期综合意外险</h4>
+    <!-- 有保单时 -->
+    <div v-if="showPic">
+        <div class="weui_cells_title">已生效</div>
+        <div class="weui_cells u-card" style="background-color: #fff;"
+             @click="jumpToDetail('page5-myInsurenceDetail.html')">
+            <div class="weui_cell top" style="padding-bottom: 4px;">
+                <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-success"></i></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <div class="order_id">保单号:23112837862345</div>
+                    <h4 class="order_title">一年期综合意外险</h4>
+                </div>
+                <div class="weui_cell_ft order_price">￥69</div>
             </div>
-            <div class="weui_cell_ft order_price">￥69</div>
+            <div class="weui_cell bottom">
+                <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
+                <div class="weui_cell_ft">有效期至:2016.09.18</div>
+            </div>
         </div>
-        <div class="weui_cell bottom">
-            <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
-            <div class="weui_cell_ft">有效期至:2016.09.18</div>
+
+        <div class="weui_cells_title">已失效</div>
+        <div class="weui_cells u-card" style="background-color: #fff;"
+             @click="jumpToDetail('page5-myInsurenceDetail-overdue.html')">
+            <div class="weui_cell top" style="padding-bottom: 4px;">
+                <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-overdue"></i></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <div class="order_id">保单号:23112837862345</div>
+                    <h4 class="order_title">一年期综合意外险</h4>
+                </div>
+                <div class="weui_cell_ft order_price">￥69</div>
+            </div>
+            <div class="weui_cell bottom">
+                <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
+                <div class="weui_cell_ft">有效期至:2016.09.18</div>
+            </div>
         </div>
     </div>
 
-    <div class="weui_cells_title">已失效</div>
-    <div class="weui_cells u-card" style="background-color: #fff;" @click="jumpToDetail('page5-myInsurenceDetail-overdue.html')">
-        <div class="weui_cell top" style="padding-bottom: 4px;">
-            <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-overdue"></i></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <div class="order_id">保单号:23112837862345</div>
-                <h4 class="order_title">一年期综合意外险</h4>
-            </div>
-            <div class="weui_cell_ft order_price">￥69</div>
+    <!-- 没有保单时 -->
+    <div v-else>
+        <div style="text-align: center;padding: 20px;">
+            <img width="163" height="170" src="./images/status_1.png" alt="">
+            <p style="font-size: 16px;line-height:36px;color: #333;">还没有购买记录哦~</p>
         </div>
-        <div class="weui_cell bottom">
-            <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
-            <div class="weui_cell_ft">有效期至:2016.09.18</div>
-        </div>
+        <a href="" class="weui_btn" style="margin: 20px 15px;">去看看</a>
     </div>
 
 </div>
@@ -65,7 +78,9 @@
     var vm = new Vue({
         el: '#app',
         data: function () {
-            return {}
+            return {
+                showPic:true,   // 是否有购买记录
+            }
         },
         methods: {
             jumpToDetail: function (url) {
