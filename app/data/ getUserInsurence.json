@@ -1,0 +1,23 @@
+{
+  "code": 97,
+  "errorMsg": "数据获取成功",
+  "product": {
+    "id": "xxx12341235",
+    "startTime": "mock",
+    "endTime": "mock",
+    "limitTime": "mock",
+    "price": 35
+  },
+  "protectedPerson": {
+    "name": "mock",
+    "sex": "mock",
+    "identifyId": "mock",
+    "className": "mock",
+    "birthday": "mock"
+  },
+  "payProtectedPerson": {
+    "name": "mock",
+    "tel": "mock",
+    "identifyId": "mock"
+  }
+}

@@ -71,7 +71,29 @@
     var vm = new Vue({
         el: '#app',
         data: function () {
-            return {}
+            return {
+                /* 待支付订单 */
+                unPayList: [
+                    {
+                        id:'',
+                        title:'',
+                        name:'',
+                        price:'',
+                        deadline:''
+                    }
+                ],
+                /* 已生效保单 */
+                effectList: [
+                    {
+                        id:'',
+                        title:'',
+                        name:'',
+                        price:'',
+                        deadline:''
+                    }
+                ]
+
+            }
         },
         methods: {
             jumpToDetail: function () {

@@ -1,3 +1,28 @@
 {
-
+  "code": 0,
+  "errorMsg": "获取成功",
+  "semesters": [
+    {
+      "label": "mock",
+      "value": "mock"
+    }
+  ],
+  "schoolData": {
+    "time": "mock",
+    "schoolName": "mock",
+    "totalNum": 22,
+    "grades": [
+      {
+        "grade": "mock",
+        "totalNum": 8,
+        "classes": [
+          {
+            "classId": "mock",
+            "className": "mock",
+            "num": 21
+          }
+        ]
+      }
+    ]
+  }
 }

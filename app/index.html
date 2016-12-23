@@ -112,9 +112,12 @@
                     num:0,
                     id:''
                 },
-                address:'',
-                schoolName:'',
-                className:''
+                /* 地址表单 */
+                form:{
+                    address:'',
+                    schoolName:'',
+                    className:''
+                }
             }
         },
         methods: {
@@ -124,6 +127,7 @@
         created: function () {
             /* 获取保险产品信息 */
             $.get('./data/product.json', function (data) {
+                console.log(data);
                 vm.product = data.product;
             });
 
@@ -132,7 +136,7 @@
                 $("#city-picker").cityPicker({
                     showDistrict: false,
                     onChange: function (e) {
-                        vm.address = e.displayValue.join(" ");
+                        vm.form.address = e.displayValue.join(" ");
                     }
                 });
 
@@ -147,7 +151,7 @@
                         }
                     ],
                     onChange: function (e) {
-                        vm.schoolName = e.value.join(" ");
+                        vm.form.schoolName = e.value.join(" ");
                     }
                 });
 
@@ -167,7 +171,7 @@
                         }
                     ],
                     onChange: function (e) {
-                        vm.className = e.value.join(" ");
+                        vm.form.className = e.value.join(" ");
                     }
                 });
 
@@ -177,21 +181,15 @@
 
     /* 点击确定时 */
     function submitAddress() {
-        if(!vm.address || !vm.schoolName || !vm.className){
+        if(!vm.form.address || !vm.form.schoolName || !vm.form.className){
             $.toast("信息不完整", "text");
             return false
         }
         vm.showDialog = false;
-        console.log(vm.address, vm.schoolName, vm.className);
+        console.log(vm.form.address, vm.form.schoolName, vm.form.className);
         // TODO:保存城市、学校、与班级
-
-        $.post('',{
-            "address":"广东省 广州",
-            "schoolName":"华师附中",
-            "className":"三年级 (1)班"
-        }, function (data) {
-
-        })
+        $.post('',vm.form, function (data) {
+        },'json');
     }
 </script>
 

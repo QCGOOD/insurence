@@ -1,5 +1,3 @@
-
-
 $(function () {
     $("header .back:not(.noClick)").on("click", function () {
         history.go(-1)
@@ -30,4 +28,18 @@ function getIdentifyMsg() {
          });*/
 
         return {}
+}
+
+function showInfo(text) {
+    var body = $('body');
+    $('.weui_toast_text').remove();
+    var template = `<div class="weui_toast weui_toast_text weui_toast_visible" style="height: auto;">
+        <i class="weui_icon_toast"></i>
+        <p class="weui_toast_content" >`+text+`</p>
+    </div>`;
+    $(body).append(template);
+
+    setTimeout(function () {
+        $('.weui_toast_text').remove();
+    },2000);
 }

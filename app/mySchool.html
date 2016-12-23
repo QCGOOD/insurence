@@ -19,13 +19,13 @@
         .f-select .weui_select{height: 24px; line-height: 24px;color: #007de2; padding: 0;}
 
         /* 表格 */
-        .dropdown-menu .weui_cells{padding: 10px 10px;}
+        .dropdown-menu .weui_cells{padding: 10px 15px;}
         .dropdown-menu .weui_cell{height: 40px;}
         .dropdown-menu .weui_cell:before{display: block;}
         .dropdown-menu .weui_cells .weui_cell:first-of-type::before{display: none;}
-        .dropdown-menu .weui_cell_hd{width: 50px;text-align: center;}
+        .dropdown-menu .weui_cell_hd{width: 60px;text-align: center;}
         .dropdown-menu .weui_cell_bd{text-align: center;}
-        .dropdown-menu .weui_cell_ft{display:inline-block;width: 80px;text-align: center;font-size: 15px;color: #4a527b;}
+        .dropdown-menu .weui_cell_ft{display:inline-block;width: 30px;text-align: center;font-size: 15px;color: #007de2;}
         .tab-head, .tab-foot{font-size: 15px;color: #333;}
 
 
@@ -38,10 +38,10 @@
         <div class="header_left back">
             <i class="iconfont icon-back"></i>
         </div>
-        <div class="header_title">班级详情</div>
+        <div class="header_title">我的学校</div>
     </header>
 
-    <div v-if="data.totalNum > 0">
+    <div v-if="schoolData.totalNum > 0">
         <div class="g-top">
 
             <div class="f-select weui_cell_select">
@@ -49,36 +49,43 @@
                     <option v-for="item in semesters" :value="item.value">{{item.label}}</option>
                 </select>
             </div>
-            <h4 style="font-size: 18px;color: #333;line-height: 1.3;">{{data.className}}</h4>
-            <p style="font-size: 14px;color: #68709a;">总投保({{data.totalNum}}人)</p>
+            <h4 style="font-size: 18px;color: #333;line-height: 1.3;">{{schoolData.schoolName}}</h4>
+            <p style="font-size: 14px;color: #68709a;">总投保({{schoolData.totalNum}}人)</p>
         </div>
         <!-- 手风琴 -->
         <ul id="accordion" class="accordion">
-            <li class="dropdown show">
-                <div data-toggle="dropdown">已投保<i class="iconfont icon-fangxiangshang"></i></div>
-                <div class="dropdown-menu ">
+            <li v-for="(grade, index) in schoolData.grades" class="dropdown" :class="{'hide': index, 'show':!index }">
+                <div data-toggle="dropdown">{{grade.grade}}<i class="iconfont icon-fangxiangshang"></i></div>
+                <div class="dropdown-menu" >
                     <div class="weui_cells">
+
                         <!-- 表头 -->
                         <div class="weui_cell tab-head">
-                            <div class="weui_cell_hd">姓名</div>
-                            <div class="weui_cell_bd weui_cell_primary">投保类型</div>
-                            <div class="weui_cell_ft">有效期至</div>
+                            <div class="weui_cell_hd">班级</div>
+                            <div class="weui_cell_bd weui_cell_primary">已投保(人)</div>
+                            <div class="weui_cell_ft"></div>
                         </div>
                         <!-- 表正文 -->
-                        <template v-for="student in data.students">
+                        <template v-for="item in grade.classes">
                             <div class="weui_cell tab-body">
-                                <div class="weui_cell_hd">{{student.name}}</div>
-                                <div class="weui_cell_bd weui_cell_primary">{{student.title}}</div>
-                                <div class="weui_cell_ft">{{student.deadline}}</div>
+                                <div class="weui_cell_hd">{{item.className}}</div>
+                                <div class="weui_cell_bd weui_cell_primary">{{item.num}}</div>
+                                <div class="weui_cell_ft" @click="jumpToDetail(item.classId)">详情</div>
                             </div>
                         </template>
+                        <!-- 表底foot -->
+                        <div class="weui_cell tab-foot">
+                            <div class="weui_cell_hd">总数</div>
+                            <div class="weui_cell_bd weui_cell_primary">{{grade.totalNum}}</div>
+                            <div class="weui_cell_ft"></div>
+                        </div>
                     </div>
 
                 </div>
             </li>
         </ul>
 
-        <a onclick="sendToEmail()" class="weui_btn" style="margin: 30px 15px;">发送表格到邮箱</a>
+        <a onclick="sendToEmail()" class="weui_btn" style="margin: 30px 10px;">发送表格到邮箱</a>
         <div class="btn_kefu"></div>
     </div>
 
@@ -95,31 +102,74 @@
         el: '#app',
         data: function () {
             return {
-//              /* 具体班级购买情况 */
-                data: {
-                    time:'2016年春季',
-                    className: '一(1)班',
-                    totalNum:4,
-                    students: [
+                /* 各年级各班级购买情况 */
+                schoolData: {
+                    time:'2016年春',
+                    schoolName:'华师附中',
+                    totalNum:2888,
+                    grades: [
                         {
-                            name: '周伦',
-                            title:'一年期综合意外险',
-                            deadline:'2017-09-08'
+                            grade:'一年级',
+                            totalNum:60,
+                            classes: [
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '一(1)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '一(2)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '一(3)班',
+                                    num: 20
+                                }
+                            ]
                         },
                         {
-                            name: '周伦1',
-                            title:'一年期综合意外险',
-                            deadline:'2017-09-08'
+                            grade:'二年级',
+                            totalNum:60,
+                            classes: [
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '二(1)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '二(2)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '二(3)班',
+                                    num: 20
+                                }
+                            ]
                         },
                         {
-                            name: '周伦2',
-                            title:'一年期综合意外险',
-                            deadline:'2017-09-08'
-                        },
-                        {
-                            name: '周伦3',
-                            title:'一年期综合意外险',
-                            deadline:'2017-09-08'
+                            grade:'三年级',
+                            totalNum:60,
+                            classes: [
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '三(1)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '三(2)班',
+                                    num: 20
+                                },
+                                {
+                                    classId:'xxxxxxxx',
+                                    className: '三(3)班',
+                                    num: 20
+                                }
+                            ]
                         }
                     ]
                 },

@@ -55,7 +55,17 @@
     var vm = new Vue({
         el: '#app',
         data: function () {
-            return {}
+            return {
+                unPayList: [
+                    {
+                        id:'',
+                        title:'',
+                        name:'',
+                        price:'',
+                        deadline:''
+                    }
+                ]
+            }
         },
         methods: {
             jumpToDetail: function () {

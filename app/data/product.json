@@ -1,8 +1,7 @@
 {
-  "school":{
-    "schoolName":"华南师范大学",
-    "schoolId":"xx123qq1234ww1234"
-  },
+  "code":0,
+  "errMsg":"数据获取成功",
+  "schoolName":"华南师范大学",
   "product":{
     "title":"一年期综合意外险",
     "price":88,

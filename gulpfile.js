@@ -81,3 +81,5 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('default',['image','js','scss-compile','css','serve','watch']);
+
+module.exports = gulp;

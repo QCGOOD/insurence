@@ -3,3 +3,6 @@ node_modules/
 dist/
 npm-debug.log
 .idea/
+express/
+application-name@0.0.1
+supervisor

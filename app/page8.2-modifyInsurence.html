@@ -164,6 +164,26 @@
                     identifyId:''
                 },
                 /* 允许修改的项目 */
+                allowedMsg:{
+                    protectedPerson: {
+                        name:'',
+                        sex:'',
+                        identifyId:'',
+                        className:'',
+                        birthday:''
+                    },
+                    payProtectedPerson: {
+                        name:'',
+                        tel:'',
+                        identifyId:''
+                    }
+                },
+                /* 修改的信息 */
+                ModifyItem:{
+                    target:'payProtectedPerson.name',
+                    oldVal:'',
+                    newVal:''
+                },
                 allowedList:[
                     {
                         belong:'protectedPerson',
@@ -185,14 +205,14 @@
                     }
                 ],
                 /* 原内容 */
-                ModifyItem: {
+                /*ModifyItem: {
                     belong:'',
                     codeName:'',
                     label:'',
                     value:'',
                     newValue:''
                 },
-                oldVal:''
+                oldVal:''*/
             }
         },
         /* 监控数据变化 */

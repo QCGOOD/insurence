@@ -80,6 +80,26 @@
         data: function () {
             return {
                 showPic:true,   // 是否有购买记录
+                /* 已生效 */
+                effectList: [
+                    {
+                        id: '',
+                        title: '',
+                        name: '',
+                        price: '',
+                        deadline: ''
+                    }
+                ],
+                /* 已失效 */
+                noEffectList: [
+                    {
+                        id: '',
+                        title: '',
+                        name: '',
+                        price: '',
+                        deadline: ''
+                    }
+                ]
             }
         },
         methods: {
