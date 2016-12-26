@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">-->
+    <title>Title</title>
+    <link rel="stylesheet" href="css/project.css">
+
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/parsley.min.js"></script>
+    <script src="js/libs/pdf.min.js"></script>
+    <script src="js/project.js"></script>
+
+    <style>
+
+        html,body{width: 100%;height: 100%;}
+     </style>
+</head>
+<body>
+
+<canvas id="the-canvas"></canvas>
+
+<script id="script">
+    var url = './pdf/test2.pdf';
+    PDFJS.workerSrc = 'js/libs/pdf.worker.min.js';
+    PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+        pdf.getPage(1).then(function getPageHelloWorld(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+            var canvas = document.getElementById('the-canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    });
+</script>
+
+</body>
+</html>

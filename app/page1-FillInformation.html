@@ -10,11 +10,11 @@
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
-    <script src="js/libs/validate.js"></script>
+    <script src="js/libs/parsley.min.js"></script>
     <script src="js/project.js"></script>
 
     <style>
-        body{background-color: #f2f3f8;padding-top: 44px;}
+        body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 40px;}
         .weui_cells{font-size: 16px;}
         /* 投保计划 */
         .weui_cells:after{border: none;}
@@ -39,10 +39,20 @@
         .toolbar .picker-button{color: #007de2;}
 
         /* 出身日期填写 */
-        .hidden{visibility: hidden;}
+        .hidden{opacity: 0;}
         .placeholder{position: absolute;right: 15px;top:0;line-height: 42px;color: #8a90af;}
 
-        /* 表单错误信息提示 */
+        /* 表单结果信息提示 */
+        .validate-success{
+            color: #468847;
+            background-color: #DFF0D8;
+            border: 1px solid #D6E9C6;
+        }
+        .validate-error{
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border: 1px solid #EED3D7;
+        }
     </style>
 </head>
 <body>
@@ -72,38 +82,41 @@
 
     <div class="weui_cells_title">信息填写</div>
     <div id="element"></div>
-    <form id="form" data-parsley-validate data-parsley-errors-messages-disabled>
-
+    <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
         <div class="weui_cells weui_cells_radio">
             <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
                 <div class="weui_cell_hd weui_cell_primary">被保人信息<span
                         style="font-size:12px;color: #007de2;">(学生)</span></div>
-                <div class="weui_cell_ft" onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">
-                    点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
+                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
+                    <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
+                    点相机拍身份证录入<i class="iconfont icon-xiangji"></i>
+                </div>
             </div>
+
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.identifyId" name="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required fd="true" dt="text" tip="身份证号" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/">
+                    <input type="text" v-model="protectedPerson.identifyId" name="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
                 </div>
             </div>
+
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="protectedPerson.name" class="weui_input g-align-right" placeholder="必填" required>
+                    <input v-model="protectedPerson.name" name="protectedPerson.name" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
                 <div class="weui_cell_ft ">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.sex" value="男" class="weui_check" name="sex"
+                        <input type="radio" v-model="protectedPerson.sex" name="protectedPerson.sex" value="男" class="weui_check"
                                id="s11" required>
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.sex" value="女" class="weui_check" name="sex"
+                        <input type="radio" v-model="protectedPerson.sex" value="女" class="weui_check" name="protectedPerson.sex"
                                id="s12">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -115,9 +128,9 @@
             <div class="weui_cell">
                 <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
                 <div class="weui_cell_ft" style="min-width: 100px;">
-                    <input id="date-picker" type="date" v-model="protectedPerson.birthday" class="weui_input"
-                           :class="{'hidden': !protectedPerson.birthday}" required>
                     <label v-show="!protectedPerson.birthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                    <input id="date-picker" type="date" v-model="protectedPerson.birthday" name="protectedPerson.birthday" class="weui_input"
+                           :class="{'hidden': !protectedPerson.birthday}" required tip="出生日期">
                 </div>
             </div>
 
@@ -128,41 +141,42 @@
                 </div>
             </div>
 
-            <!--<div class="weui_cell">
+            <div class="weui_cell">
                 <label class="weui_label weui_cell_bd weui_cell_primary">
                     班级
                 </label>
                 <div class="weui_cell_ft">
-                    <input class="weui_input g-align-right" placeholder="请选择班级" type="text" id='picker'>
+                    <input class="weui_input g-align-right" v-model="protectedPerson.className" name="protectedPerson.className" placeholder="请选择班级" type="text" id='picker' required>
                 </div>
-            </div>-->
+            </div>
         </div>
 
         <div class="weui_cells">
             <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
                         style="font-size:12px;color: #007de2;">(家长)</span></div>
-                <div class="weui_cell_ft" onclick="getIdentifyMsg()" style="font-size: 12px;line-height: 24px;">
+                <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
+                    <input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
                     点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
             </div>
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.identifyId" type="number" class="weui_input g-align-right"
-                           placeholder="有则填，避免纠纷">
+                    <input v-model="payProtectedPerson.identifyId" name="payProtectedPerson.identifyId" type="text" class="weui_input g-align-right"
+                           placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" >
                 </div>
             </div>
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.name" class="weui_input g-align-right" placeholder="必填" required>
+                    <input v-model="payProtectedPerson.name" name="payProtectedPerson.name" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.tel" type="number" class="weui_input g-align-right"
-                           placeholder="必填" required>
+                    <input v-model="payProtectedPerson.tel" name="payProtectedPerson.tel" type="number" class="weui_input g-align-right"
+                           placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
                 </div>
             </div>
 
@@ -194,17 +208,17 @@
                 schoolName:'',
                 /* 被保人信息 */
                 protectedPerson:{
-                    name:'',
-                    sex:'',
-                    identifyId:'12345',
-                    className:'',
-                    birthday:'',
+                    name:'彭生',
+                    sex:'男',
+                    identifyId:'420187199211035032',
+                    className:'三年级 (1)班',
+                    birthday:'1992-01-01',
                     identifyPhoto:''
                 },
                 /* 投保人信息 */
                 payProtectedPerson:{
-                    name:'',
-                    tel:'',
+                    name:'彭生',
+                    tel:'18825144569',
                     identifyId:'',
                     identifyPhoto:''
                 }
@@ -234,8 +248,8 @@
                 }
             });
 
-            /* 初始化班级选择器 */
             setTimeout(function () {
+                // 初始化班级选择插件
                 $("#picker").picker({
                     title: "请选择班级",
                     cols: [
@@ -254,6 +268,10 @@
                         vm.protectedPerson.className = e.value.join(" ");
                     }
                 });
+
+                // 初始化表单验证插件
+                initParsley();
+
             },1000);
 
             $('#app').show();
@@ -262,13 +280,36 @@
     
     /* 提交订单 */
     function submit() {
-        var json = formCheck();
-        console.log(json);
+        var form = $('#form');
+        var imgInputs = $('input[accept^="image"]');
+        for(var i=0; i<imgInputs.length; i++){
+            console.log(imgInputs[i].files);
+        }
+        form.submit();
     }
 
-    /* 表单验证 */
-    function checkForm() {
+    /* 绑定表单验证事件 */
+    function initParsley(callback) {
+        /* 表单验证 */
+        Parsley.on('form:error', function (formInstance) {
+            formInstance.fields.every(function (fieldInstance) {
+                var ok = fieldInstance.isValid();
+                if (!ok) {
+                    var tip = $(fieldInstance.$element).attr('tip') || "";
+                    var ErrorsMessages = fieldInstance.getErrorsMessages();
+                    showInfo(tip + ErrorsMessages);
+                    return false
+                } else {
+                    return true
+                }
+            });
+        }).on('form:success', function (formInstance) {
 
+//            console.log(formInstance.$element.serialize());
+            callback? callback():'';
+        }).on('form:submit', function () {
+            return false
+        });
     }
 
     /* 班级改变时 */

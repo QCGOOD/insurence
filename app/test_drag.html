@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <title>drag</title>
+    <style>
+        * {margin: 0}
+        .test {
+            position: absolute;
+            top: 20px;
+            width: 300px;
+            height: 400px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: #ddd;
+        }
+        .drag {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 200px;
+            line-height: 50px;
+            font-size: 1rem;
+            color: #fff;
+            left: 0;
+            text-align: center;
+            background-color: #000;
+        }
+        .target {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #007aff;
+            left: 0;
+            line-height: 50px;
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="test">
+    <div id="tag1" style="left: 10px" class="target">tag_1</div>
+    <div id="tag2" style="left: 70px; top: 300px;" class="target">tag_2</div>
+    <div id="tag3" style="left: 200px; top: 300px;" class="target">tag_3</div>
+
+    <div id="drag1" style="left: 10px;" class="drag">drag_1</div>
+    <div id="drag2" style="left: 70px;" class="drag">drag_2</div>
+    <div id="drag3" style="left: 130px;" class="drag">drag_3</div>
+
+</div>
+
+<script src="js/libs/drag.js"></script>
+<script>
+
+    new Drag({
+        dragEle: '#drag1',
+        targetEle: '#tag1',
+        ondrag: function (obj) {
+            console.log(obj);
+        }
+    });
+
+    new Drag({
+        dragEle: '#drag2',
+        targetEle: '#tag2',
+        ondrag: function (obj) {
+
+        }
+    });
+
+    new Drag({
+        dragEle: '#drag3',
+        targetEle: '#tag3',
+        ondrag: function (obj) {
+
+        }
+    });
+
+</script>
+</body>
+</html>

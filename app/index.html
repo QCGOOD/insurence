@@ -10,6 +10,9 @@
     <script src="js/libs/city-picker.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/project.js"></script>
+
+    <script src="js/libs/pdf.min.js"></script>
+
     <style>
         body{padding: 30px 20px;min-height: 480px;}
         /* 信主体区域 */
@@ -22,7 +25,8 @@
         .g-card-price{font-size: 23px;color: #f14f44;}
         .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
         .g-card-link-group{font-size:0;padding:8px 0;color: #007de2;border-top: dashed 1px #cfcfcf;text-align: center;width: 100%;}
-        .g-card-link-group>a{width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
+        .g-card-link-group>a{color: #007de2;width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
+        .g-card-link-group>a:visited{color: #007de2;}
         .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
 
         /* 选择城市与学校 */
@@ -32,6 +36,7 @@
 </head>
 <body>
 <div id="app">
+    <div v-show="!showPDF">
     <!-- 致家长的信 -->
     <main @click="">
         <img width="100%" height="17" src="images/title.png">
@@ -48,10 +53,10 @@
             <div class="g-card-title">{{product.title}}（保费{{product.maxAmount}}）</div>
             <div class="g-card-price">￥{{product.price}}</div>
             <div class="g-card-num">已售:{{product.num}}</div>
-            <div class="g-card-link-group">
-                <a class="border-right">投保须知</a>
-                <a class="border-right">保险内容解读</a>
-                <a>理赔流程</a>
+            <div class="g-card-link-group" id="readPdf">
+                <a  data-pdfUrl="./pdf/test.pdf" class="border-right" >投保须知</a>
+                <a  data-pdfUrl="./pdf/test2.pdf" class="border-right" >保险内容解读</a>
+                <a  data-pdfUrl="./pdf/test2.pdf" >理赔流程</a>
             </div>
         </div>
     </main>
@@ -94,8 +99,20 @@
                 <a onclick="submitAddress()" class="weui_btn_dialog primary">确定</a>
             </div>
         </div>
-
     </div>
+    </div>
+    <div v-show="showPDF">
+        <!-- 头部 -->
+        <header class="fixed_top">
+            <div class="header_left" @click="showPDF = false">
+                <i class="iconfont icon-back"></i>
+            </div>
+            <div class="header_title">{{pdfTitle}}</div>
+        </header>
+        <canvas id="pdf"></canvas>
+    </div>
+
+
 </div>
 
 
@@ -104,7 +121,9 @@
         el: '#app',
         data: function () {
             return {
-                showDialog: true,           // 是否显示对话框
+                showPDF:false,
+                pdfTitle:"",
+                showDialog: false,           // 是否显示对话框
                 product:{
                     title:"",
                     price:0,
@@ -173,6 +192,14 @@
                     onChange: function (e) {
                         vm.form.className = e.value.join(" ");
                     }
+                });
+                
+                /* 初始化查看保险按钮 */
+                $("#readPdf").on('click','a', function (e) {
+                    console.log(e.target,this);
+                    vm.showPDF = true;
+                    vm.pdfTitle = $(this).text();
+                    initPDF('pdf',$(this).attr('data-pdfUrl'));
                 });
 
             },1000);

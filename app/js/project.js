@@ -13,33 +13,35 @@ $(function () {
     /* 封装一个手风琴插件 --end */
 });
 
-/* 身份证识别 */
-function getIdentifyMsg() {
-        showInfo('该功能正在开发');
-        /* TODO:调用微信摄像头,识别身份证信息 */
-        /*wx.chooseImage({
-         count: 1, // 默认9
-         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-         success: function (res) {
-         var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 
-         }
-         });*/
-
-        return {}
-}
-
+/* 封装toast弹框 */
 function showInfo(text) {
     var body = $('body');
     $('.weui_toast_text').remove();
-    var template = `<div class="weui_toast weui_toast_text weui_toast_visible" style="height: auto;">
-        <i class="weui_icon_toast"></i>
-        <p class="weui_toast_content" >`+text+`</p>
-    </div>`;
+    var template = '<div class="weui_toast weui_toast_text weui_toast_visible" style="height: auto;"><p class="weui_toast_content" >'+text+'</p></div>';
     $(body).append(template);
 
     setTimeout(function () {
         $('.weui_toast_text').remove();
     },2000);
+}
+
+/* 渲染PDF文件 */
+function initPDF(id, url) {
+    PDFJS.workerSrc = 'js/libs/pdf.worker.min.js';
+    PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+        pdf.getPage(1).then(function getPageHelloWorld(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+            var canvas = document.getElementById(id);
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    });
 }
