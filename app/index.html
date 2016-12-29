@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="css/project.css">
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
-    <script src="js/libs/city-picker.min.js"></script>
+    <script src="js/libs/city-picker.js"></script>
     <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/hammer.min.js"></script>
+
     <script src="js/project.js"></script>
 
-    <script src="js/libs/pdf.min.js"></script>
 
     <style>
         body{padding: 30px 20px;min-height: 480px;}
@@ -35,10 +36,9 @@
     </style>
 </head>
 <body>
-<div id="app">
-    <div v-show="!showPDF">
+<div id="app" style="display: none;">
     <!-- 致家长的信 -->
-    <main @click="">
+    <main>
         <img width="100%" height="17" src="images/title.png">
         <h1 class="letter_title">致家长的一封信</h1>
         <article class="letter">
@@ -49,24 +49,24 @@
         </article>
 
         <!-- 保险 -->
-        <div class="u-card g-card">
-            <div class="g-card-title">{{product.title}}（保费{{product.maxAmount}}）</div>
-            <div class="g-card-price">￥{{product.price}}</div>
-            <div class="g-card-num">已售:{{product.num}}</div>
-            <div class="g-card-link-group" id="readPdf">
-                <a  data-pdfUrl="./pdf/test.pdf" class="border-right" >投保须知</a>
-                <a  data-pdfUrl="./pdf/test2.pdf" class="border-right" >保险内容解读</a>
-                <a  data-pdfUrl="./pdf/test2.pdf" >理赔流程</a>
+            <div class="u-card g-card">
+                <div class="g-card-title">{{product.title}}（保费{{product.maxAmount}}）</div>
+                <div class="g-card-price">￥{{product.price}}</div>
+                <div class="g-card-num">已售:{{product.num}}</div>
+                <div class="g-card-link-group">
+                    <a class="border-right">投保须知</a>
+                    <a class="border-right">保险内容解读</a>
+                    <a>理赔流程</a>
+                </div>
             </div>
-        </div>
+
     </main>
 
     <a href="page1-FillInformation.html" class="weui_btn_fixedBottom">立即投保</a>
 
-    <div class="btn_kefu"></div>
 
     <!-- 选择城市 -->
-    <div v-show="showDialog">
+    <div v-show="showDialog" style="display: none;">
         <div class="weui_mask weui_mask_visible"></div>
         <div class="weui_dialog weui_dialog_visible " style="top:21%;">
             <div class="weui_dialog_hd" style="border-bottom: 0;">
@@ -75,7 +75,14 @@
             <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;">
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在城市" type="text" id='city-picker'>
+                        <input class="weui_input " placeholder="请选择您所在城市" type="text" id='city-picker' >
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input " placeholder="请选择学校类型" type="text" id='class-picker'>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
@@ -87,32 +94,12 @@
                     <div class="weui_cell_ft"></div>
                 </div>
 
-                <div class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择班级" type="text" id='class-picker'>
-                    </div>
-                    <div class="weui_cell_ft"></div>
-                </div>
-
             </div>
             <div class="weui_dialog_ft">
                 <a onclick="submitAddress()" class="weui_btn_dialog primary">确定</a>
             </div>
         </div>
     </div>
-    </div>
-    <div v-show="showPDF">
-        <!-- 头部 -->
-        <header class="fixed_top">
-            <div class="header_left" @click="showPDF = false">
-                <i class="iconfont icon-back"></i>
-            </div>
-            <div class="header_title">{{pdfTitle}}</div>
-        </header>
-        <canvas id="pdf"></canvas>
-    </div>
-
-
 </div>
 
 
@@ -123,7 +110,7 @@
             return {
                 showPDF:false,
                 pdfTitle:"",
-                showDialog: false,           // 是否显示对话框
+                showDialog: true,           // 是否显示对话框
                 product:{
                     title:"",
                     price:0,
@@ -136,7 +123,10 @@
                     address:'',
                     schoolName:'',
                     className:''
-                }
+                },
+                dataSchool:[
+
+                ]
             }
         },
         methods: {
@@ -153,7 +143,6 @@
             setTimeout(function () {
                 /* 初始化城市选择器 */
                 $("#city-picker").cityPicker({
-                    showDistrict: false,
                     onChange: function (e) {
                         vm.form.address = e.displayValue.join(" ");
                     }
@@ -174,19 +163,13 @@
                     }
                 });
 
-                /* 初始化班级选择期 */
+                /* 初始化学校类型选择器 */
                 $("#class-picker").picker({
-                    title: "请选择班级",
+                    title: "请选择学校类型",
                     cols: [
                         {
                             textAlign: 'center',
-                            values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
-                            displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
-                        },
-                        {
-                            textAlign: 'center',
-                            values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                            displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                            values: ['幼儿园','小学','初中','高中','大学']
                         }
                     ],
                     onChange: function (e) {
@@ -202,11 +185,12 @@
                     initPDF('pdf',$(this).attr('data-pdfUrl'));
                 });
 
+
             },1000);
         }
     });
 
-    /* 点击确定时 */
+    /* 保存学校 */
     function submitAddress() {
         if(!vm.form.address || !vm.form.schoolName || !vm.form.className){
             $.toast("信息不完整", "text");
@@ -218,6 +202,10 @@
         $.post('',vm.form, function (data) {
         },'json');
     }
+
+
+
+
 </script>
 
 </body>

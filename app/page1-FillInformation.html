@@ -189,7 +189,6 @@
     <!-- 错误信息的容器 -->
 
 
-    <div class="btn_kefu"></div>
 
 </div>
 <script>
@@ -270,7 +269,9 @@
                 });
 
                 // 初始化表单验证插件
-                initParsley();
+                initParsley(function () {
+                    window.location.href = 'page2-checkMsg.html'
+                });
 
             },1000);
 

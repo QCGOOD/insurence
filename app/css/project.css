@@ -83,14 +83,19 @@ div, ul, li, input, img, a, textarea, span {
 
 /* 悬浮客服按钮 */
 .btn_kefu {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   position: fixed;
-  bottom: 70px;
+  z-index: 1001;
+  bottom: 60px;
   left: 10px;
   display: inline-block;
   width: 50px;
   height: 50px;
+  opacity: 0.8;
   background: url("../images/kefu.png") no-repeat;
-  background-size: 50px 50px; }
+  background-size: 50px 50px;
+  transition: opacity .3s ease-in-out; }
 
 @media screen and (max-height: 450px) {
   .btn_kefu {
@@ -423,3 +428,6 @@ header .header_title {
 
 .toolbar .picker-button {
   color: #007de2; }
+
+#app {
+  display: none; }
