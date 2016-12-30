@@ -8,12 +8,14 @@
     "createdTime":"2016-09-23",
     "startTime":"2016-09-19",
     "endTime":"2017-09-18",
-    "limitTime":"一年"
+    "limitTime":"365天",
+    "formula":"69元/365天*100天"
   },
   "protectedPerson":{
     "name":"林笑笑",
     "sex":"女",
     "identifyId":"421023198811035032",
+    "schoolName":"中山大学",
     "className":"三年级 2班",
     "birthday":"2001-01-01"
   },

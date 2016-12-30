@@ -12,14 +12,12 @@
     <style>
         body{background-color: #f2f3f8;padding-top: 45px;}
 
-
+        .accordion{margin-top: 10px;}
         /* checkbox */
         .weui_cells_checkbox.weui_cells:after{display: none;}
 
         /* 可点击链接 */
-        .s-link{
-            font-size:15px;color: #007de2;text-decoration: underline;
-        }
+        .s-link{  font-size:15px;color: #007de2;text-decoration: underline;  }
     </style>
 </head>
 <body>
@@ -33,9 +31,9 @@
         <div class="header_title">保单信息确认</div>
     </header>
 
-    <div style="font-size: 20px;color: #333;line-height: 65px;text-align: center;">
+    <!--<div style="font-size: 20px;color: #333;line-height: 65px;text-align: center;">
         一年综合意外险
-    </div>
+    </div>-->
 
     <!-- 手风琴 -->
     <ul id="accordion" class="accordion">
@@ -53,7 +51,7 @@
                         <div class="weui_cell_bd weui_cell_primary">{{product.endTime}}</div>
                     </div>
                     <div class="weui_cell border-bottom ">
-                        <div class="weui_cell_hd">保险时限:</div>
+                        <div class="weui_cell_hd">保期:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{product.limitTime}}</div>
                     </div>
                     <div class="weui_cell">
@@ -64,19 +62,23 @@
                         <div class="weui_cell_hd">性别:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.sex}}</div>
                     </div>
-                    <div class="weui_cell">
-                        <div class="weui_cell_hd">班级:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
-                    </div>
+
                     <div class="weui_cell">
                         <div class="weui_cell_hd">身份证号:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.identifyId}}</div>
                     </div>
-                    <div class="weui_cell border-bottom ">
+                    <div class="weui_cell  ">
                         <div class="weui_cell_hd">出身日期:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.birthday}}</div>
                     </div>
-
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">学校:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.schoolName}}</div>
+                    </div>
+                    <div class="weui_cell border-bottom">
+                        <div class="weui_cell_hd">班级:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
+                    </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">投保人姓名:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.name}}</div>
@@ -114,9 +116,9 @@
         </label>
     </div>
 
-    <div style="font-size: 16px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.price}}</span></div>
+    <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.price}}</span></div>
+    <div style="font-size: 13px;color: #8a90af;text-align: center;">(保费计算公式):{{product.formula}}</div>
     <a href="page3-pay.html" class="weui_btn" style="margin: 20px 15px;">立即支付</a>
-
 
 </div>
 <script>
@@ -130,13 +132,15 @@
                     startTime:'',
                     endTime:'',
                     limitTime:'',
-                    price:''
+                    price:'',
+                    formula:''
                 },
                 /* 被保人 */
                 protectedPerson:{
                     name:'',
                     sex:'',
                     identifyId:'',
+                    schoolName:'',
                     className:'',
                     birthday:''
                 },

@@ -64,7 +64,7 @@
         <div class="header_title">保单信息填写</div>
     </header>
 
-    <div class="weui_cells_title">投保计划</div>
+   <!-- <div class="weui_cells_title">投保计划</div>
     <div class="weui_cells sawtooth plan">
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">保险起期</div>
@@ -79,17 +79,35 @@
             <div class="weui_cell_ft">{{product.limitTime}}</div>
         </div>
     </div>
-
-    <div class="weui_cells_title">信息填写</div>
-    <div id="element"></div>
+-->
     <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
+        <div class="weui_cells_title">信息填写</div>
+        <div class="weui_cells weui_cells_access">
+            <a class="weui_cell" href="chooseSchool.html">
+                <div class="weui_cell_hd weui_cell_primary">学校</div>
+                <div class="weui_cell_bd">
+                    <div class="g-align-right">{{schoolName}}</div>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </a>
+
+            <div class="weui_cell">
+                <label class="weui_label weui_cell_bd weui_cell_primary">
+                    班级
+                </label>
+                <div class="weui_cell_bd">
+                    <input class="weui_input g-align-right" v-model="protectedPerson.className" name="protectedPerson.className" placeholder="请选择班级" type="text" id='picker' required>
+                </div>
+                <!--<div class="weui_cell_ft"></div>-->
+            </div>
+        </div>
         <div class="weui_cells weui_cells_radio">
             <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
                 <div class="weui_cell_hd weui_cell_primary">被保人信息<span
                         style="font-size:12px;color: #007de2;">(学生)</span></div>
                 <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
                     <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
-                    点相机拍身份证录入<i class="iconfont icon-xiangji"></i>
+                    拍身份证录入<i class="iconfont icon-xiangji"></i>
                 </div>
             </div>
 
@@ -134,21 +152,6 @@
                 </div>
             </div>
 
-            <div class="weui_cell">
-                <div class="weui_cell_hd weui_cell_primary">学校</div>
-                <div class="weui_cell_ft">
-                    <div class="g-align-right">{{schoolName}}</div>
-                </div>
-            </div>
-
-            <div class="weui_cell">
-                <label class="weui_label weui_cell_bd weui_cell_primary">
-                    班级
-                </label>
-                <div class="weui_cell_ft">
-                    <input class="weui_input g-align-right" v-model="protectedPerson.className" name="protectedPerson.className" placeholder="请选择班级" type="text" id='picker' required>
-                </div>
-            </div>
         </div>
 
         <div class="weui_cells">
@@ -157,7 +160,7 @@
                         style="font-size:12px;color: #007de2;">(家长)</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
                     <input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
-                    点相机拍身份证录入<i class="iconfont icon-xiangji"></i></div>
+                    拍身份证录入<i class="iconfont icon-xiangji"></i></div>
             </div>
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
@@ -210,7 +213,7 @@
                     name:'彭生',
                     sex:'男',
                     identifyId:'420187199211035032',
-                    className:'三年级 (1)班',
+                    className:'三年级 1班',
                     birthday:'1992-01-01',
                     identifyPhoto:''
                 },

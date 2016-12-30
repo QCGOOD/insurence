@@ -10,10 +10,7 @@
     <script src="js/libs/city-picker.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/libs/hammer.min.js"></script>
-
     <script src="js/project.js"></script>
-
-
     <style>
         body{padding: 30px 20px;min-height: 480px;}
         /* 信主体区域 */
@@ -25,13 +22,14 @@
         .g-card-title{font-size: 15px;line-height:1.2em;color: #000;font-weight: bold;}
         .g-card-price{font-size: 23px;color: #f14f44;}
         .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
-        .g-card-link-group{font-size:0;padding:8px 0;color: #007de2;border-top: dashed 1px #cfcfcf;text-align: center;width: 100%;}
+        .g-card-link-group{font-size:0;padding:8px 0;color: #007de2;border-top: solid 1px #cfcfcf;text-align: center;width: 100%;}
         .g-card-link-group>a{color: #007de2;width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
         .g-card-link-group>a:visited{color: #007de2;}
         .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
-
-        /* 选择城市与学校 */
-        .weui_dialog_bd .weui_input{color: #333;}
+        /* 当有两个保险产品时 */
+        .u-card-content{padding: 0;}
+        .u-card-content-item{padding: 0 10px;}
+        .u-card-content-item:first-of-type{border-right: solid 1px #cfcfcf;}
 
     </style>
 </head>
@@ -48,9 +46,9 @@
             </section>
         </article>
 
-        <!-- 保险 -->
-            <div class="u-card g-card">
-                <div class="g-card-title">{{product.title}}（保费{{product.maxAmount}}）</div>
+        <!-- 如果有一个保险产品 -->
+            <div class="u-card g-card" style="display: none;">
+                <div class="g-card-title">{{product.title}}</div>
                 <div class="g-card-price">￥{{product.price}}</div>
                 <div class="g-card-num">已售:{{product.num}}</div>
                 <div class="g-card-link-group">
@@ -59,58 +57,36 @@
                     <a>理赔流程</a>
                 </div>
             </div>
-
+        <!-- 如果有两个产品产品 -->
+            <div class="u-card g-card" style="display: block;">
+               <div class="u-card-content weui_cell">
+                   <div class="u-card-content-item weui_cell_bd">
+                       <div class="g-card-title">{{product.title}}</div>
+                       <div class="g-card-price">￥{{product.price}}</div>
+                       <div class="g-card-num">已售:{{product.num}}</div>
+                   </div>
+                   <div class="u-card-content-item weui_cell_bd">
+                       <div class="g-card-title">{{product.title}}</div>
+                       <div class="g-card-price">￥{{product.price}}</div>
+                       <div class="g-card-num">已售:{{product.num}}</div>
+                   </div>
+               </div>
+                <div class="g-card-link-group">
+                    <a class="border-right">投保须知</a>
+                    <a class="border-right">保险内容解读</a>
+                    <a>理赔流程</a>
+                </div>
+            </div>
     </main>
-
     <a href="page1-FillInformation.html" class="weui_btn_fixedBottom">立即投保</a>
-
-
-    <!-- 选择城市 -->
-    <div v-show="showDialog" style="display: none;">
-        <div class="weui_mask weui_mask_visible"></div>
-        <div class="weui_dialog weui_dialog_visible " style="top:21%;">
-            <div class="weui_dialog_hd" style="border-bottom: 0;">
-                <div class="weui_dialog_title">选择城市与学校</div>
-            </div>
-            <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;">
-                <div class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在城市" type="text" id='city-picker' >
-                    </div>
-                    <div class="weui_cell_ft"></div>
-                </div>
-
-                <div class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择学校类型" type="text" id='class-picker'>
-                    </div>
-                    <div class="weui_cell_ft"></div>
-                </div>
-
-                <div class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在学校" type="text" id='school-picker'>
-                    </div>
-                    <div class="weui_cell_ft"></div>
-                </div>
-
-            </div>
-            <div class="weui_dialog_ft">
-                <a onclick="submitAddress()" class="weui_btn_dialog primary">确定</a>
-            </div>
-        </div>
-    </div>
 </div>
-
 
 <script>
     var vm = new Vue({
         el: '#app',
         data: function () {
             return {
-                showPDF:false,
                 pdfTitle:"",
-                showDialog: true,           // 是否显示对话框
                 product:{
                     title:"",
                     price:0,
@@ -118,15 +94,6 @@
                     num:0,
                     id:''
                 },
-                /* 地址表单 */
-                form:{
-                    address:'',
-                    schoolName:'',
-                    className:''
-                },
-                dataSchool:[
-
-                ]
             }
         },
         methods: {
@@ -140,53 +107,6 @@
                 vm.product = data.product;
             });
 
-            setTimeout(function () {
-                /* 初始化城市选择器 */
-                $("#city-picker").cityPicker({
-                    onChange: function (e) {
-                        vm.form.address = e.displayValue.join(" ");
-                    }
-                });
-
-                /* 初始化学校选择器 */
-                $("#school-picker").picker({
-                    title: "请选择您的学校",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['华师附中', '华师附小'],
-                            displayValues:['华师附中', '华师附小']
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.form.schoolName = e.value.join(" ");
-                    }
-                });
-
-                /* 初始化学校类型选择器 */
-                $("#class-picker").picker({
-                    title: "请选择学校类型",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['幼儿园','小学','初中','高中','大学']
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.form.className = e.value.join(" ");
-                    }
-                });
-                
-                /* 初始化查看保险按钮 */
-                $("#readPdf").on('click','a', function (e) {
-                    console.log(e.target,this);
-                    vm.showPDF = true;
-                    vm.pdfTitle = $(this).text();
-                    initPDF('pdf',$(this).attr('data-pdfUrl'));
-                });
-
-
-            },1000);
         }
     });
 
@@ -202,10 +122,6 @@
         $.post('',vm.form, function (data) {
         },'json');
     }
-
-
-
-
 </script>
 
 </body>

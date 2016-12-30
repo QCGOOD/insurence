@@ -1,22 +1,22 @@
 {
-  "code": 82,
-  "errorMsg": "mock",
-  "semesters": [
-    {
-      "label": "mock",
-      "value": "mock"
-    }
-  ],
-  "classData": {
-    "time": "mock",
-    "className": "mock",
-    "totalNum": 93,
-    "students": [
-      {
-        "name": "mock",
-        "title": "mock",
-        "deadline": "mock"
-      }
-    ]
-  }
+	"code": 82,
+	"errorMsg": "mock",
+	"semesters": [
+		{
+			"label": "mock",
+			"value": "mock"
+		}
+	],
+	"classData": {
+		"time": "mock",
+		"className": "mock",
+		"totalNum": 93,
+		"students": [
+			{
+				"name": "mock",
+				"title": "mock",
+				"deadline": "mock"
+			}
+		]
+	}
 }

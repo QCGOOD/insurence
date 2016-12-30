@@ -137,8 +137,7 @@
         </div>
     </div>
 
-    <a href="page2-checkMsg.html" class="weui_btn" style="margin: 28px 15px;">确认修改</a>
-
+    <a onclick="submit()" class="weui_btn" style="margin: 28px 15px;">确认修改</a>
 
 </div>
 <script>
@@ -219,12 +218,25 @@
             },1000);
 
             $('#app').show();
+
+            $.confirm({
+                title: '温馨提示',
+                text: ' 请拍摄您的身份证照片作为修改人证明',
+                onOK: function () {
+                    //点击确认
+
+                },
+                onCancel: function () {
+                }
+            });
         }
     });
     
     /* 提交订单 */
     function submit() {
-
+        $.alert(' 您的申请已经提交，我们将在 **时间内给您回复','温馨提示', function () {
+            
+        })
     }
 
     /* 表单验证 */
