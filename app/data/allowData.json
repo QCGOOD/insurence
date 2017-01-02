@@ -1,0 +1,10 @@
+{
+  "code":0,
+  "errMsg":"数据获取成功",
+  "protectedPerson":{
+    "insurantName":"林笑笑",
+    "insurantCardNo":"421023198811035032",
+    "insurantClass":"三年级 2班",
+    "insurantBirthday":"2001-01-01"
+  }
+}

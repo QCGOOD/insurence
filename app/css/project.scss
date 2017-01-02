@@ -22,7 +22,6 @@ $background-color: #f2f3f8;
 
 /* 自定义按钮 */
 .weui_btn { background-color: $default-color; line-height: 36px; }
-
 .weui_btn_fixedBottom { position: fixed; bottom: 0; left: 0; right: 0; line-height: 40px; background-color: #007de2; color: #fff; font-size: 16px; text-align: center; -webkit-tap-highlight-color: transparent; }
 
 @media screen and (min-width: 375px) {

@@ -77,6 +77,7 @@ function initDrag ( id ) {
 }
 
 
+
 /* 封装toast弹框 */
 function showInfo ( text ) {
     var body = $( 'body' );
@@ -87,24 +88,4 @@ function showInfo ( text ) {
     setTimeout( function () {
         $( '.weui_toast_text' ).remove();
     }, 2000 );
-}
-
-/* 渲染PDF文件 */
-function initPDF ( id, url ) {
-    PDFJS.workerSrc = 'js/libs/pdf.worker.min.js';
-    PDFJS.getDocument( url ).then( function getPdfHelloWorld ( pdf ) {
-        pdf.getPage( 1 ).then( function getPageHelloWorld ( page ) {
-            var scale = 1.5;
-            var viewport = page.getViewport( scale );
-            var canvas = document.getElementById( id );
-            var context = canvas.getContext( '2d' );
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            var renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            page.render( renderContext );
-        } );
-    } );
 }

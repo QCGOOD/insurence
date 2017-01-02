@@ -16,6 +16,7 @@
 
         /* 选择城市与学校 */
         .weui_dialog_bd .weui_input{color: #333;}
+        #school-picker{position: absolute;width: 100%;height: 100%;top:0;left: 0;opacity: 0;}
     </style>
 </head>
 <body>
@@ -30,28 +31,28 @@
             <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;">
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在城市" type="text" id='city-picker' >
+                        <input class="weui_input " placeholder="请选择您所在城市" :value="school.address" type="text" id='city-picker' >
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
 
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择学校类型" type="text" id='class-picker'>
+                        <input class="weui_input " placeholder="请选择学校类型" :value="school.schoolType" type="text" id='class-picker'>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
 
                 <div class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在学校" type="text" id='school-picker'>
+                    <div class="weui_cell_bd weui_cell_primary" >
+                        <input class="weui_input"  type="text" id="school-picker">
+                        <input class="weui_input" v-model="school.schoolName" placeholder="请选择您所在学校" type="text" readonly>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
-
             </div>
             <div class="weui_dialog_ft">
-                <a onclick="submitAddress()" class="weui_btn_dialog primary">确定</a>
+                <a onclick="saveSchool()" class="weui_btn_dialog primary">确定</a>
             </div>
         </div>
     </div>
@@ -62,47 +63,47 @@
         el: '#app',
         data: function () {
             return {
-                /* 地址表单 */
-                form:{
-                    address:'',
-                    schoolName:'',
-                    className:''
+                /* 学校信息 */
+                school:{
+                    address: '',
+                    schoolType: '',
+                    schoolName: '',
+                    schoolId: ''
                 },
-                dataSchool:[
-
-                ]
+                /* 学校数据列表 */
+                schoolList:[]
+            }
+        },
+        watch:{
+            school: {
+                handler: function () {
+                    vm.querySchool();
+                },
+                deep:true
             }
         },
         methods: {
-
+            /* 根据城市和学校类型查询学校数据 */
+            querySchool: function () {
+                if(this.school.address && this.school.schoolType){
+                    $.get('./data/school.json', function (data) {
+                        vm.schoolList = data.schoolList;
+                        initSchool(data.schoolList);
+                    })
+                }
+            }
         },
         /* 初始化数据 */
         created: function () {
-
             setTimeout(function () {
-                /* 初始化城市选择器 */
+                /* 选择城市 */
                 $("#city-picker").cityPicker({
                     onChange: function (e) {
-                        vm.form.address = e.displayValue.join(" ");
+                        vm.school.address = e.displayValue.join(" ");
                     }
                 });
 
-                /* 初始化学校选择器 */
-                $("#school-picker").picker({
-                    title: "请选择您的学校",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['华师附中', '华师附小'],
-                            displayValues:['华师附中', '华师附小']
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.form.schoolName = e.value.join(" ");
-                    }
-                });
-
-                /* 初始化学校类型选择器 */
+                /* 选择学校类型 */
                 $("#class-picker").picker({
                     title: "请选择学校类型",
                     cols: [
@@ -112,23 +113,68 @@
                         }
                     ],
                     onChange: function (e) {
-                        vm.form.className = e.value.join(" ");
+                        vm.school.schoolType = e.value.join(" ");
                     }
                 });
-            },500);
+
+                /* 给学校选择器绑定点击事件 */
+                $("#school-picker").on('click', function () {
+                    if(!vm.school.address){
+                        $.toast('请先选择城市','text');
+                    }else  if(!vm.school.schoolType){
+                        $.toast('请选择学校类型','text');
+                    }
+                });
+                vm.querySchool();
+            },400);
+
+            /* 从后台获取城市与学校 */
+            $.get('./data/school.json', function (data) {
+                if(data.code == 0 && data.school && data.school.schoolId){
+                    vm.school = data.school;
+                }
+            })
         }
     });
 
+    /* 学校选择器
+     * @param schoolList 学校数据列表，格式(数组)schoolList:[{schoolId:'glzsdx',schoolName:'中山大学'}]
+     * @return null
+     * */
+    function initSchool(schoolList) {
+        var values = [];
+        var displayValues = [];
+        schoolList.forEach(function (school) {
+            values.push(school.schoolId);
+            displayValues.push(school.schoolName);
+        });
+        /* 选择学校 */
+        $("#school-picker").picker({
+            title: "请选择您的学校",
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: values,
+                    displayValues:displayValues
+                }
+            ],
+            onChange: function (e,val,displayVal) {
+                vm.querySchool();
+                vm.school.schoolName = displayVal.join(',');
+                vm.school.schoolId = val.join(',');
+                console.log(vm.school.schoolId);
+            }
+        });
+    }
+
     /* 保存学校 */
-    function submitAddress() {
-        if(!vm.form.address || !vm.form.schoolName || !vm.form.className){
-            $.toast("信息不完整", "text");
+    function saveSchool() {
+        if(!vm.school.schoolId){
+            $.toast("请选择学校", "text");
             return false
         }
-        vm.showDialog = false;
-        console.log(vm.form.address, vm.form.schoolName, vm.form.className);
-        window.location = 'index.html';
-        // TODO:保存城市、学校、与班级
+        window.location = 'index.html?schoolId='+vm.school.schoolId;
+        // TODO:学校
         $.post('',vm.form, function (data) {
         },'json');
     }

@@ -1,27 +1,27 @@
 [
   {
     "product":{
-      "title":"一年期综合意外险",
-      "price":88,
-      "maxAmount":"10万",
+      "productTitle":"Z-100A",
+      "amount":100,
       "num":223456,
-      "id":"xx12345678910xx",
-      "createdTime":"2016-09-23",
-      "startTime":"2016-09-19",
-      "endTime":"2017-09-18",
-      "limitTime":"一年"
+      "productId":"xx12345678910xx",
+      "policyStartTime":"2016-09-01",
+      "policyEndTime":"2017-08-31",
+      "policyDay":"365天",
+      "formula":"69元/365天*100天"
     },
     "protectedPerson":{
-      "name":"林笑笑",
-      "sex":"女",
-      "identifyId":"421023198811035032",
-      "className":"三年级 2班",
-      "birthday":"2001-01-01"
+      "insurantName":"林笑笑",
+      "insurantGender":"女",
+      "insurantCardNo":"421023198811035032",
+      "schoolName":"中山大学",
+      "insurantClass":"三年级 2班",
+      "insurantBirthday":"2001-01-01"
     },
     "payProtectedPerson":{
-      "name":"时光",
-      "tel":"18812341234",
-      "identifyId":"420134********"
+      "holderName":"时光",
+      "holderPhone":"18812341234",
+      "holderCardNo":"420134********"
     }
   }
 ]

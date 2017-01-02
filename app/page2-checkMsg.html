@@ -44,32 +44,32 @@
                     <div class="s-link" style="position:absolute;right:15px;top:15px;">修改信息</div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">保险起期:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{product.startTime}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.policyStartTime}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">保险止期:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{product.endTime}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.policyEndTime}}</div>
                     </div>
                     <div class="weui_cell border-bottom ">
                         <div class="weui_cell_hd">保期:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{product.limitTime}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{product.policyDay}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">被保人姓名:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.name}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.insurantName}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">性别:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.sex}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.insurantGender}}</div>
                     </div>
 
                     <div class="weui_cell">
                         <div class="weui_cell_hd">身份证号:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.identifyId}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.insurantCardNo}}</div>
                     </div>
                     <div class="weui_cell  ">
                         <div class="weui_cell_hd">出身日期:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.birthday}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.insurantBirthday}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">学校:</div>
@@ -77,19 +77,20 @@
                     </div>
                     <div class="weui_cell border-bottom">
                         <div class="weui_cell_hd">班级:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.className}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.insurantClass}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">投保人姓名:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.name}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.holderName}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">手机:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.tel}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.holderPhone}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">身份证号:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.identifyId}}</div>
+                        <div class="weui_cell_hd">身份证号:</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.holderCardNo}}</div>
                     </div>
                 </div>
             </div>
@@ -116,9 +117,9 @@
         </label>
     </div>
 
-    <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.price}}</span></div>
+    <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.amount}}</span></div>
     <div style="font-size: 13px;color: #8a90af;text-align: center;">(保费计算公式):{{product.formula}}</div>
-    <a href="page3-pay.html" class="weui_btn" style="margin: 20px 15px;">立即支付</a>
+    <a onclick="pay()" class="weui_btn" style="margin: 20px 15px;">立即支付</a>
 
 </div>
 <script>
@@ -126,37 +127,40 @@
         el: '#app',
         data: function () {
             return {
+                schoolName:'',
                 /* 保险产品 */
                 product: {
-                    id:'',
-                    startTime:'',
-                    endTime:'',
-                    limitTime:'',
-                    price:'',
-                    formula:''
+                    productTitle:"Z-100A",
+                    amount:100,
+                    num:223456,
+                    productId:"xx12345678910xx",
+                    policyStartTime:"2016-09-01",
+                    policyEndTime:"2017-08-31",
+                    policyDay:"365天",
+                    formula:"69元/365天*100天"
                 },
                 /* 被保人 */
                 protectedPerson:{
-                    name:'',
-                    sex:'',
-                    identifyId:'',
-                    schoolName:'',
-                    className:'',
-                    birthday:''
+                    insurantName:'彭生',
+                    insurantGender:'男',
+                    insurantCardNo:'420187199211035032',
+                    insurantClass:'三年级 1班',
+                    insurantBirthday:'1992-01-01'
                 },
                 /* 投保人 */
                 payProtectedPerson:{
-                    name:'',
-                    tel:'',
-                    identifyId:''
+                    holderName:'彭生',
+                    holderPhone:'18825144569',
+                    holderCardNo:''
                 },
-                hasRead:false,
+                hasRead:false
             }
         },
         methods: {},
         created: function () {
             /* 获取保险信息 */
             $.get('./data/order.json', function (data) {
+                vm.schoolName = data.schoolName;
                 vm.product = data.product;
                 vm.protectedPerson = data.protectedPerson;
                 vm.payProtectedPerson = data.payProtectedPerson;
@@ -164,7 +168,14 @@
                 console.log(data);
             })
         }
-    })
+    });
+
+    /* 支付 */
+    function pay() {
+        $.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
+             window.location.href = 'page4-myInsurence.html';
+        })
+    }
 </script>
 
 </body>

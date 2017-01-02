@@ -16,6 +16,8 @@
     <style>
         body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 40px;}
         .weui_cells{font-size: 16px;}
+        /* 内容区标题--学校信息、投保人信息、被保人信息 */
+        .qc_cell_title{  align-items: baseline;border-bottom: solid 1px #d4d4d4;  }
         /* 投保计划 */
         .weui_cells:after{border: none;}
         .weui_cells.plan{padding: 10px 0px 30px;}
@@ -64,26 +66,28 @@
         <div class="header_title">保单信息填写</div>
     </header>
 
-   <!-- <div class="weui_cells_title">投保计划</div>
+    <div class="weui_cells_title">投保计划</div>
     <div class="weui_cells sawtooth plan">
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">保险起期</div>
-            <div class="weui_cell_ft">{{product.startTime}}</div>
+            <div class="weui_cell_ft">{{product.policyStartTime}}</div>
         </div>
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">保险止期</div>
-            <div class="weui_cell_ft">{{product.endTime}}</div>
+            <div class="weui_cell_ft">{{product.policyEndTime}}</div>
         </div>
         <div class="weui_cell border-bottom dashed" style="padding-bottom: 10px;">
             <div class="weui_cell_bd weui_cell_primary">保险时限</div>
-            <div class="weui_cell_ft">{{product.limitTime}}</div>
+            <div class="weui_cell_ft">{{product.policyDay}}</div>
         </div>
     </div>
--->
     <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
         <div class="weui_cells_title">信息填写</div>
         <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" href="chooseSchool.html">
+            <div class="weui_cell qc_cell_title">
+                <div class="weui_cell_hd">学校信息</div>
+            </div>
+            <a class="weui_cell noBorder" href="chooseSchool.html">
                 <div class="weui_cell_hd weui_cell_primary">学校</div>
                 <div class="weui_cell_bd">
                     <div class="g-align-right">{{schoolName}}</div>
@@ -96,13 +100,13 @@
                     班级
                 </label>
                 <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right" v-model="protectedPerson.className" name="protectedPerson.className" placeholder="请选择班级" type="text" id='picker' required>
+                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required>
                 </div>
                 <!--<div class="weui_cell_ft"></div>-->
             </div>
         </div>
         <div class="weui_cells weui_cells_radio">
-            <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
+            <div class="weui_cell qc_cell_title" >
                 <div class="weui_cell_hd weui_cell_primary">被保人信息<span
                         style="font-size:12px;color: #007de2;">(学生)</span></div>
                 <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
@@ -114,27 +118,27 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.identifyId" name="protectedPerson.identifyId" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
+                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
                 </div>
             </div>
 
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="protectedPerson.name" name="protectedPerson.name" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="protectedPerson.insurantName" name="protectedPerson.insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
                 <div class="weui_cell_ft ">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.sex" name="protectedPerson.sex" value="男" class="weui_check"
+                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="男" class="weui_check"
                                id="s11" required>
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.sex" value="女" class="weui_check" name="protectedPerson.sex"
+                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="女" class="weui_check"
                                id="s12">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -146,16 +150,16 @@
             <div class="weui_cell">
                 <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
                 <div class="weui_cell_ft" style="min-width: 100px;">
-                    <label v-show="!protectedPerson.birthday" for="date-picker" class="placeholder">请选择出生日期</label>
-                    <input id="date-picker" type="date" v-model="protectedPerson.birthday" name="protectedPerson.birthday" class="weui_input"
-                           :class="{'hidden': !protectedPerson.birthday}" required tip="出生日期">
+                    <label v-show="!protectedPerson.insurantBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                    <input id="date-picker" type="date" v-model="protectedPerson.insurantBirthday" name="protectedPerson.insurantBirthday" class="weui_input"
+                           :class="{'hidden': !protectedPerson.insurantBirthday}" required tip="出生日期">
                 </div>
             </div>
 
         </div>
 
         <div class="weui_cells">
-            <div class="weui_cell" style="align-items: baseline;border-bottom: solid 1px #d4d4d4;">
+            <div class="weui_cell qc_cell_title" >
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
                         style="font-size:12px;color: #007de2;">(家长)</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
@@ -165,20 +169,20 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.identifyId" name="payProtectedPerson.identifyId" type="text" class="weui_input g-align-right"
+                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" class="weui_input g-align-right"
                            placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" >
                 </div>
             </div>
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.name" name="payProtectedPerson.name" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.tel" name="payProtectedPerson.tel" type="number" class="weui_input g-align-right"
+                    <input v-model="payProtectedPerson.holderPhone" name="payProtectedPerson.holderPhone" type="number" class="weui_input g-align-right"
                            placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
                 </div>
             </div>
@@ -189,9 +193,6 @@
             <a  onclick="submit()" class="weui_btn" >提交订单</a>
         </div>
     </form>
-    <!-- 错误信息的容器 -->
-
-
 
 </div>
 <script>
@@ -199,30 +200,31 @@
         el: '#app',
         data: function () {
             return {
+                /* 学校信息 */
+                schoolId:'',
+                schoolName:'',
                 /* 保险产品 */
                 product: {
-                    id:'',
-                    startTime:'',
-                    endTime:'',
-                    limitTime:'',
+                    productId:'',
+                    policyStartTime:'',
+                    policyEndTime:'',
+                    policyDay:''
                 },
-                /* 学校信息 */
-                schoolName:'',
                 /* 被保人信息 */
                 protectedPerson:{
-                    name:'彭生',
-                    sex:'男',
-                    identifyId:'420187199211035032',
-                    className:'三年级 1班',
-                    birthday:'1992-01-01',
-                    identifyPhoto:''
+                    insurantName:'彭生',
+                    insurantGender:'男',
+                    insurantCardNo:'420187199211035032',
+                    insurantClass:'三年级 1班',
+                    insurantBirthday:'1992-01-01',
+                    insurantPhoto:''
                 },
                 /* 投保人信息 */
                 payProtectedPerson:{
-                    name:'彭生',
-                    tel:'18825144569',
-                    identifyId:'',
-                    identifyPhoto:''
+                    holderName:'彭生',
+                    holderPhone:'18825144569',
+                    holderCardNo:'',
+                    holderCardPhoto:''
                 }
             }
         },
@@ -240,11 +242,11 @@
 
         },
         created: function () {
-            /* 获取学校名 */
+            /* 获取相关信息 */
             $.get('./data/product.json', function (data) {
                 if(data.code == 0){
-                    vm.product = data.product;
-                    vm.schoolName = data.schoolName;
+                    vm.product = data.products[0];
+                    vm.protectedPerson.schoolName = data.schoolName;
                 }else {
                     console.log(data.errMsg);
                 }
