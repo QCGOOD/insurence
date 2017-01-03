@@ -22,6 +22,7 @@ $background-color: #f2f3f8;
 
 /* 自定义按钮 */
 .weui_btn { background-color: $default-color; line-height: 36px; }
+.weui_btn.disabled{background-color: #f7f7f7; color: rgba(0, 0, 0, 0.3);}
 .weui_btn_fixedBottom { position: fixed; bottom: 0; left: 0; right: 0; line-height: 40px; background-color: #007de2; color: #fff; font-size: 16px; text-align: center; -webkit-tap-highlight-color: transparent; }
 
 @media screen and (min-width: 375px) {
@@ -367,7 +368,7 @@ $stepText-width: 70px;
 header { position: fixed; top: 0; left: 0; right: 0; font-size: 16px; padding: 0 30px; color: #333; line-height: 44px; border-bottom: solid 1px #cbceda; text-align: center; background-color: #fff; z-index: 100; }
 
 header .header_left {
-	position: absolute; left: 10px; top: 0;
+	position: absolute; left: 10px; top: 0;z-index: 1;
 	.icon-back { color: #333; }
 }
 

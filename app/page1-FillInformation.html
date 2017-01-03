@@ -119,7 +119,7 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
+                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" class="weui_input g-align-right" placeholder="有则填，避免纠纷"  pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
                 </div>
             </div>
 
@@ -213,10 +213,10 @@
                 },
                 /* 被保人信息 */
                 protectedPerson:{
-                    insurantName:'彭生',
-                    insurantGender:'男',
-                    insurantCardNo:'420187199211035032',
-                    insurantClass:'一年级 3班',
+                    insurantName:'',
+                    insurantGender:'',
+                    insurantCardNo:'',
+                    insurantClass:'',
                     insurantBirthday:'',
                     insurantPhoto:''
                 },
@@ -226,7 +226,8 @@
                     holderPhone:'18825144569',
                     holderCardNo:'',
                     holderCardPhoto:''
-                }
+                },
+                formValid: false    // 表单验证通过了吗？
             }
         },
         /* 监控数据变化 */
@@ -313,7 +314,6 @@
                 }
             });
         }).on('form:success', function (formInstance) {
-
 //            console.log(formInstance.$element.serialize());
             callback? callback():'';
         }).on('form:submit', function () {

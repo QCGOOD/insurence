@@ -26,6 +26,10 @@ div, ul, li, input, img, a, textarea, span {
   background-color: #007de2;
   line-height: 36px; }
 
+.weui_btn.disabled {
+  background-color: #f7f7f7;
+  color: rgba(0, 0, 0, 0.3); }
+
 .weui_btn_fixedBottom {
   position: fixed;
   bottom: 0;
@@ -383,7 +387,8 @@ header {
 header .header_left {
   position: absolute;
   left: 10px;
-  top: 0; }
+  top: 0;
+  z-index: 1; }
   header .header_left .icon-back {
     color: #333; }
 

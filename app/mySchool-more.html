@@ -8,7 +8,7 @@
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
-    <script src="js/project.js"></script>
+    <script src="js/project.js?123"></script>
     <style>
         body{background-color: #f2f3f8;padding-top: 44px;}
         .weui_cell{height: 50px;}
@@ -25,11 +25,11 @@
     </header>
 
     <div class="weui_cells weui_cells_access">
-        <div class="weui_cell">
+        <div class="weui_cell" onclick="showInfo('该功能需要在后台编辑')">
             <div class="weui_cell_bd weui_cell_primary">关联方案介绍</div>
             <div class="weui_cell_ft"></div>
         </div>
-        <div class="weui_cell">
+        <div class="weui_cell" onclick="showInfo('该功能需要在后台编辑')">
             <div class="weui_cell_bd weui_cell_primary">理赔流程</div>
             <div class="weui_cell_ft"></div>
         </div>

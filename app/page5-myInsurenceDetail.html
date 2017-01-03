@@ -41,7 +41,7 @@
     <div v-if="!showPDF">
         <!-- 头部 -->
         <header class="fixed_top">
-            <div class="header_left back">
+            <div class="header_left" onclick="history.go(-1)">
                 <i class="iconfont icon-back"></i>
             </div>
             <div class="header_title">保单详情</div>
@@ -60,7 +60,7 @@
     </div>
     <div v-else>
         <!-- 头部 -->
-        <header class="fixed_top">
+        <header class="fixed_top" v-if="showPDF">
             <div class="header_left" @click="showPDF = false">
                 <i class="iconfont icon-back"></i>
             </div>

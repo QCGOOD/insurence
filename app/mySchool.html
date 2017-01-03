@@ -209,6 +209,10 @@
             title: '填写邮箱',
             empty: false, // 是否允许为空
             onOK: function (input) {
+                if(!isEmail(input)){
+                    showInfo('您输入的邮箱有误,请重新输入','text');
+                    return false
+                }
                 //点击确认
             },
             onCancel: function () {

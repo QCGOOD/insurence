@@ -31,6 +31,8 @@ function initDrag ( id ) {
 
     $( id ).on( 'touchend', function () {
         console.log( 'end' );
+        var arr = ['我只是一只小母鸡','我只是用来看的','点我没什么用','来打我呀~'];
+        showInfo(arr[Math.floor(Math.random()*4)]);
         $( id ).css( {
             WebkitTransform: 'translate3d(0,0,0)scale(1)',
             transform: 'translate3d(0,0,0)scale(1)'
@@ -41,7 +43,6 @@ function initDrag ( id ) {
     } );
 
     hammer.on( 'press', function ( e ) {
-        console.log( 'press' );
         $( id ).css( {
             WebkitTransform: 'translate3d(0,0,0) scale(1.1)',
             transform: 'translate3d(0,0,0) scale(1.1)',
@@ -76,8 +77,6 @@ function initDrag ( id ) {
     } )
 }
 
-
-
 /* 封装toast弹框 */
 function showInfo ( text ) {
     var body = $( 'body' );
@@ -87,5 +86,11 @@ function showInfo ( text ) {
 
     setTimeout( function () {
         $( '.weui_toast_text' ).remove();
-    }, 2000 );
+    }, 3000 );
+}
+
+/* 验证邮箱邮箱性 */
+function isEmail(val) {
+    var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    return reg.test(val)
 }

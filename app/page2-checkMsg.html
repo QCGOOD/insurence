@@ -119,7 +119,7 @@
 
     <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{product.amount}}</span></div>
     <div style="font-size: 13px;color: #8a90af;text-align: center;">(保费计算公式):{{product.formula}}</div>
-    <a onclick="pay()" class="weui_btn" style="margin: 20px 15px;">立即支付</a>
+    <a onclick="pay()" class="weui_btn" :class="{'disabled': !hasRead}" style="margin: 20px 15px;">立即支付</a>
 
 </div>
 <script>
@@ -172,6 +172,10 @@
 
     /* 支付 */
     function pay() {
+        if(!vm.hasRead){
+            showInfo("请先勾选“我已阅读”");
+            return false
+        }
         $.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
              window.location.href = 'page4-myInsurence.html';
         })
