@@ -1,4 +1,6 @@
 {
+  "code":0,
+  "errMsg":"订单获取成功",
   "product":{
     "productTitle":"Z-100A",
     "amount":100,
@@ -12,6 +14,7 @@
   "protectedPerson":{
     "insurantName":"林笑笑",
     "insurantGender":"女",
+    "insurantPhoto":"",
     "insurantCardNo":"421023198811035032",
     "schoolName":"中山大学",
     "insurantClass":"三年级 2班",
@@ -20,6 +23,7 @@
   "payProtectedPerson":{
     "holderName":"时光",
     "holderPhone":"18812341234",
-    "holderCardNo":"420134********"
+    "holderCardNo":"420134********",
+    "holderPhoto":""
   }
 }

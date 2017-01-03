@@ -1,8 +1,9 @@
 {
   "code":0,
   "errMsg":"数据获取成功",
+  "policyNo": "xxxxxxxx",
   "protectedPerson":{
-    "insurantName":"林笑笑",
+    "insurantName":"Allen",
     "insurantCardNo":"421023198811035032",
     "insurantClass":"三年级 2班",
     "insurantBirthday":"2001-01-01"

@@ -1,27 +1,32 @@
-[
-  {
-    "product":{
-      "productTitle":"Z-100A",
-      "amount":100,
-      "num":223456,
-      "productId":"xx12345678910xx",
+{
+  "effectList":[
+    {
+      "policyNo": "xxxxxxxx",
+      "productTitle": "Z-100A",
+      "insurantName": "Allen",
+      "amount": "99",
       "policyStartTime":"2016-09-01",
-      "policyEndTime":"2017-08-31",
-      "policyDay":"365天",
-      "formula":"69元/365天*100天"
-    },
-    "protectedPerson":{
-      "insurantName":"林笑笑",
-      "insurantGender":"女",
-      "insurantCardNo":"421023198811035032",
-      "schoolName":"中山大学",
-      "insurantClass":"三年级 2班",
-      "insurantBirthday":"2001-01-01"
-    },
-    "payProtectedPerson":{
-      "holderName":"时光",
-      "holderPhone":"18812341234",
-      "holderCardNo":"420134********"
+      "policyEndTime":"2017-08-31"
     }
-  }
-]
+  ],
+  "noEffectList":[
+    {
+      "policyNo": "xxxxxxxx",
+      "productTitle": "Z-100A",
+      "insurantName": "Allen",
+      "amount": "88",
+      "policyStartTime":"2015-09-01",
+      "policyEndTime":"2016-08-31"
+    }
+  ],
+  "unPayList": [
+    {
+      "productId": "xxxxxxxx",
+      "productTitle": "Z-100A",
+      "insurantName": "Allen",
+      "amount": "99",
+      "policyStartTime":"2016-09-01",
+      "policyEndTime":"2017-08-31"
+    }
+  ]
+}

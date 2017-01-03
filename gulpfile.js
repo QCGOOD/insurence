@@ -80,6 +80,6 @@ gulp.task('clean', function (cb) {
    del(['dist/**/*'],cb);
 });
 
-gulp.task('default',['image','js','scss-compile','css','serve','watch']);
+gulp.task('default',['image','js','html','scss-compile','css','serve','watch']);
 
 module.exports = gulp;

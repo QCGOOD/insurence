@@ -33,14 +33,14 @@
             <div class="weui_cell">
                 <div class="weui_cell_hd"><i class="iconfont icon-identity"></i></div>
                 <div class="weui_cell_bd">
-                    <input type="text" class="weui_input" placeholder="请填写您的身份证号">
+                    <input type="text" class="weui_input" placeholder="请填写您的身份证号" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/">
                 </div>
             </div>
 
             <div class="weui_cell">
                 <div class="weui_cell_hd"><i class="iconfont icon-name"></i></div>
                 <div class="weui_cell_bd">
-                    <input type="text" class="weui_input" placeholder="请输入您的姓名">
+                    <input type="text" v-model="payProtectedPerson.holderName" class="weui_input" placeholder="请输入您的姓名" required>
                 </div>
             </div>
 
@@ -49,12 +49,12 @@
                 <div class="weui_cell_bd">
                     <label for="s11" style="padding-right: 20px;padding-left: 10px;">
                         <span>男</span>
-                        <input type="radio" v-model="person.sex" value="男" class="weui_check" name="sex" id="s11" >
+                        <input type="radio" v-model="payProtectedPerson.holderGender" value="男" class="weui_check" name="holderGender" id="s11" required>
                         <span class="weui_icon_checked_primary"></span>
                     </label>
                     <label for="s12" style="padding-right: 20px;">
                         <span>女</span>
-                        <input type="radio" v-model="person.sex" value="女"  class="weui_check" name="sex" id="s12" >
+                        <input type="radio" v-model="payProtectedPerson.holderGender" value="女"  class="weui_check" name="holderGender" id="s12" >
                         <span class="weui_icon_checked_primary"></span>
                     </label>
                 </div>
@@ -63,7 +63,7 @@
             <div class="weui_cell">
                 <div class="weui_cell_hd"><i class="iconfont icon-phone"></i></div>
                 <div class="weui_cell_bd">
-                    <input type="text" class="weui_input" placeholder="请输入您的手机号">
+                    <input type="text" v-model="payProtectedPerson.holderPhone" pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" class="weui_input" placeholder="请输入您的手机号" required>
                 </div>
             </div>
 
@@ -71,8 +71,8 @@
             <div class="weui_cell">
                 <div class="weui_cell_hd"><i class="iconfont icon-birthday"></i></div>
                 <div class="weui_cell_ft weui_cell_primary" style="min-width: 100px;position: relative;">
-                    <input id="date-picker" type="date" v-model="person.birthday" class="weui_input" :class="{'hidden': !person.birthday}">
-                    <label v-show="!person.birthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                    <input id="date-picker" type="date" v-model="payProtectedPerson.holderBirthday" class="weui_input" :class="{'hidden': !payProtectedPerson.holderBirthday}" required>
+                    <label v-show="!payProtectedPerson.holderBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
                 </div>
             </div>
 
@@ -89,13 +89,15 @@
         el: '#app',
         data: function () {
             return {
-                person: {
-                    name:'',
-                    sex:'',
-                    identifyId:'',
-                    identifyPhoto:'',
-                    tel:'',
-                    birthday:''
+                repeat:true,        // 是否重复提交
+                /* 投保人信息 */
+                payProtectedPerson:{
+                    holderName:'彭生',
+                    holderGender:'男',
+                    holderBirthday:'1988-01-01',
+                    holderPhone:'18825144569',
+                    holderCardNo:'421087********',
+                    holderCardPhoto:''
                 }
             }
         },

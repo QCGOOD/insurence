@@ -31,35 +31,35 @@
     <div v-if="showPic">
         <div class="weui_cells_title">已生效</div>
         <div class="weui_cells u-card" style="background-color: #fff;"
-             @click="jumpToDetail('page5-myInsurenceDetail.html')">
+             @click="jumpToDetail('page5-myInsurenceDetail.html')" v-for="item in effectList">
             <div class="weui_cell top" style="padding-bottom: 4px;">
                 <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-success"></i></div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <div class="order_id">保单号:23112837862345</div>
-                    <h4 class="order_title">一年期综合意外险</h4>
+                    <div class="order_id">保单号:{{item.policyNo}}</div>
+                    <h4 class="order_title">{{item.productTitle}}</h4>
                 </div>
-                <div class="weui_cell_ft order_price">￥69</div>
+                <div class="weui_cell_ft order_price">￥{{item.amount}}</div>
             </div>
             <div class="weui_cell bottom">
-                <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
-                <div class="weui_cell_ft">有效期至:2016.09.18</div>
+                <div class="weui_cell_bd weui_cell_primary">被保人:{{item.insurantName}}</div>
+                <div class="weui_cell_ft">保期:{{item.policyStartTime}}-{{item.policyEndTime}}</div>
             </div>
         </div>
 
         <div class="weui_cells_title">已失效</div>
         <div class="weui_cells u-card" style="background-color: #fff;"
-             @click="jumpToDetail('page5-myInsurenceDetail.html')">
+             @click="jumpToDetail('page5-myInsurenceDetail.html')" v-for="item in noEffectList">
             <div class="weui_cell top" style="padding-bottom: 4px;">
                 <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-overdue"></i></div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <div class="order_id">保单号:23112837862345</div>
-                    <h4 class="order_title">一年期综合意外险</h4>
+                    <div class="order_id">保单号:{{item.policyNo}}</div>
+                    <h4 class="order_title">{{item.productTitle}}</h4>
                 </div>
-                <div class="weui_cell_ft order_price">￥69</div>
+                <div class="weui_cell_ft order_price">￥{{item.amount}}</div>
             </div>
             <div class="weui_cell bottom">
-                <div class="weui_cell_bd weui_cell_primary">被保人:***</div>
-                <div class="weui_cell_ft">有效期至:2016.09.18</div>
+                <div class="weui_cell_bd weui_cell_primary">被保人:{{item.insurantName}}</div>
+                <div class="weui_cell_ft">保期:{{item.policyStartTime}}-{{item.policyEndTime}}</div>
             </div>
         </div>
     </div>
@@ -83,21 +83,24 @@
                 /* 已生效 */
                 effectList: [
                     {
-                        id: '',
-                        title: '',
-                        name: '',
-                        price: '',
-                        deadline: ''
+                        policyNo: '',
+                        productTitle: '',
+                        insurantName: '',
+                        amount: '',
+                        policyStartTime:'',
+                        policyEndTime:''
                     }
                 ],
                 /* 已失效 */
                 noEffectList: [
                     {
-                        id: '',
-                        title: '',
-                        name: '',
-                        price: '',
-                        deadline: ''
+                        policyNo: '',
+                        productTitle: '',
+                        insurantName: '',
+                        amount: '',
+                        policyDay: '',
+                        policyStartTime:'',
+                        policyEndTime:''
                     }
                 ]
             }
@@ -108,7 +111,20 @@
             }
         },
         created: function () {
+            // 获取保单数据
+            $.get('./data/orderList.json', function (data) {
+                data.effectList.forEach(function (item) {
+                       item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
+                       item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");
+                });
+                data.noEffectList.forEach(function (item) {
+                    item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
+                    item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");
+                });
+                vm.effectList = data.effectList;
+                vm.noEffectList = data.noEffectList;
 
+            });
         }
     })
 </script>

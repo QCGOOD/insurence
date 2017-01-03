@@ -9,6 +9,8 @@
 
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/parsley.min.js"></script>
+
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/project.js"></script>
 
@@ -49,63 +51,76 @@
         <div style="font-size: 12px;color: #8a90af;">保单将以修改后的内容为准，请准确填写！</div>
     </div>
 
+    <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
         <div class="weui_cells_title">信息填写</div>
-        <div class="weui_cells weui_cells_access" >
-            <div class="weui_cell qc_cell_title">
-                <div class="weui_cell_hd">学校信息</div>
-            </div>
-            <a class="weui_cell noBorder" href="chooseSchool.html" v-show="schoolName">
-                <div class="weui_cell_hd weui_cell_primary">学校</div>
-                <div class="weui_cell_bd">
-                    <div class="g-align-right">{{schoolName}}</div>
+        <!-- 学校信息 -->
+        <div v-if="schoolName != null || protectedPerson.insurantClass != null">
+            <div class="weui_cells weui_cells_access">
+                <div class="weui_cell qc_cell_title">
+                    <div class="weui_cell_hd">学校信息</div>
                 </div>
-                <div class="weui_cell_ft"></div>
-            </a>
+                <a class="weui_cell noBorder" href="chooseSchool.html" v-if="schoolName != null">
+                    <div class="weui_cell_hd weui_cell_primary">学校</div>
+                    <div class="weui_cell_bd">
+                        <div class="g-align-right">{{schoolName}}</div>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </a>
 
-            <div class="weui_cell">
-                <label class="weui_label weui_cell_bd weui_cell_primary">
-                    班级
-                </label>
-                <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required>
+                <div class="weui_cell" v-if="protectedPerson.insurantClass != null">
+                    <label for="picker" class="weui_label weui_cell_bd weui_cell_primary">班级</label>
+                    <div class="weui_cell_bd">
+                        <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass"
+                               name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id="picker">
+                    </div>
+                    <div class="weui_cell_ft"></div>
                 </div>
-                <div class="weui_cell_ft"></div>
             </div>
         </div>
+
+        <!-- 被保人信息 -->
         <div class="weui_cells weui_cells_radio">
-            <div class="weui_cell qc_cell_title" >
+
+            <div class="weui_cell qc_cell_title">
                 <div class="weui_cell_hd weui_cell_primary">被保人信息<span
                         style="font-size:12px;color: #007de2;">(学生)</span></div>
-                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
-                    <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
+                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;">
+                    <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*">
                     拍身份证录入<i class="iconfont icon-xiangji"></i>
                 </div>
             </div>
 
-            <div class="weui_cell noBorder">
+            <div class="weui_cell noBorder" v-if="protectedPerson.insurantCardNo != null">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" class="weui_input g-align-right" placeholder="有则填，避免纠纷" required pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
+                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo"
+                           class="weui_input g-align-right" placeholder="有则填，避免纠纷"
+                           pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/"
+                           tip="身份证号">
                 </div>
             </div>
 
-            <div class="weui_cell ">
+            <div class="weui_cell" v-if="protectedPerson.insurantName != null">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="protectedPerson.insurantName" name="protectedPerson.insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="protectedPerson.insurantName" name="protectedPerson.insurantName"
+                           class="weui_input g-align-right" placeholder="必填" tip="姓名">
                 </div>
             </div>
-            <div class="weui_cell">
+
+            <div class="weui_cell" v-if="protectedPerson.insurantGender != null">
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
-                <div class="weui_cell_ft ">
+                <div class="weui_cell_ft">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="男" class="weui_check"
-                               id="s11" required>
+                        <input type="radio" v-model="protectedPerson.insurantGender"
+                               name="protectedPerson.insurantGender" value="男" class="weui_check"
+                               id="s11">
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="女" class="weui_check"
+                        <input type="radio" v-model="protectedPerson.insurantGender"
+                               name="protectedPerson.insurantGender" value="女" class="weui_check"
                                id="s12">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -113,49 +128,61 @@
                 </div>
             </div>
 
-
-            <div class="weui_cell">
+            <div class="weui_cell" v-if="protectedPerson.insurantBirthday !=null">
                 <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
                 <div class="weui_cell_ft" style="min-width: 100px;">
-                    <label v-show="!protectedPerson.insurantBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
-                    <input id="date-picker" type="date" v-model="protectedPerson.insurantBirthday" name="protectedPerson.insurantBirthday" class="weui_input"
-                           :class="{'hidden': !protectedPerson.insurantBirthday}" required tip="出生日期">
+                    <label v-show="!protectedPerson.insurantBirthday" for="date-picker"
+                           class="placeholder">请选择出生日期</label>
+                    <input id="date-picker" type="date" v-model="protectedPerson.insurantBirthday"
+                           name="protectedPerson.insurantBirthday" class="weui_input"
+                           :class="{'hidden': !protectedPerson.insurantBirthday}" tip="出生日期">
                 </div>
             </div>
 
         </div>
 
-        <div class="weui_cells">
-            <div class="weui_cell qc_cell_title" >
+        <!-- 投保人信息 -->
+        <div class="weui_cells"
+             v-if="payProtectedPerson.holderCardNo != null || payProtectedPerson.holderName != null || payProtectedPerson.holderPhone != null">
+            <div class="weui_cell qc_cell_title">
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
                         style="font-size:12px;color: #007de2;">(家长)</span></div>
-                <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
-                    <input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
+                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;">
+                    <input name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file"
+                           accept="image/*">
                     拍身份证录入<i class="iconfont icon-xiangji"></i></div>
             </div>
-            <div class="weui_cell noBorder">
+
+            <div class="weui_cell noBorder" v-if="payProtectedPerson.holderCardNo != null">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" class="weui_input g-align-right"
-                           placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" >
+                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text"
+                           class="weui_input g-align-right"
+                           placeholder="有则填，避免纠纷"
+                           pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
                 </div>
             </div>
-            <div class="weui_cell ">
+
+            <div class="weui_cell " v-if="payProtectedPerson.holderName != null">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName"
+                           class="weui_input g-align-right" placeholder="必填" tip="姓名">
                 </div>
             </div>
-            <div class="weui_cell">
+
+            <div class="weui_cell" v-if="payProtectedPerson.holderPhone != null">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderPhone" name="payProtectedPerson.holderPhone" type="number" class="weui_input g-align-right"
-                           placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
+                    <input v-model="payProtectedPerson.holderPhone" name="payProtectedPerson.holderPhone" type="number"
+                           class="weui_input g-align-right"
+                           placeholder="必填"
+                           pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
                 </div>
             </div>
 
         </div>
-
+    </form>
     <a onclick="submit()" class="weui_btn" style="margin: 28px 15px;">提交申请</a>
 
 </div>
@@ -182,7 +209,7 @@
                     holderPhone:'',
                     holderCardNo:'',
                     holderCardPhoto:''
-                },
+                }
             }
         },
         /* 监控数据变化 */
@@ -199,12 +226,12 @@
 
         },
         created: function () {
-            /* 获取允许修改的数据 */
-            $.get('./data/allowData.json', function (data) {
-                vm.protectedPerson = data.protectedPerson;
-            });
-
             // TODO:获取允许修改的项目
+            $.get('./data/allowData.json', function (data) {
+                vm.protectedPerson = data.protectedPerson || {};
+                vm.payProtectedPerson = data.payProtectedPerson || {};
+                vm.schoolName = data.schoolName;
+            });
 
             setTimeout(function () {
                 /* 初始化班级选择期 */
@@ -226,29 +253,61 @@
                         vm.protectedPerson.className = e.value.join(" ");
                     }
                 });
+
+                // 初始化表单验证插件
+                initParsley(function () {
+                    $.alert(' 您的申请已经提交，我们将在 **时间内给您回复','温馨提示', function () {
+
+                    });
+                });
             },1000);
 
             $('#app').show();
 
         }
     });
-    
+
     /* 提交订单 */
     function submit() {
-        $.alert(' 您的申请已经提交，我们将在 **时间内给您回复','温馨提示', function () {
-            
-        })
-    }
-
-    /* 表单验证 */
-    function checkForm() {
-
+        var form = $('#form');
+        var imgInputs = $('input[accept^="image"]');
+        for(var i=0; i<imgInputs.length; i++){
+//            console.log(imgInputs[i].files);
+        }
+        form.submit();
     }
 
     /* 班级改变时 */
     function classNameChange(val) {
         console.log(val);
     }
+
+    /* 绑定表单验证事件
+     * @param callback 表单验证成功时的执行函数
+     * */
+    function initParsley(callback) {
+        /* 表单验证 */
+        Parsley.on('form:error', function (formInstance) {
+            formInstance.fields.every(function (fieldInstance) {
+                var ok = fieldInstance.isValid();
+                if (!ok) {
+                    var tip = $(fieldInstance.$element).attr('tip') || "";
+                    var ErrorsMessages = fieldInstance.getErrorsMessages();
+                    showInfo(tip + ErrorsMessages);
+                    return false
+                } else {
+                    return true
+                }
+            });
+        }).on('form:success', function (formInstance) {
+
+//            console.log(formInstance.$element.serialize());
+            callback? callback():'';
+        }).on('form:submit', function () {
+            return false
+        });
+    }
+
 </script>
 
 </body>

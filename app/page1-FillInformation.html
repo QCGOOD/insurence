@@ -81,6 +81,7 @@
             <div class="weui_cell_ft">{{product.policyDay}}</div>
         </div>
     </div>
+
     <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
         <div class="weui_cells_title">信息填写</div>
         <div class="weui_cells weui_cells_access">
@@ -100,7 +101,7 @@
                     班级
                 </label>
                 <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required>
+                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
                 </div>
                 <!--<div class="weui_cell_ft"></div>-->
             </div>
@@ -161,7 +162,7 @@
         <div class="weui_cells">
             <div class="weui_cell qc_cell_title" >
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
-                        style="font-size:12px;color: #007de2;">(家长)</span></div>
+                        style="font-size:12px;color: #007de2;">(父/母)</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
                     <input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
                     拍身份证录入<i class="iconfont icon-xiangji"></i></div>
@@ -170,20 +171,20 @@
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
                     <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" class="weui_input g-align-right"
-                           placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" >
+                           placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="投保人身份证号">
                 </div>
             </div>
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
                     <input v-model="payProtectedPerson.holderPhone" name="payProtectedPerson.holderPhone" type="number" class="weui_input g-align-right"
-                           placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
+                           placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="投保人手机号">
                 </div>
             </div>
 
@@ -215,8 +216,8 @@
                     insurantName:'彭生',
                     insurantGender:'男',
                     insurantCardNo:'420187199211035032',
-                    insurantClass:'三年级 1班',
-                    insurantBirthday:'1992-01-01',
+                    insurantClass:'一年级 3班',
+                    insurantBirthday:'',
                     insurantPhoto:''
                 },
                 /* 投保人信息 */
@@ -242,11 +243,11 @@
 
         },
         created: function () {
-            /* 获取相关信息 */
+            /* 获取允许修改的字段和数据 */
             $.get('./data/product.json', function (data) {
                 if(data.code == 0){
                     vm.product = data.products[0];
-                    vm.protectedPerson.schoolName = data.schoolName;
+                    vm.schoolName = data.schoolName;
                 }else {
                     console.log(data.errMsg);
                 }
@@ -294,7 +295,9 @@
         form.submit();
     }
 
-    /* 绑定表单验证事件 */
+    /* 绑定表单验证事件
+    * @param callback 表单验证成功时的执行函数
+    * */
     function initParsley(callback) {
         /* 表单验证 */
         Parsley.on('form:error', function (formInstance) {

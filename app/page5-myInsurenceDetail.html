@@ -52,13 +52,11 @@
                 <div class="weui_cell_hd weui_cell_primary">电子保单</div>
                 <div class="weui_cell_ft"></div>
             </div>
-            <div class="weui_cell" onclick="initPDF('./pdf/test.pdf','批单')">
+            <div v-if="modifyPDF" class="weui_cell" onclick="initPDF('./pdf/test.pdf','批单')">
                 <div class="weui_cell_hd weui_cell_primary">批单(保单修改批复)</div>
                 <div class="weui_cell_ft"></div>
             </div>
         </div>
-
-
     </div>
     <div v-else>
         <!-- 头部 -->
@@ -84,18 +82,20 @@
                 <a onclick="sendToEmail()" class="weui_btn">发送保单到邮箱</a>
             </div>
         </div>
-
-
     </div>
 </div>
 <script>
+
+
     var vm = new Vue({
         el: '#app',
         data: function () {
             return {
                 overDue:false,   // 是否过期
                 showPDF: false,
-                PDFTitle:''
+                PDFTitle:'',
+                insurencePDF:'',
+                modifyPDF:''
             }
         },
         methods: {},
