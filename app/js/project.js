@@ -81,12 +81,11 @@ function initDrag ( id ) {
 function showInfo ( text ) {
     var body = $( 'body' );
     $( '.weui_toast_text' ).remove();
-    var template = '<div class="weui_toast weui_toast_text weui_toast_visible" style="height: auto;"><p class="weui_toast_content" >' + text + '</p></div>';
+    var template = $('<div class="weui_toast weui_toast_text weui_toast_visible" style="height: auto;"><p class="weui_toast_content" >' + text + '</p></div>');
     $( body ).append( template );
-
     setTimeout( function () {
-        $( '.weui_toast_text' ).remove();
-    }, 3000 );
+        $(template).remove();
+    },1500);
 }
 
 /* 验证邮箱邮箱性 */
