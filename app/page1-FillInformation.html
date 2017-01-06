@@ -99,7 +99,7 @@
             <div class="weui_cell">
                 <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
                 <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right"  name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
+                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
                 </div>
                 <!--<div class="weui_cell_ft"></div>-->
             </div>
@@ -199,23 +199,17 @@
         el: '#app',
         data: function () {
             return {
+                productId:'',
                 /* 学校信息 */
                 schoolId:'',
                 schoolName:'',
-                /* 保险产品 */
-                product: {
-                    productId:'',
-                    policyStartTime:'',
-                    policyEndTime:'',
-                    policyDay:''
-                },
                 /* 被保人信息 */
                 protectedPerson:{
-                    insurantName:'',
-                    insurantGender:'',
-                    insurantCardNo:'',
-                    insurantClass:'',
-                    insurantBirthday:'',
+                    insurantName:'彭生',
+                    insurantGender:'男',
+                    insurantCardNo:'420187199211035032',
+                    insurantClass:'三年级 1班',
+                    insurantBirthday:'1992-01-01',
                     insurantPhoto:''
                 },
                 /* 投保人信息 */
@@ -242,42 +236,34 @@
 
         },
         created: function () {
-            /* 获取允许修改的字段和数据 */
-            $.get('./data/product.json', function (data) {
-                if(data.code == 0){
-                    vm.product = data.products[0];
-                    vm.schoolName = data.schoolName;
-                }else {
-                    console.log(data.errMsg);
-                }
-            });
+            // 获取学校信息
+            this.schoolName = store.getItem('school').schoolName;
+            // 获取产品id
+            this.productId = getUrlParam('productId');
+
 
             setTimeout(function () {
-                // 初始化班级选择插件
-                $("#picker").picker({
-                    title: "请选择班级",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
-                            displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
-                        },
-                        {
-                            textAlign: 'center',
-                            values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                            displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.protectedPerson.className = e.value.join(" ");
-                    }
-                });
+                // 初始化班级选择器
+                initClassPick();
 
                 // 初始化表单验证插件
                 initParsley(function () {
-                    window.location.href = 'page2-checkMsg.html'
+                    /* 当表单验证通过时 */
+                    var data = {
+                        productId: vm.productId,
+                        protectedPerson: vm.protectedPerson,
+                        payProtectedPerson: vm.payProtectedPerson
+                    };
+                    var url =  'http://192.168.1.27:3000/createOrder';
+                    $.post(url, data, function (data) {
+//                        data = JSON.parse(data);
+                        console.log(data);
+                        if(data.code ==0){
+                            store.setItem('orderId',data.orderId);
+                            window.location.href = 'page2-checkMsg.html'
+                        }
+                    });
                 });
-
             },1000);
 
             $('#app').show();
@@ -287,10 +273,10 @@
     /* 提交订单 */
     function submit() {
         var form = $('#form');
-        var imgInputs = $('input[accept^="image"]');
+      /*  var imgInputs = $('input[accept^="image"]');
         for(var i=0; i<imgInputs.length; i++){
             console.log(imgInputs[i].files);
-        }
+        }*/
         form.submit();
     }
 
@@ -312,17 +298,37 @@
                 }
             });
         }).on('form:success', function (formInstance) {
-//            console.log(formInstance.$element.serialize());
             callback? callback():'';
         }).on('form:submit', function () {
             return false
         });
     }
 
+
+
     /* 班级改变时 */
-    function classNameChange(val) {
-        console.log(val);
+    function initClassPick() {
+        // 初始化班级选择插件
+        $("#picker").picker({
+            title: "请选择班级",
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
+                    displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
+                },
+                {
+                    textAlign: 'center',
+                    values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                    displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                }
+            ],
+            onChange: function (e) {
+                vm.protectedPerson.insurantClass = e.value.join(" ");
+            }
+        });
     }
+
 </script>
 
 </body>

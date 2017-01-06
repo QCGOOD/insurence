@@ -17,7 +17,8 @@
     "gulp-sass": "^3.0.0",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.10",
-    "jshint": "^2.9.3"
+    "jshint": "^2.9.3",
+    "multer": "^1.2.1"
   },
   "main": "index.js",
   "dependencies": {
@@ -390,7 +391,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp"
+    "start": "gulp",
+    "serve": "node ./server/serve.js"
   },
   "author": "peng",
   "license": "ISC",

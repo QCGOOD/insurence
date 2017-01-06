@@ -23,6 +23,16 @@ $( function () {
     }, 300 );
 } );
 
+/* 封装本地存储 */
+var store ={
+    getItem: function (name) {
+        return  localStorage.getItem(name)? JSON.parse(localStorage.getItem(name)):false;
+    },
+    setItem: function (name,val) {
+        localStorage.setItem(name,JSON.stringify(val))
+    }
+};
+
 /* 初始化拖拽插件 */
 function initDrag ( id ) {
     delete Hammer.defaults.cssProps.userSelect;
@@ -92,4 +102,17 @@ function showInfo ( text ) {
 function isEmail(val) {
     var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
     return reg.test(val)
+}
+
+/* 从当前url地址获取查询参数 */
+function getUrlParam(name) {
+    var result = '';
+    var searchArr =  window.location.search.slice(1).split('&');
+    searchArr.map(function (item) {
+        var arr = item.split('=');
+        if(arr[0] == name){
+            result = arr[1];
+        }
+    });
+    return result
 }

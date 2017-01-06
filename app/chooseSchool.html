@@ -65,8 +65,8 @@
             return {
                 /* 学校信息 */
                 school:{
-                    address: '',
-                    schoolType: '',
+                    address: '广东省 广州市 番禺区',
+                    schoolType: '大学',
                     schoolName: '',
                     schoolId: ''
                 },
@@ -86,7 +86,13 @@
             /* 根据城市和学校类型查询学校数据 */
             querySchool: function () {
                 if(this.school.address && this.school.schoolType){
-                    $.get('./data/school.json', function (data) {
+                    var queryData = {
+                        address: vm.school.address,
+                        schoolType: vm.school.schoolType
+                    };
+                    var url =  'http://192.168.1.27:3000/getSchoolList';
+                    $.post(url, queryData,function (data) {
+                        data = JSON.parse(data);
                         vm.schoolList = data.schoolList;
                         initSchool(data.schoolList);
                     })
@@ -169,13 +175,21 @@
 
     /* 保存学校 */
     function saveSchool() {
+        var school = vm.school;
         if(!vm.school.schoolId){
             $.toast("请选择学校", "text");
             return false
         }
-        window.location = 'index.html?schoolId='+vm.school.schoolId;
-        // TODO:学校
-        $.post('',vm.form, function (data) {
+        // TODO:保存学校
+        var url =  'http://192.168.1.27:3000/setSchool';
+        $.post(url,school, function (data) {
+            console.log(data);
+            if(data.code == 0){
+                store.setItem('school',school);
+                window.location = 'index.html?schoolId='+vm.school.schoolId;
+            }else{
+                showInfo('保存失败！')
+            }
         },'json');
     }
 </script>

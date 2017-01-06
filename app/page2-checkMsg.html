@@ -73,7 +73,7 @@
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">学校:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{protectedPerson.schoolName}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{schoolName}}</div>
                     </div>
                     <div class="weui_cell border-bottom">
                         <div class="weui_cell_hd">班级:</div>
@@ -88,7 +88,6 @@
                         <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.holderPhone}}</div>
                     </div>
                     <div class="weui_cell">
-                        <div class="weui_cell_hd">身份证号:</div>
                         <div class="weui_cell_hd">身份证号:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{payProtectedPerson.holderCardNo}}</div>
                     </div>
@@ -123,6 +122,9 @@
 
 </div>
 <script>
+    // 订单的id
+    var orderId = '';
+
     var vm = new Vue({
         el: '#app',
         data: function () {
@@ -158,14 +160,16 @@
         },
         methods: {},
         created: function () {
-            /* 获取保险信息 */
-            $.get('./data/order.json', function (data) {
+            orderId = store.getItem('orderId');
+            /* 查看订单 */
+            var url =  'http://192.168.1.27:3000/getOrder?orderId='+orderId;
+            $.get(url, function (data) {
+//                data = JSON.parse(data);
+                console.log(data);
                 vm.schoolName = data.schoolName;
                 vm.product = data.product;
                 vm.protectedPerson = data.protectedPerson;
                 vm.payProtectedPerson = data.payProtectedPerson;
-
-                console.log(data);
             })
         }
     });
@@ -176,10 +180,36 @@
             showInfo("请先勾选“我已阅读”");
             return false
         }
-        $.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
-             window.location.href = 'page4-myInsurence.html';
+        // 订单支付状态
+        var state = true ;
+        //TODO:调用第三方支付接口
+
+
+        if(state){
+            // 更新订单
+            updataOrder(orderId);
+
+        }else {
+            $.alert('支付失败,请联系客服！', '温馨提示',function () {
+            })
+        }
+    }
+
+    /* 更新订单状态
+    * @param  orderId [string]------订单id
+    * */
+    function updataOrder(orderId) {
+        var url =  'http://192.168.1.27:3000/updataOrder?orderId='+ orderId;
+        $.get(url, function (data) {
+            console.log(data);
+            if(data.code == 0){
+                $.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
+                    window.location.href = 'page4-myInsurence.html';
+                })
+            }
         })
     }
+
 </script>
 
 </body>

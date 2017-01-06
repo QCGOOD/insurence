@@ -1,0 +1,62 @@
+{
+  "className": "一(1)班",
+  "totalNum": 4,
+  "students": [
+    {
+      "insurantName": "周伦1",
+      "productTitle": "一年期综合意外险",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦2",
+      "productTitle": "一年期综合意外险",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦3",
+      "productTitle": "一年期综合意外险",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦4",
+      "productTitle": "一年期综合意外险",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦1",
+      "productTitle": "一年期综合意外险",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦2",
+      "productTitle": "Z-100A",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦3",
+      "productTitle": "Z-100A",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    },
+    {
+      "insurantName": "周伦4",
+      "productTitle": "Z-100A",
+      "policyStartTime": "2016-09-01",
+      "policyEndTime": "2017-08-31",
+      "policyDay": "365天"
+    }
+  ]
+}

@@ -92,27 +92,21 @@
         },
         /* 初始化数据 */
         created: function () {
-            /* 获取保险产品信息 */
-            $.get('./data/product.json', function (data) {
-                console.log(data);
-                vm.products = data.products;
-            });
-
+            /* 获取当前学校信息 */
+            var schoolId = getUrlParam('schoolId');
+            if(!schoolId){
+                window.location.href = 'chooseSchool.html';
+            }else {
+                /* 获取保险产品信息 */
+                var getProduct = 'http://192.168.1.27:3000/getProduct?schoolId='+schoolId;
+                $.get(getProduct, function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    vm.products = data.products;
+                });
+            }
         }
     });
-
-    /* 保存学校 */
-    function submitAddress() {
-        if(!vm.form.address || !vm.form.schoolName || !vm.form.className){
-            $.toast("信息不完整", "text");
-            return false
-        }
-        vm.showDialog = false;
-        console.log(vm.form.address, vm.form.schoolName, vm.form.className);
-        // TODO:保存城市、学校、与班级
-        $.post('',vm.form, function (data) {
-        },'json');
-    }
 </script>
 
 </body>

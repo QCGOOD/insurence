@@ -1,0 +1,12 @@
+{
+	"outputs": [
+		{
+			"outputLabel": "ocr_id",
+			"outputMulti": {},
+			"outputValue": {
+				"dataType": 50,
+				"dataValue": "{\"address\": \"浙江省杭州市余杭区文一西路969号\", \"config_str\" : \"{\"side\":\"face\"}\", \"name\" : \"张三\",\"num\" : \"1234567890\", \"success\" : true}"
+			}
+		}
+	]
+}
