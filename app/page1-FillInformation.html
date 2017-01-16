@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Title</title>
+    <title>相书保险</title>
 
     <link rel="stylesheet" href="css/project.css">
 
@@ -24,14 +24,6 @@
         .weui_cells.plan .weui_cell:before,.noBorder.weui_cell:before{display: none;}
         .weui_cells.plan .weui_cell{padding: 4px 15px;}
         .weui_cells.plan .weui_cell_ft{color: #333;}
-        /* 锯齿 */
-        .sawtooth{position:relative;}
-        .sawtooth:after{content: "";position: absolute;bottom: 0;width:100%;height: 10px;margin-top: 20px;background-size: 12px 20px;}
-        .sawtooth:after{background-color: #f2f3f8;background-position: 50% 15%;
-            background-image: linear-gradient(-45deg, #fff 25%, transparent 25%, transparent),
-            linear-gradient(-135deg, #fff 25%, transparent 25%, transparent),
-            linear-gradient(-45deg, transparent 75%, #fff 75%),
-            linear-gradient(-135deg, transparent 75%, #fff 75%);}
         /* 投保计划 */
 
         /* 信息填写 */
@@ -39,7 +31,7 @@
         .weui_cell_select {  padding: 0 15px;  }
         .weui_cell_ft{color: #333;}
         .toolbar .picker-button{color: #007de2;}
-
+        .weui_cell_hd{white-space: nowrap;}
         /* 出身日期填写 */
         .hidden{opacity: 0;}
         .placeholder{position: absolute;right: 15px;top:0;line-height: 42px;color: #8a90af;}
@@ -82,7 +74,7 @@
         </div>
     </div>-->
 
-    <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
+    <form id="form" data-parsley-validate data-parsley-ui-enabled="false" method="post">
         <div class="weui_cells_title">信息填写</div>
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell qc_cell_title">
@@ -109,15 +101,15 @@
                 <div class="weui_cell_hd weui_cell_primary">被保人信息<span
                         style="font-size:12px;color: #007de2;">(学生)</span></div>
                 <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
-                    <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
-                    拍身份证录入<i class="iconfont icon-xiangji"></i>
+                    <!--<input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
+                    拍身份证录入<i class="iconfont icon-xiangji"></i>-->
                 </div>
             </div>
 
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" class="weui_input g-align-right" placeholder="有则填，避免纠纷"  pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
+                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" data-parsley-check-identify class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
                 </div>
             </div>
 
@@ -131,13 +123,13 @@
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
                 <div class="weui_cell_ft ">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="男" class="weui_check"
+                        <input type="radio" v-model="protectedPerson.insurantSex" name="protectedPerson.insurantSex" value="男" class="weui_check"
                                id="s11" required>
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="女" class="weui_check"
+                        <input type="radio" v-model="protectedPerson.insurantSex" name="protectedPerson.insurantSex" value="女" class="weui_check"
                                id="s12">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -162,14 +154,15 @@
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
                         style="font-size:12px;color: #007de2;">(父/母)</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
-                    <input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
-                    拍身份证录入<i class="iconfont icon-xiangji"></i></div>
+                    <!--<input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
+                    拍身份证录入<i class="iconfont icon-xiangji"></i>-->
+                </div>
             </div>
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" class="weui_input g-align-right"
-                           placeholder="有则填，避免纠纷" pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="投保人身份证号">
+                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" data-parsley-check-identify class="weui_input g-align-right"
+                           placeholder="有则填，避免纠纷"  tip="投保人身份证号">
                 </div>
             </div>
             <div class="weui_cell ">
@@ -189,7 +182,7 @@
         </div>
 
         <div style="margin: 28px 15px;">
-            <a  onclick="submit()" class="weui_btn" >提交订单</a>
+            <a href="javascript:;" onclick="submit()" class="weui_btn">提交订单</a>
         </div>
     </form>
 
@@ -200,14 +193,15 @@
         data: function () {
             return {
                 productId:'',
+                productName:'',
                 /* 学校信息 */
                 schoolId:'',
                 schoolName:'',
                 /* 被保人信息 */
                 protectedPerson:{
                     insurantName:'彭生',
-                    insurantGender:'男',
-                    insurantCardNo:'420187199211035032',
+                    insurantSex:'男',
+                    insurantCardNo:'421087199211035032',
                     insurantClass:'三年级 1班',
                     insurantBirthday:'1992-01-01',
                     insurantPhoto:''
@@ -219,15 +213,20 @@
                     holderCardNo:'',
                     holderCardPhoto:''
                 },
-                formValid: false    // 表单验证通过了吗？
+                formValid: false,    // 表单验证通过了吗？
+                hasSubmit:false      // 表单提交了吗?
             }
         },
         /* 监控数据变化 */
         watch: {
             protectedPerson: {
                 /* 变化时执行函数 */
-                handler: function (val, oldVal) {
-                    console.log(val);
+                handler: function (val) {
+                    var idCard = val.insurantCardNo;
+                    if (checkidCard(idCard).state) {
+                        val.insurantBirthday = getBirthday(idCard);
+                        val.insurantSex = getSex(idCard);
+                    }
                 },
                 deep: true
             }
@@ -237,11 +236,17 @@
         },
         created: function () {
             // 获取学校信息
-            this.schoolName = store.getItem('school').schoolName;
-            // 获取产品id
-            this.productId = getUrlParam('productId');
+            this.schoolName = store.getItem('school').name;
+            this.schoolId = store.getItem('school').id;
+            // 获取产品id和名称
+            this.productId = store.getItem('product').id;
+            this.productName = store.getItem('product').title;
 
-
+            if(!this.schoolName || !this.schoolId){
+                window.location.href = 'chooseSchool.html';
+            }else if(!this.productId || !this.productName){
+                window.location.href = 'index.html';
+            }
             setTimeout(function () {
                 // 初始化班级选择器
                 initClassPick();
@@ -249,18 +254,29 @@
                 // 初始化表单验证插件
                 initParsley(function () {
                     /* 当表单验证通过时 */
-                    var data = {
-                        productId: vm.productId,
-                        protectedPerson: vm.protectedPerson,
-                        payProtectedPerson: vm.payProtectedPerson
-                    };
-                    var url =  'http://192.168.1.27:3000/createOrder';
+                    var insurantClass = vm.protectedPerson.insurantClass.split(' ');
+                    var data = Object.assign(
+                            {
+                                productId: vm.productId,
+                                productName:vm.productName,
+                                schoolId:vm.schoolId,
+                                schoolName:vm.schoolName,
+                                gradeName:insurantClass[0].slice(0,1),
+                                className:insurantClass[1].slice(0,1),
+                                insurantGender:transformSex(vm.protectedPerson.insurantSex)
+                            },
+                            vm.protectedPerson,
+                            vm.payProtectedPerson
+                    );
+                    console.log(data);
+                    var url =  '/wego168-xsinsurance-wechat/order/save.jsp';
                     $.post(url, data, function (data) {
-//                        data = JSON.parse(data);
+                        data = JSON.parse(data);
                         console.log(data);
-                        if(data.code ==0){
-                            store.setItem('orderId',data.orderId);
-                            window.location.href = 'page2-checkMsg.html'
+                        if(data.errcode ==0){
+                            window.location.href = 'page2-checkMsg.html?orderId='+data.orderId;
+                        }else {
+                            console.log(data.errMsg);
                         }
                     });
                 });
@@ -269,21 +285,32 @@
             $('#app').show();
         }
     });
-    
+
     /* 提交订单 */
     function submit() {
         var form = $('#form');
-      /*  var imgInputs = $('input[accept^="image"]');
-        for(var i=0; i<imgInputs.length; i++){
-            console.log(imgInputs[i].files);
-        }*/
+        /*  var imgInputs = $('input[accept^="image"]');
+         for(var i=0; i<imgInputs.length; i++){
+         console.log(imgInputs[i].files);
+         }*/
         form.submit();
     }
 
     /* 绑定表单验证事件
-    * @param callback 表单验证成功时的执行函数
-    * */
+     * @param callback 表单验证成功时的执行函数
+     * */
     function initParsley(callback) {
+        // 身份证验证器，用法<input name='identify' data-parsley-check-identify>
+        Parsley.addValidator('checkIdentify',{
+            requirementType:'boolean',
+            validateString: function (val) {
+                if(!val.length){
+                    return true
+                }else{
+                    return checkidCard(val).state
+                }
+            }
+        });
         /* 表单验证 */
         Parsley.on('form:error', function (formInstance) {
             formInstance.fields.every(function (fieldInstance) {
@@ -304,8 +331,6 @@
         });
     }
 
-
-
     /* 班级改变时 */
     function initClassPick() {
         // 初始化班级选择插件
@@ -314,8 +339,8 @@
             cols: [
                 {
                     textAlign: 'center',
-                    values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
-                    displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
+                    values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级'],
+                    displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
                 },
                 {
                     textAlign: 'center',

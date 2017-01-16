@@ -30,6 +30,7 @@ app.post('/getSchoolList', function (req, res) {
                 errMsg: '读取文件失败'
             });
         }
+        console.log(data);
         res.end(data);
     })
 });
@@ -73,7 +74,8 @@ app.get('/getProduct', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin","*");
    fs.readFile(PATH + '/product.json', 'utf8', function (err, data) {
        if(err){return console.error(err);}
-       res.end(data);
+       console.log(data);
+       res.send(data);
    })
 });
 
@@ -181,7 +183,6 @@ app.get('/getOrder', function (req, res) {
                 errMsg:'未找到订单'
             })
         }
-
     })
 });
 
@@ -202,16 +203,22 @@ app.get('/updataOrder', function (req, res) {
         }
         var newData = JSON.parse(data);
         var product = {};
-        newData.unPayList = newData.unPayList.map(function (item) {
-            console.log(item.orderId, orderId);
-            if(item.orderId != orderId){
-                return item
+        newData.unPayList = newData.unPayList.filter(function (item) {
+            if (item.orderId != orderId) {
+                return true
             }else {
-                product = item
+                product = item;
             }
         });
         product.policyNo = guidGenerate();
-        newData.effectList.push(product);
+        if(product){
+            newData.effectList.push(product)
+        }else{
+            return res.send({
+                code: 1,
+                errMsg: '订单不存在'
+            })
+        }
 
         // 写入文件
         newData = JSON.stringify(newData);
@@ -231,10 +238,31 @@ app.get('/updataOrder', function (req, res) {
     })
 });
 
+// 获取保单
+app.get('/getInsurence', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin","*");
+    // 读取保单
+    var filePath  = PATH + '/orderList.json';
+    fs.readFile(filePath, 'utf8', function (err, data) {
+        if(err){
+            return res.send({
+                status:1,
+                errMsg: '读取文件失败'
+            });
+        }
+        var newData = JSON.parse(data);
+        return res.send(JSON.stringify({
+            code: 0,
+            errMsg: '获取数据成功',
+            effectList: newData.effectList,
+            noEffectList: newData.noEffectList
+        }))
+    })
+});
 
-var server = app.listen(3000, function () {
-    var port = server.address().port || 3000;
-    console.log("应用实例，访问地址为 http://192.168.1.27:%s", port)
+var server = app.listen(4000, function () {
+    var port = server.address().port || 4000;
+    console.log("应用实例，访问地址为 http://192.168.1.23:%s", port)
 });
 
 

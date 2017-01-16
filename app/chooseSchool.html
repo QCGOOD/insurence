@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Title</title>
+    <title>相书保险</title>
     <link rel="stylesheet" href="css/project.css">
+
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
+    <!-- 城市选择器 -->
     <script src="js/libs/city-picker.js"></script>
     <script src="js/libs/vue2.0.js"></script>
+    <!-- 拖拽插件hammer.js http://hammerjs.github.io/ -->
     <script src="js/libs/hammer.min.js"></script>
+    <!-- 全局js文件 -->
     <script src="js/project.js"></script>
     <style>
         body{padding: 30px 20px;background-color: rgba(0, 0, 0, 0.75);}
@@ -17,6 +21,35 @@
         /* 选择城市与学校 */
         .weui_dialog_bd .weui_input{color: #333;}
         #school-picker{position: absolute;width: 100%;height: 100%;top:0;left: 0;opacity: 0;}
+
+        /* 搜索结果 */
+        .weui_dialog{overflow: visible;}
+        .search_list{
+            position: absolute;
+            top:46px;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            max-height: 195px;
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 0 6px 0 rgba(0,0,0,.04), 0 2px 4px 0 rgba(0,0,0,.12);
+            text-align: left;
+            padding: 10px 15px;
+            border: 1px solid #d3dce6;
+            overflow: auto;
+            transition: top .5s ease-out;
+        }
+        .search_list_item{  line-height: 30px;  color: #333;  white-space: nowrap;overflow: hidden;text-overflow: ellipsis;  }
+        .search_list_item span{font-size: 12px;color: #999;}
+
+        .weui_dialog{top: 15%;}
+        @media screen and (max-height: 400px){
+            .weui_dialog{top: 0;}
+        }
+        @media screen and (max-height: 300px){
+            .weui_dialog{top: -100px;}
+        }
     </style>
 </head>
 <body>
@@ -24,88 +57,165 @@
     <!-- 选择学校 -->
     <div>
         <div class="weui_mask weui_mask_visible"></div>
-        <div class="weui_dialog weui_dialog_visible " style="top:21%;">
+        <div class="weui_dialog weui_dialog_visible ">
             <div class="weui_dialog_hd" style="border-bottom: 0;">
                 <div class="weui_dialog_title">选择城市与学校</div>
             </div>
-            <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;">
+            <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;margin-bottom: 20px;">
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在城市" :value="school.address" type="text" id='city-picker' >
+                        <input class="weui_input " placeholder="请选择您所在城市" :value="address" type="text" id='city-picker' >
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
 
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择学校类型" :value="school.schoolType" type="text" id='class-picker'>
+                        <input class="weui_input" placeholder="请选择学校类型" :value="transformSchoolCode(type,'str')" type="text" id='class-picker'>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
 
-                <div class="weui_cell">
+                <div class="weui_cell" style="position: relative;overflow: visible;">
                     <div class="weui_cell_bd weui_cell_primary" >
-                        <input class="weui_input"  type="text" id="school-picker">
-                        <input class="weui_input" v-model="school.schoolName" placeholder="请选择您所在学校" type="text" readonly>
+                        <!--<input class="weui_input"  type="text" id="school-picker">-->
+                        <!--<input class="weui_input" v-model="name" placeholder="请选择您所在学校" type="text" readonly>-->
+                        <input class="weui_input" v-model="name"  @click="searchSchool"  placeholder="请选择您所在的学校">
                     </div>
                     <div class="weui_cell_ft"></div>
+                    <!-- 搜索结果 -->
+                    <ul id="search_list" class="search_list" v-show="showSearchResult && searchList.length">
+                        <!--<li class="search_list_item" v-for="school in searchList" @click="selectSchool(school)">{{school.name}}<span>({{school.address.replace(/\s/g,"")}})</span></li>-->
+                        <li class="search_list_item" v-for="school in searchList" @click="selectSchool(school)">{{school.name}}</li>
+                    </ul>
                 </div>
             </div>
-            <div class="weui_dialog_ft">
-                <a onclick="saveSchool()" class="weui_btn_dialog primary">确定</a>
-            </div>
+            <!-- <div class="weui_dialog_ft">
+                 <a onclick="saveSchool()" class="weui_btn_dialog primary">确定</a>
+             </div>-->
         </div>
     </div>
 </div>
 
 <script>
+    var interval;
     var vm = new Vue({
         el: '#app',
         data: function () {
             return {
                 /* 学校信息 */
-                school:{
-                    address: '广东省 广州市 番禺区',
-                    schoolType: '大学',
-                    schoolName: '',
-                    schoolId: ''
-                },
+                address: '广东省 肇庆市 四会市',
+                provice:'',
+                city:'',
+                area:'',
+                type: '',
+                name: '',
+                id: '',
+                addressAndType:{},
                 /* 学校数据列表 */
-                schoolList:[]
+                schoolList:[],
+                /* 搜索结果 */
+                searchList:[
+
+                ],
+                /* 是否显示搜索结果 */
+                showSearchResult: false
             }
         },
         watch:{
-            school: {
-                handler: function () {
-                    vm.querySchool();
-                },
-                deep:true
+            // 当城市变化时
+            address: function () {
+                vm.name = '';
+                vm.showSearchResult = false;
+                vm.initSchoolList();
+            },
+            // 学校类型变化时
+            type: function () {
+                vm.name = '';
+                vm.showSearchResult = false;
+                vm.initSchoolList();
+            },
+            // 当搜索框的值改变时
+            name: function (val) {
+                clearInterval(interval);
+                interval = setTimeout(function () {
+                    vm.searchSchool();
+                    console.log('搜索结果:',vm.searchList);
+                },500);
             }
         },
         methods: {
-            /* 根据城市和学校类型查询学校数据 */
-            querySchool: function () {
-                if(this.school.address && this.school.schoolType){
+            /* 查询学校列表 */
+            initSchoolList: function () {
+                if(this.address && this.type){
+                    var address = vm.address.split(' ');
                     var queryData = {
-                        address: vm.school.address,
-                        schoolType: vm.school.schoolType
+                        provice:address[0],
+                        city:address[1],
+                        area:address[2],
+                        type: transformSchoolCode(vm.type,'num')
                     };
-                    var url =  'http://192.168.1.27:3000/getSchoolList';
+                    console.log(queryData);
+                    var url =  '/wego168-xsinsurance-wechat/school/listJson.jsp';
                     $.post(url, queryData,function (data) {
                         data = JSON.parse(data);
-                        vm.schoolList = data.schoolList;
-                        initSchool(data.schoolList);
+                        console.log(data);
+                        if(data.errcode == 0){
+//                            vm.searchSchool();
+                            vm.schoolList = data.schoolList.map(function (school) {
+                                return {
+                                    name: school.name,
+                                    id: school.id,
+                                    provice:school.provice,
+                                    city:school.city,
+                                    area:school.area,
+                                    type: school.type,
+                                    address: [school.provice,school.city,school.area].join(' '),
+                                }
+                            })
+                        }else {
+                            showInfo(data.errMsg);
+                        }
                     })
                 }
+            },
+            /* 搜索学校
+             *  @param val  输入值[string]
+             *  @param arr  搜索源Array[obj]
+             *  @return     搜索结果Array[obj]
+             * */
+            searchSchool: function () {
+                var val = vm.name;
+                vm.showSearchResult = true;
+                if(!val){
+                    vm.searchList = vm.schoolList;
+                    console.log(vm.searchList);
+                }else {
+                    vm.searchList = vm.schoolList.filter(function (item) {
+                        return item.name.match(val) != null
+                    })
+                }
+            },
+            /* 选择学校 */
+            selectSchool: function (school) {
+                vm.name = school.name;
+                vm.showSearchResult = false;
+                store.setItem('school',school);
+                window.location = 'index.html?id='+school.id;
+//                saveSchool(school);
             }
         },
         /* 初始化数据 */
         created: function () {
+            /* 获取城市、学校类型、学校 */
+            var school = store.getItem('school');
+            this.address = school.address;
+
             setTimeout(function () {
                 /* 选择城市 */
                 $("#city-picker").cityPicker({
                     onChange: function (e) {
-                        vm.school.address = e.displayValue.join(" ");
+                        vm.address = e.displayValue.join(" ");
                     }
                 });
 
@@ -119,79 +229,24 @@
                         }
                     ],
                     onChange: function (e) {
-                        vm.school.schoolType = e.value.join(" ");
+                        vm.type = e.value.join(" ");
                     }
                 });
 
                 /* 给学校选择器绑定点击事件 */
                 $("#school-picker").on('click', function () {
-                    if(!vm.school.address){
+                    if(!vm.address){
                         $.toast('请先选择城市','text');
-                    }else  if(!vm.school.schoolType){
+                    }else  if(!vm.type){
                         $.toast('请选择学校类型','text');
                     }
                 });
-                vm.querySchool();
+                vm.initSchoolList();
             },400);
-
-            /* 从后台获取城市与学校 */
-           /* $.get('./data/school.json', function (data) {
-                if(data.code == 0 && data.school && data.school.schoolId){
-                    vm.school = data.school;
-                }
-            })*/
         }
     });
 
-    /* 学校选择器
-     * @param schoolList 学校数据列表，格式(数组)schoolList:[{schoolId:'glzsdx',schoolName:'中山大学'}]
-     * @return null
-     * */
-    function initSchool(schoolList) {
-        var values = [];
-        var displayValues = [];
-        schoolList.forEach(function (school) {
-            values.push(school.schoolId);
-            displayValues.push(school.schoolName);
-        });
-        /* 选择学校 */
-        $("#school-picker").picker({
-            title: "请选择您的学校",
-            cols: [
-                {
-                    textAlign: 'center',
-                    values: values,
-                    displayValues:displayValues
-                }
-            ],
-            onChange: function (e,val,displayVal) {
-                vm.querySchool();
-                vm.school.schoolName = displayVal.join(',');
-                vm.school.schoolId = val.join(',');
-                console.log(vm.school.schoolId);
-            }
-        });
-    }
 
-    /* 保存学校 */
-    function saveSchool() {
-        var school = vm.school;
-        if(!vm.school.schoolId){
-            $.toast("请选择学校", "text");
-            return false
-        }
-        // TODO:保存学校
-        var url =  'http://192.168.1.27:3000/setSchool';
-        $.post(url,school, function (data) {
-            console.log(data);
-            if(data.code == 0){
-                store.setItem('school',school);
-                window.location = 'index.html?schoolId='+vm.school.schoolId;
-            }else{
-                showInfo('保存失败！')
-            }
-        },'json');
-    }
 </script>
 
 </body>

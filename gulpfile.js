@@ -6,12 +6,16 @@ var watch = require('gulp-watch');
 var imagemin = require('gulp-imagemin');
 var gulpScss = require('gulp-sass');   // 编译sass文件
 var $ = require('gulp-load-plugins')();
+var path = require('path');
+// 目标文件夹
+var PATH = 'C:\\Program Files (x86)\\Apache Software Foundation\\Apache2.2\\htdocs\\';
+
 
 // 图片压缩
 gulp.task('image', function() {
     return gulp.src('app/images/**/*')
         .pipe($.cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-        .pipe(gulp.dest('dist/images'));
+        .pipe(gulp.dest(PATH+'dist/images'));
 });
 
 // 编译sass文件
@@ -30,7 +34,7 @@ gulp.task('css', function () {
    gulp.src('app/css/**/*')
        .pipe($.autoprefixer())
        .pipe($.minifyCss())
-       .pipe(gulp.dest('dist/css'));
+       .pipe(gulp.dest(PATH+'dist/css'));
 });
 
 // js压缩,检测
@@ -38,7 +42,7 @@ gulp.task('js', function () {
     gulp.src(['app/js/**/*.js'])
         .pipe($.jshint.reporter('default'))
         .pipe($.uglify())
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest(PATH+'dist/js'))
 });
 gulp.task('lint', function () {
     gulp.src('gulpfile.js')
@@ -48,16 +52,23 @@ gulp.task('lint', function () {
 
 // 复制html
 gulp.task('html', function () {
-   gulp.src('app/**/*.html')
-       .pipe(gulp.dest('dist/'))
+   gulp.src('app/*.html')
+       .pipe(gulp.dest(PATH+'dist/'))
 });
 
+// 复制font
+gulp.task('font', function () {
+    gulp.src('app/font/*')
+    .pipe(gulp.dest(PATH+'dist/font/'))
+})
 
 // 自动刷新
 gulp.task('serve', function () {
     browserSync.init({
         server:{baseDir:'./app'},
-        browser:'chrome'
+        browser:'chrome',
+        //proxy:'localhost：8080',
+        //port: '8080',
     });
 });
 
@@ -71,15 +82,17 @@ gulp.task('watch', function () {
 gulp.task('rename', function () {
    gulp.src(['!dist/**/*min.js','!dist/**/*min.css','dist/**/*.css','dist/**/*.js'])
        .pipe($.rename({suffix:'.min'}))
-       .pipe(gulp.dest('dist/'));
+       .pipe(gulp.dest(PATH+'dist/'));
 });
 
 
 // clean
 gulp.task('clean', function (cb) {
-   del(['dist/**/*'],cb);
+   del([PATH+'dist/**/*'],cb);
 });
 
-gulp.task('default',['image','js','html','scss-compile','css','serve','watch']);
+gulp.task('default',['scss-compile','serve','watch']);
+
+gulp.task('build',['image','js','html','font','scss-compile','css','serve','watch']);
 
 module.exports = gulp;

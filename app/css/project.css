@@ -1,35 +1,84 @@
 @charset "UTF-8";
-/* 字体图标 */
-@import url("//at.alicdn.com/t/font_qco3slqi3emkuik9.css");
-/* 引入weui.css */
-@import url(./libs/weui.css);
+/*******  相书保险全局css样式文件  *******/
+/* 字体图标 http:/* www.iconfont.cn/ */
+@import url(../font/iconfont.css);
+/* 引入weui,jquery-weui */
 @import url(./libs/jquery-weui.min.css);
-/* 重置样式 */
+/************************* 字体图标 ********************************/
+.iconfont {
+  color: #007de2; }
+
+.icon-weixin {
+  font-size: 24px;
+  color: #59a500; }
+
+.icon-xiangji {
+  font-size: 24px; }
+
+/**********************  基础类样式 *****************************/
 html, body {
   max-width: 640px !important;
   color: #333; }
 
-/* ol ul */
 ol, ul {
   list-style: none; }
 
-/* border-box */
 div, ul, li, input, img, a, textarea, span {
   -webkit-box-sizing: border-box; }
 
-/* 布局样式.g- */
-.g-align-right {
-  text-align: right; }
+/* 定义输入框placeholder和输入字体颜色 */
+input::-webkit-input-placeholder {
+  color: #8a90af; }
 
-/* 自定义按钮 */
+input {
+  color: #333; }
+
+/* 头部导航 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 16px;
+  padding: 0 30px;
+  color: #333;
+  line-height: 44px;
+  border-bottom: solid 1px #cbceda;
+  text-align: center;
+  background-color: #fff;
+  z-index: 100; }
+
+header .header_left {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  z-index: 1; }
+  header .header_left .icon-back {
+    color: #333; }
+
+header .header_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+header .header_right {
+  position: absolute;
+  right: 10px;
+  top: 0; }
+  header .header_right .icon-more {
+    color: #333; }
+
+/************************ 自定义按钮 *************************/
 .weui_btn {
   background-color: #007de2;
   line-height: 36px; }
 
+/*  禁止 */
 .weui_btn.disabled {
   background-color: #f7f7f7;
   color: rgba(0, 0, 0, 0.3); }
 
+/*  固定到页面底部 */
 .weui_btn_fixedBottom {
   position: fixed;
   bottom: 0;
@@ -42,18 +91,45 @@ div, ul, li, input, img, a, textarea, span {
   text-align: center;
   -webkit-tap-highlight-color: transparent; }
 
+/*  当屏幕宽度大于375px */
 @media screen and (min-width: 375px) {
   .weui_btn {
     line-height: 44px; }
   .weui_btn_fixedBottom {
     line-height: 44px; } }
 
+/*  悬浮客服按钮 */
+.btn_kefu {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  position: fixed;
+  z-index: 1001;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  background: url("../images/kefu.png") no-repeat;
+  background-size: 50px 50px;
+  transition: opacity .3s ease-in-out ,left .3s ease-in-out,top .3s ease-in-out; }
+
+/*  当屏幕高度小于450px */
+@media screen and (max-height: 450px) {
+  .btn_kefu {
+    display: none; } }
+
+/********************** 工具类样式 *************************/
+/*  右对齐 */
+.g-align-right {
+  text-align: right; }
+
+/*  固定到底部 */
 .fixed_bottom {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0; }
 
+/*  固定到顶部 */
 .fixed_top {
   position: fixed;
   top: 0;
@@ -68,7 +144,7 @@ div, ul, li, input, img, a, textarea, span {
   overflow: hidden;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04); }
 
-/* 底部1px边框 */
+/*  底部1px实线边框 */
 .border-bottom:after {
   content: " ";
   position: absolute;
@@ -83,30 +159,13 @@ div, ul, li, input, img, a, textarea, span {
   transform: scaleY(0.5);
   left: 15px; }
 
+/*  底部1px虚线边框 */
 .border-bottom.dashed:after {
   border-top-style: dashed; }
 
-/* 悬浮客服按钮 */
-.btn_kefu {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  position: fixed;
-  z-index: 1001;
-  bottom: 60px;
-  left: 10px;
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  opacity: 0.8;
-  background: url("../images/kefu.png") no-repeat;
-  background-size: 50px 50px;
-  transition: opacity .3s ease-in-out; }
-
-@media screen and (max-height: 450px) {
-  .btn_kefu {
-    display: none; } }
-
-/* 自定义单选框 --start */
+/******************** 重置weui样式 ****************************/
+/* 重构weui单选框  */
+/*  选中样式 */
 .weui_cells_radio .weui_check:checked + .weui_icon_checked_primary:before {
   font-family: "iconfont" !important;
   display: inline-block;
@@ -114,6 +173,7 @@ div, ul, li, input, img, a, textarea, span {
   color: #007de2;
   font-size: 18px; }
 
+/*  未选中样式 */
 .weui_cells_radio .weui_check + .weui_icon_checked_primary:before {
   font-family: "iconfont" !important;
   display: inline-block;
@@ -121,11 +181,11 @@ div, ul, li, input, img, a, textarea, span {
   color: #999;
   font-size: 18px; }
 
-/* 自定义单选框 --end */
-/* 自定义复选框 --start */
+/* 重构weui复选框  */
 .weui_icon_checked_primary {
   vertical-align: text-bottom; }
 
+/*  选中 */
 .weui_cells_checkbox .weui_check:checked + .weui_icon_checked_primary:before {
   font-family: "iconfont" !important;
   display: inline-block;
@@ -133,6 +193,7 @@ div, ul, li, input, img, a, textarea, span {
   color: #007de2;
   font-size: 15px; }
 
+/*  未选中 */
 .weui_cells_checkbox .weui_check + .weui_icon_checked_primary:before {
   font-family: "iconfont" !important;
   display: inline-block;
@@ -141,20 +202,41 @@ div, ul, li, input, img, a, textarea, span {
   color: rgba(175, 175, 175, 0.75);
   font-size: 15px; }
 
-/* 自定义复选框 --end */
-/* 定义输入框placeholder和输入字体颜色 */
-input::-webkit-input-placeholder {
-  color: #8a90af; }
+/* 微信alert弹框--start */
+.weui_dialog {
+  border-radius: 6px;
+  overflow: hidden;
+  /* .weui_dialog_ft{position: absolute;bottom: 0;left: 0;right: 0;} */ }
+  .weui_dialog .weui_dialog_title {
+    font-size: 20px;
+    color: #1a1e36;
+    font-weight: 600; }
+  .weui_dialog .weui_dialog_bd {
+    color: #68709a; }
+  .weui_dialog .weui_btn_dialog.primary {
+    background-color: #007de2;
+    color: #fff; }
+  .weui_dialog .weui-prompt-input {
+    border: none;
+    border-bottom: solid 1px #ccc;
+    padding: 10px 15px; }
 
-input {
-  color: #333; }
+/* 微信alert弹框--end */
+/*  jquery weui Toast */
+.weui_toast_text {
+  border-radius: 12px; }
 
-/* 封装一个手风琴插件 --start */
+/*  下拉框工具栏 */
+.toolbar .picker-button {
+  color: #007de2; }
+
+/*************************************** 组件类样式 ********************************************/
+/* 手风琴组件 --start */
 .accordion {
-  /* 标题或者开关 */
-  /* 当为隐藏状态时 */
-  /* 当为显示状态时 */
-  /* 内容区详情 */ }
+  /*  标题或者开关 */
+  /*  当为隐藏状态时 */
+  /*  当为显示状态时 */
+  /*  手风琴内容区详情 */ }
   .accordion .dropdown [data-toggle="dropdown"] {
     position: relative;
     font-size: 17px;
@@ -165,8 +247,8 @@ input {
     color: #000;
     background: #fff; }
   .accordion .dropdown {
-    /* 内容区 */
-    /* 箭头 */ }
+    /*  内容区 */
+    /*  箭头 */ }
     .accordion .dropdown .dropdown-menu {
       overflow: hidden;
       list-style: none;
@@ -194,8 +276,8 @@ input {
       -webkit-transition: -webkit-transform 0.6s;
       transition: transform 0.6s; }
   .accordion .dropdown.show {
-    /* 内容 */
-    /* 箭头 */ }
+    /*  内容 */
+    /*  箭头 */ }
     .accordion .dropdown.show .dropdown-menu {
       display: block;
       max-height: 600px;
@@ -232,6 +314,7 @@ input {
     width: 50px;
     color: #007de2; }
 
+/* 动画类样式 */
 @keyframes showAnimation {
   0% {
     -webkit-transform: scaleY(0.1);
@@ -294,34 +377,8 @@ input {
     -webkit-transform: scaleY(0);
     transform: scaleY(0); } }
 
-/* 封装一个手风琴插件 --end */
-/* 订单状态类样式 --start */
-[class^='z-order'] {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  background: url("../images/order_status.png") no-repeat;
-  background-size: 300px 50px;
-  vertical-align: middle; }
-
-/* 已受理订单 */
-.z-order-accepted {
-  background-position-x: -100px; }
-
-/* 已生效 */
-.z-order-success {
-  background-position-x: -50px; }
-
-/* 已过期 */
-.z-order-overdue {
-  background-position-x: 0; }
-
-/* 待支付 */
-.z-order-unPay {
-  background-position-x: -150px; }
-
-/* 订单状态类样式 --end */
-/* 步骤状态类样式 --start */
+/* 手风琴组件 --end */
+/* 步骤组件step状态类样式 --start */
 .step-group {
   position: relative;
   min-height: 70px;
@@ -369,78 +426,30 @@ input {
   transform: translateX(85px); }
 
 /* 步骤状态类样式 --end */
-/* 头部导航 */
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  font-size: 16px;
-  padding: 0 30px;
-  color: #333;
-  line-height: 44px;
-  border-bottom: solid 1px #cbceda;
-  text-align: center;
-  background-color: #fff;
-  z-index: 100; }
+/************************  订单状态样式 **************************/
+[class^='z-order'] {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: url("../images/order_status.png") no-repeat;
+  background-size: 300px 50px;
+  vertical-align: middle; }
 
-header .header_left {
-  position: absolute;
-  left: 10px;
-  top: 0;
-  z-index: 1; }
-  header .header_left .icon-back {
-    color: #333; }
+/*  已受理订单 */
+.z-order-accepted {
+  background-position-x: -100px; }
 
-header .header_title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
+/*  已生效 */
+.z-order-success {
+  background-position-x: -50px; }
 
-header .header_right {
-  position: absolute;
-  right: 10px;
-  top: 0; }
-  header .header_right .icon-more {
-    color: #333; }
+/*  已过期 */
+.z-order-overdue {
+  background-position-x: 0; }
 
-/* 微信alert弹框--start */
-/* 标题 */
-.weui_dialog {
-  border-radius: 6px;
-  overflow: hidden; }
-  .weui_dialog .weui_dialog_title {
-    font-size: 20px;
-    color: #1a1e36;
-    font-weight: 600; }
-  .weui_dialog .weui_dialog_bd {
-    color: #68709a; }
-  .weui_dialog .weui_btn_dialog.primary {
-    background-color: #007de2;
-    color: #fff; }
-  .weui_dialog .weui-prompt-input {
-    border: none;
-    border-bottom: solid 1px #ccc;
-    padding: 10px 15px; }
-
-/* 微信alert弹框--end */
-/* jquery weui Toast */
-.weui_toast_text {
-  border-radius: 12px; }
-
-/* icons */
-.iconfont {
-  color: #007de2; }
-
-.icon-weixin {
-  font-size: 24px;
-  color: #59a500; }
-
-.icon-xiangji {
-  font-size: 24px; }
-
-.toolbar .picker-button {
-  color: #007de2; }
+/*  待支付 */
+.z-order-unPay {
+  background-position-x: -150px; }
 
 #app {
   display: none; }

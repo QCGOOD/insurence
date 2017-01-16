@@ -53,21 +53,21 @@
         </article>
 
         <!-- 如果有两个产品产品 -->
-            <div class="u-card g-card" style="display: block;">
-                <div class="g-card-link-group">
-                    <a class="border-right">投保须知</a>
-                    <a class="border-right">保险内容解读</a>
-                    <a>理赔流程</a>
-                </div>
-                <div class="u-card-content weui_cell">
-                        <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
-                            <div class="g-card-title">{{product.productTitle}}</div>
-                            <div class="g-card-price">￥{{product.amount}}/学年</div>
-                            <div class="g-card-num">已售:{{product.num}}</div>
-                            <a :href="'page1-FillInformation.html?productId='+product.productId" class="weui_btn">立即投保</a>
-                        </div>
+        <div class="u-card g-card" style="display: block;">
+            <div class="g-card-link-group">
+                <a class="border-right">投保须知</a>
+                <a class="border-right">保险内容解读</a>
+                <a>理赔流程</a>
+            </div>
+            <div class="u-card-content weui_cell">
+                <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
+                    <div class="g-card-title">{{product.title}}</div>
+                    <div class="g-card-price">￥{{product.packagePrice}}/学年</div>
+                    <div class="g-card-num">已售:{{product.soldNum}}</div>
+                    <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
                 </div>
             </div>
+        </div>
     </main>
 </div>
 
@@ -79,30 +79,40 @@
                 pdfTitle:"",
                 products:[
                     {
-                        productTitle:"",
-                        amount:0,
-                        num:0,
-                        productId:''
+                        title:"",
+                        packagePrice:0,
+                        soldNum:0,
+                        id:''
                     }
                 ]
             }
         },
         methods: {
-
+            // 选择产品
+            selectProduct: function (product) {
+                console.log(product);
+                store.setItem('product',product);
+                window.location.href = 'page1-FillInformation.html';
+            }
         },
         /* 初始化数据 */
         created: function () {
-            /* 获取当前学校信息 */
-            var schoolId = getUrlParam('schoolId');
+            // 获取学校信息
+            var schoolId = store.getItem('school').id;
             if(!schoolId){
                 window.location.href = 'chooseSchool.html';
             }else {
                 /* 获取保险产品信息 */
-                var getProduct = 'http://192.168.1.27:3000/getProduct?schoolId='+schoolId;
+                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+schoolId;
                 $.get(getProduct, function (data) {
                     data = JSON.parse(data);
                     console.log(data);
-                    vm.products = data.products;
+                    if(data.errcode == 0){
+                        vm.products = data.products;
+                        console.log(vm.products);
+                    }else {
+                        showInfo(data.errMsg);
+                    }
                 });
             }
         }

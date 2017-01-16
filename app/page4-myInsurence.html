@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Title</title>
+    <title>相书保险</title>
     <link rel="stylesheet" href="css/project.css">
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
@@ -15,13 +15,14 @@
         .u-card{margin: 10px 10px;}
         .weui_cells_title{font-size: 12px;color: #8a90af;margin-top: 15px;}
         /* 图标 */
-        .order_id{font-size: 14px;color: #68709a;white-space: nowrap;}
+        .order_id{font-size: 14px;color: #68709a;  overflow: hidden;  text-overflow: ellipsis;  }
         .order_title{font-size: 16px;line-height:30px;color: #333;}
         .order_price{font-size: 23px;color: #333;}
         .weui_cell.bottom{font-size: 12px;color: #68709a;margin-left: 65px;}
         .weui_cell.bottom:before{border-top: dashed 1px #bababa;}
         .weui_cell.bottom .weui_cell_ft{color: #68709a;}
-
+        .weui_cell .weui_cell_primary{  overflow: hidden;  -webkit-line-clamp: 1;  display: -webkit-box;  -webkit-box-orient: vertical;  }
+        .weui_cell_ft{overflow: hidden;white-space: nowrap;}
     </style>
 </head>
 <body>
@@ -38,7 +39,7 @@
                     <div class="order_id">保单号:{{item.policyNo}}</div>
                     <h4 class="order_title">{{item.productTitle}}</h4>
                 </div>
-                <div class="weui_cell_ft order_price">￥{{item.amount}}</div>
+                <div class="weui_cell_ft  order_price">￥{{item.amount}}</div>
             </div>
             <div class="weui_cell bottom">
                 <div class="weui_cell_bd weui_cell_primary">被保人:{{item.insurantName}}</div>
@@ -111,19 +112,32 @@
             }
         },
         created: function () {
-            // 获取保单数据
-            $.get('./data/orderList.json', function (data) {
-                data.effectList.forEach(function (item) {
-                       item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
-                       item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");
+            // 获取保单列表
+            var url = '/wego168-xsinsurance-wechat/order/listJson.jsp';
+            $.get(url, function (data) {
+                data = JSON.parse(data);
+                console.log(data);
+                vm.effectList = data.effectList.map(function (item) {
+                    return {
+                        policyNo: item.policyNo,
+                        productTitle: item.product.productTitle,
+                        insurantName: item.protectedPerson.insurantName,
+                        amount: item.product.amount,
+                        policyStartTime:item.product.policyStartTime.slice(2).replace(/-/g,"."),
+                        policyEndTime:item.product.policyEndTime.slice(2).replace(/-/g,".")
+                    }
                 });
-                data.noEffectList.forEach(function (item) {
-                    item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
-                    item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");
+                vm.noEffectList = data.noEffectList.map(function (item) {
+                    return {
+                        policyNo: item.policyNo,
+                        productTitle: item.product.productTitle,
+                        insurantName: item.protectedPerson.insurantName,
+                        amount: item.product.amount,
+                        policyStartTime:item.product.policyStartTime.slice(2).replace(/-/g,"."),
+                        policyEndTime:item.product.policyEndTime.slice(2).replace(/-/g,".")
+                    }
                 });
-                vm.effectList = data.effectList;
-                vm.noEffectList = data.noEffectList;
-
+                console.log(vm.effectList);
             });
         }
     })
