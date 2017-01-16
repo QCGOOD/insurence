@@ -71,7 +71,8 @@
         },
         created: function () {
             // 获取未支付订单数据
-            $.get('./data/orderList.json', function (data) {
+            var url = '/wego168-xsinsurance-wechat/order/listJson.jsp';
+            $.get(url, function (data) {
                 data.unPayList.forEach(function (item) {
                     item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
                     item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");

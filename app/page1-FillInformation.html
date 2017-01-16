@@ -123,13 +123,13 @@
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
                 <div class="weui_cell_ft ">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantSex" name="protectedPerson.insurantSex" value="男" class="weui_check"
-                               id="s11" required>
+                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="M" class="weui_check"
+                               id="s11" required tip="性别">
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantSex" name="protectedPerson.insurantSex" value="女" class="weui_check"
+                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="F" class="weui_check"
                                id="s12">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -200,7 +200,7 @@
                 /* 被保人信息 */
                 protectedPerson:{
                     insurantName:'彭生',
-                    insurantSex:'男',
+                    insurantGender:'M',
                     insurantCardNo:'421087199211035032',
                     insurantClass:'三年级 1班',
                     insurantBirthday:'1992-01-01',
@@ -225,7 +225,6 @@
                     var idCard = val.insurantCardNo;
                     if (checkidCard(idCard).state) {
                         val.insurantBirthday = getBirthday(idCard);
-                        val.insurantSex = getSex(idCard);
                     }
                 },
                 deep: true
@@ -263,7 +262,6 @@
                                 schoolName:vm.schoolName,
                                 gradeName:insurantClass[0].slice(0,1),
                                 className:insurantClass[1].slice(0,1),
-                                insurantGender:transformSex(vm.protectedPerson.insurantSex)
                             },
                             vm.protectedPerson,
                             vm.payProtectedPerson

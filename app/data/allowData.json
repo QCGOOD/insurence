@@ -1,9 +1,18 @@
 {
-  "policyNo": "xxxxxxxx",
-  "protectedPerson":{
-    "insurantName":"Allen",
-    "insurantCardNo":"421023198811035032",
-    "insurantClass":"三年级 2班",
-    "insurantBirthday":"2001-01-01"
-  }
+  "errcode":0,
+  "policyNo": "bd1234",
+  "schoolId": "asdfawe12341234",
+  "schoolName": "华南师范大学",
+  "insurantName": "张三",
+  "insurantGender": "M",
+  "insurantCardNo": "421087199211035032",
+  "insurantClass": "三年级 1班",
+  "gradeName":"三",
+  "className":"1",
+  "insurantBirthday": "1992-01-01",
+  "insurantPhoto": "mock",
+  "holderName": "张一",
+  "holderPhone": "18825144569",
+  "holderCardNo": "421087199211035302",
+  "holderCardPhoto": "mock"
 }

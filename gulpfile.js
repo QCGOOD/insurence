@@ -65,10 +65,10 @@ gulp.task('font', function () {
 // 自动刷新
 gulp.task('serve', function () {
     browserSync.init({
-        server:{baseDir:'./app'},
         browser:'chrome',
-        //proxy:'localhost：8080',
-        //port: '8080',
+        serveStatic:['./app'],
+        // 代理服务器
+        proxy:'192.168.1.69：8080',
     });
 });
 

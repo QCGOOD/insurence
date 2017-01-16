@@ -20,7 +20,6 @@
 
         /* 选择城市与学校 */
         .weui_dialog_bd .weui_input{color: #333;}
-        #school-picker{position: absolute;width: 100%;height: 100%;top:0;left: 0;opacity: 0;}
 
         /* 搜索结果 */
         .weui_dialog{overflow: visible;}
@@ -64,23 +63,27 @@
             <div class="weui_dialog_bd weui_cells_access" style="padding-top: 0;margin-bottom: 20px;">
                 <div class="weui_cell">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input " placeholder="请选择您所在城市" :value="address" type="text" id='city-picker' >
+                        <input class="weui_input " placeholder="请选择您所在城市" :value="provice+' '+city+' '+area" type="text" id='city-picker' >
                     </div>
                     <div class="weui_cell_ft"></div>
                 </div>
 
-                <div class="weui_cell">
+                <div class="weui_cell weui_cell_select">
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input" placeholder="请选择学校类型" :value="transformSchoolCode(type,'str')" type="text" id='class-picker'>
+                        <select class="weui_select" name="select" v-model="type">
+                            <option value="">请选择学校类型</option>
+                            <option value="0">幼儿园</option>
+                            <option value="1">小学</option>
+                            <option value="2">初中</option>
+                            <option value="3">高中</option>
+                            <option value="4">大学</option>
+                        </select>
                     </div>
-                    <div class="weui_cell_ft"></div>
                 </div>
 
                 <div class="weui_cell" style="position: relative;overflow: visible;">
                     <div class="weui_cell_bd weui_cell_primary" >
-                        <!--<input class="weui_input"  type="text" id="school-picker">-->
-                        <!--<input class="weui_input" v-model="name" placeholder="请选择您所在学校" type="text" readonly>-->
-                        <input class="weui_input" v-model="name"  @click="searchSchool"  placeholder="请选择您所在的学校">
+                        <input class="weui_input" v-model="name"  @click="searchSchool"  placeholder="请选择您所在的学校" id="school-picker">
                     </div>
                     <div class="weui_cell_ft"></div>
                     <!-- 搜索结果 -->
@@ -104,12 +107,13 @@
         data: function () {
             return {
                 /* 学校信息 */
-                address: '广东省 肇庆市 四会市',
-                provice:'',
-                city:'',
-                area:'',
+                provice:'广东省',
+                city:'肇庆市',
+                area:'四会市',
                 type: '',
+                // 学校名
                 name: '',
+                // 学校id
                 id: '',
                 addressAndType:{},
                 /* 学校数据列表 */
@@ -124,8 +128,9 @@
         },
         watch:{
             // 当城市变化时
-            address: function () {
+            area: function () {
                 vm.name = '';
+                vm.type = '';
                 vm.showSearchResult = false;
                 vm.initSchoolList();
             },
@@ -147,32 +152,22 @@
         methods: {
             /* 查询学校列表 */
             initSchoolList: function () {
-                if(this.address && this.type){
-                    var address = vm.address.split(' ');
+                if(this.area && this.type){
+                    // 查询参数
                     var queryData = {
-                        provice:address[0],
-                        city:address[1],
-                        area:address[2],
-                        type: transformSchoolCode(vm.type,'num')
+                        provice:vm.provice,
+                        city:vm.city,
+                        area:vm.area,
+                        type: vm.type
                     };
-                    console.log(queryData);
+                    // 查询地址
                     var url =  '/wego168-xsinsurance-wechat/school/listJson.jsp';
                     $.post(url, queryData,function (data) {
                         data = JSON.parse(data);
                         console.log(data);
                         if(data.errcode == 0){
 //                            vm.searchSchool();
-                            vm.schoolList = data.schoolList.map(function (school) {
-                                return {
-                                    name: school.name,
-                                    id: school.id,
-                                    provice:school.provice,
-                                    city:school.city,
-                                    area:school.area,
-                                    type: school.type,
-                                    address: [school.provice,school.city,school.area].join(' '),
-                                }
-                            })
+                            vm.schoolList = data.schoolList;
                         }else {
                             showInfo(data.errMsg);
                         }
@@ -201,7 +196,7 @@
                 vm.name = school.name;
                 vm.showSearchResult = false;
                 store.setItem('school',school);
-                window.location = 'index.html?id='+school.id;
+                window.location = 'index.html';
 //                saveSchool(school);
             }
         },
@@ -209,36 +204,23 @@
         created: function () {
             /* 获取城市、学校类型、学校 */
             var school = store.getItem('school');
-            this.address = school.address;
 
             setTimeout(function () {
                 /* 选择城市 */
                 $("#city-picker").cityPicker({
                     onChange: function (e) {
-                        vm.address = e.displayValue.join(" ");
-                    }
-                });
-
-                /* 选择学校类型 */
-                $("#class-picker").picker({
-                    title: "请选择学校类型",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['幼儿园','小学','初中','高中','大学']
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.type = e.value.join(" ");
+                        vm.province = e.displayValue[0];
+                        vm.city = e.displayValue[1];
+                        vm.area = e.displayValue[2];
                     }
                 });
 
                 /* 给学校选择器绑定点击事件 */
                 $("#school-picker").on('click', function () {
-                    if(!vm.address){
+                    if(!vm.area){
                         $.toast('请先选择城市','text');
-                    }else  if(!vm.type){
-                        $.toast('请选择学校类型','text');
+                    }else if(!vm.type){
+                        $.toast('请先选择学校类型','text');
                     }
                 });
                 vm.initSchoolList();
