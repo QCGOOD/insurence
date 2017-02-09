@@ -16,10 +16,12 @@
         .u-card{ margin: 10px 10px; }
         .weui_cells_title{ font-size: 12px; color: #8a90af; margin-top: 15px; }
         /* 图标 */
-        .order_id{ font-size: 14px; color: #68709a; white-space: nowrap; }
+        .weui_cell_primary{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+        .order_id{ font-size: 14px; color: #68709a; white-space: nowrap; overflow: hidden;  text-overflow: ellipsis;}
         .order_title{ font-size: 16px; line-height: 30px; color: #333; }
         .order_price{ font-size: 23px; color: #333; }
         .order_protectedPerson{ font-size: 12px; color: #68709a; }
+
         .weui_cell.bottom{ font-size: 12px; color: #68709a; margin-left: 65px; }
         .weui_cell.bottom:before{ border-top: dashed 1px #bababa; }
         .weui_cell.bottom .weui_cell_ft{ color: #68709a; }
@@ -31,18 +33,18 @@
 <div id="app">
     <div class="weui_cells_title">待支付</div>
     <div class="weui_cells u-card" style="background-color: #fff;"
-          v-for="item in unPayList" @click="jumpToDetail(item.orderId)">
+          v-for="item in unPayList" @click="jumpToDetail(item.id)">
         <div class="weui_cell top" style="padding-bottom: 4px;">
             <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-unPay"></i></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <div class="order_id">订单号:{{item.productId}}</div>
+                <div class="order_id">订单号:{{item.id}}</div>
                 <h4 class="order_title">{{item.productTitle}}</h4>
             </div>
-            <div class="weui_cell_ft order_price">￥{{item.premium}}</div>
+            <div class="weui_cell_ft order_price">￥{{item.premium/100}}</div>
         </div>
         <div class="weui_cell bottom">
             <div class="weui_cell_bd weui_cell_primary">被保人:{{item.insurantName}}</div>
-            <div class="weui_cell_ft">保期:{{item.policyStartTime}}-{{item.policyEndTime}}</div>
+            <div class="weui_cell_ft">保期:{{item.effectiveDateYMD}}-{{item.expiryDateYMD}}</div>
         </div>
     </div>
 
@@ -54,30 +56,31 @@
             return {
                 unPayList: [
                     {
-                        orderId:"sxaasa",
+                        id:"sxaasa",
                         productId: "xxxxxxxx",
                         productTitle: "Z-100A",
                         insurantName: "Allen",
                         premium: "99",
-                        policyStartTime:"16.09.01",
-                        policyEndTime:"17.08.31"
+                        effectiveDateYMD:"16.09.01",
+                        expiryDateYMD:"17.08.31"
                     }
                 ]
             }
         },
         methods: {
             jumpToDetail: function (orderId) {
-                window.location.href = 'page1-FillInformation.html?orderId='+orderId;
+                window.location.href = 'fillInformation.html?orderId='+orderId;
             }
         },
         created: function () {
             // 获取未支付订单数据
-            var url = './data/orderList.json';
+            var url = 'wego168-xsinsurance-wechat/order/listJson.jsp';
             $.get(url, function (data) {
                 data = JSON.parse(data);
+                console.log(data);
                 data.unPayList.forEach(function (item) {
-                    item.policyStartTime = item.policyStartTime.slice(2).replace(/-/g,".");
-                    item.policyEndTime = item.policyEndTime.slice(2).replace(/-/g,".");
+                    item.effectiveDateYMD = String(item.effectiveDateYMD).slice(2).replace(/-/g,".");
+                    item.expiryDateYMD = String(item.expiryDateYMD).slice(2).replace(/-/g,".");
                 });
                 vm.unPayList = data.unPayList;
             });

@@ -41,7 +41,7 @@
             <div data-toggle="dropdown">投保信息<i class="iconfont icon-fangxiangshang"></i></div>
             <div class="dropdown-menu">
                 <div class="weui_cells ">
-                    <a href="page1-FillInformation.html" class="s-link" style="z-index:1;position:absolute;right:15px;top:15px;">修改信息</a>
+                    <a :href="'fillInformation.html?orderId='+order.id" class="s-link" style="z-index:1;position:absolute;right:15px;top:15px;">修改信息</a>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">保险起期:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{order.effectiveDateYMD}}</div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="weui_cell border-bottom ">
                         <div class="weui_cell_hd">保期:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{order.policyDay}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{order.policyDay+'天'}}</div>
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">被保人姓名:</div>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="weui_cell">
                         <div class="weui_cell_hd">身份证号:</div>
-                        <div class="weui_cell_bd weui_cell_primary">{{order.holderCardNo}}</div>
+                        <div class="weui_cell_bd weui_cell_primary">{{order.holderCardno}}</div>
                     </div>
                 </div>
             </div>
@@ -134,24 +134,24 @@
                     productId: '',
                     productName: '',
                     /* 保险产品 */
-                    productName: "Z-100A",
-                    premium: 100,
-                    effectiveDateYMD: "2016-09-01",
-                    expiryDateYMD: "2017-08-31",
-                    policyDay: "365天",
-                    calculatingFormula: "69元/365天*100天",
+                    productName: "",
+                    premium: 0,
+                    effectiveDateYMD: "",
+                    expiryDateYMD: "",
+                    policyDay: "",
+                    calculatingFormula: "",
                     /* 被保人 */
-                    insurantName: '彭生',
-                    insurantGender: '男',
-                    insurantCardNo: '420187199211035032',
-                    insurantClass: '三年级 1班',
-                    gradeName:'三',
-                    className:'1',
-                    insurantBirthday: '1992-01-01',
+                    insurantName: '',
+                    insurantGender: '',
+                    insurantCardNo: '',
+                    insurantClass: '',
+                    gradeName:'',
+                    className:'',
+                    insurantBirthday: '',
                     /* 投保人 */
-                    holderName: '彭生',
-                    holderPhone: '18825144569',
-                    holderCardNo: ''
+                    holderName: '',
+                    holderPhone: '',
+                    holderCardno: ''
                 }
             }
         },
@@ -182,7 +182,7 @@
 
         if(state){
             // 更新订单
-            updataOrder(vm.order);
+            updataOrder(vm.order.id);
 
         }else {
             $.alert('支付失败,请联系客服！', '温馨提示',function () {
@@ -193,14 +193,17 @@
     /* 更新订单状态
     * @param  orderId [string]------订单id
     * */
-    function updataOrder(order) {
-        var url =  'http://192.168.1.23:4000/updataOrder';
-        $.get(url, order, function (data) {
+    function updataOrder(orderId) {
+        var url = '/wego168-xsinsurance-wechat/policy/underwrite.jsp';
+
+        $.get(url,{orderId:orderId}, function (data) {
+            data = JSON.parse(data);
             console.log(data);
-            if(data.code == 0){
-                $.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
-                    window.location.href = 'page4-myInsurence.html';
-                })
+            if(data.errcode == 0){
+                window.location.href = data.url;
+                    /*$.alert(' 支付成功！您已成功购买一年期综合意外险，详情请查看"我的保单"', '温馨提示',function () {
+                     window.location.href = 'orderList.html';
+                     })*/
             }
         })
     }

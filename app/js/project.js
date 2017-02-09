@@ -6,7 +6,7 @@ $( function () {
     } );
     // 点击查看更多事件
     $( "header .more:not(.noClick)" ).on( "click", function () {
-        window.location.href = "mySchool-more.html"
+        window.location.href = "other.html"
     } );
 
     // 手风琴,点击事件

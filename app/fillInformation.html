@@ -58,22 +58,6 @@
         <div class="header_title">保单信息填写</div>
     </header>
 
-    <!--<div class="weui_cells_title">投保计划</div>
-    <div class="weui_cells sawtooth plan">
-        <div class="weui_cell">
-            <div class="weui_cell_bd weui_cell_primary">保险起期</div>
-            <div class="weui_cell_ft">{{product.policyStartTime}}</div>
-        </div>
-        <div class="weui_cell">
-            <div class="weui_cell_bd weui_cell_primary">保险止期</div>
-            <div class="weui_cell_ft">{{product.policyEndTime}}</div>
-        </div>
-        <div class="weui_cell border-bottom dashed" style="padding-bottom: 10px;">
-            <div class="weui_cell_bd weui_cell_primary">保险时限</div>
-            <div class="weui_cell_ft">{{product.policyDay}}</div>
-        </div>
-    </div>-->
-
     <form id="form" data-parsley-validate data-parsley-ui-enabled="false" method="post">
         <div class="weui_cells_title">信息填写</div>
         <div class="weui_cells weui_cells_access">
@@ -91,7 +75,7 @@
             <div class="weui_cell">
                 <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
                 <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right" v-model="protectedPerson.insurantClass" name="protectedPerson.insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
+                    <input class="weui_input g-align-right" :value="gradeName ? (gradeName+'年级 '+className+'班'): ''" name="insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
                 </div>
                 <!--<div class="weui_cell_ft"></div>-->
             </div>
@@ -109,28 +93,28 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="protectedPerson.insurantCardNo" name="protectedPerson.insurantCardNo" data-parsley-check-identify class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
+                    <input type="text" v-model="insurantCardNo" name="insurantCardNo" data-parsley-check-identify class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
                 </div>
             </div>
 
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="protectedPerson.insurantName" name="protectedPerson.insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                    <input v-model="insurantName" name="insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
-                <div class="weui_cell_ft ">
+                <div class="weui_cell_ft">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="M" class="weui_check"
+                        <input type="radio" v-model="insurantGender" name="insurantGender" value="M" class="weui_check"
                                id="s11" required tip="性别">
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="protectedPerson.insurantGender" name="protectedPerson.insurantGender" value="F" class="weui_check"
-                               id="s12">
+                        <input type="radio" v-model="insurantGender" name="insurantGender" value="F" class="weui_check"
+                               id="s12" tip="性别">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
                     </label>
@@ -141,9 +125,9 @@
             <div class="weui_cell">
                 <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
                 <div class="weui_cell_ft" style="min-width: 100px;">
-                    <label v-show="!protectedPerson.insurantBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
-                    <input id="date-picker" type="date" v-model="protectedPerson.insurantBirthday" name="protectedPerson.insurantBirthday" class="weui_input"
-                           :class="{'hidden': !protectedPerson.insurantBirthday}" required tip="出生日期">
+                    <label v-show="!insurantBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                    <input id="date-picker" type="date" v-model="insurantBirthday" name="insurantBirthday" class="weui_input"
+                           :class="{'hidden': !insurantBirthday}" required tip="出生日期">
                 </div>
             </div>
 
@@ -154,27 +138,27 @@
                 <div class="weui_cell_hd weui_cell_primary">投保人信息<span
                         style="font-size:12px;color: #007de2;">(父/母)</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
-                    <!--<input  name="protectedPerson.identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
+                    <!--<input  name="identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
                     拍身份证录入<i class="iconfont icon-xiangji"></i>-->
                 </div>
             </div>
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderCardNo" name="payProtectedPerson.holderCardNo" type="text" data-parsley-check-identify class="weui_input g-align-right"
+                    <input v-model="holderCardno" name="holderCardno" type="text" data-parsley-check-identify class="weui_input g-align-right"
                            placeholder="有则填，避免纠纷"  tip="投保人身份证号">
                 </div>
             </div>
             <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderName" name="payProtectedPerson.holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
+                    <input v-model="holderName" name="holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
                 </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="payProtectedPerson.holderPhone" name="payProtectedPerson.holderPhone" type="number" class="weui_input g-align-right"
+                    <input v-model="holderPhone" name="holderPhone" type="number" class="weui_input g-align-right"
                            placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="投保人手机号">
                 </div>
             </div>
@@ -192,29 +176,27 @@
         el: '#app',
         data: function () {
             return {
-                productId:'',
-                productName:'',
+                productId: '',
+                productName: '',
                 /* 学校信息 */
-                schoolId:'',
-                schoolName:'',
+                schoolId: '',
+                schoolName: '',
                 /* 被保人信息 */
-                protectedPerson:{
-                    insurantName:'彭生',
-                    insurantGender:'M',
-                    insurantCardNo:'421087199211035032',
-                    insurantClass:'三年级 1班',
-                    insurantBirthday:'1992-01-01',
-                    insurantPhoto:''
-                },
+                insurantName: '',
+                insurantGender: '',
+                insurantCardNo: '',
+                insurantClass: '',
+                gradeName:'',
+                className:'',
+                insurantBirthday: '',
+                insurantPhoto: '',
                 /* 投保人信息 */
-                payProtectedPerson:{
-                    holderName:'彭生',
-                    holderPhone:'18825144569',
-                    holderCardNo:'',
-                    holderCardPhoto:''
-                },
+                holderName: '',
+                holderPhone: '',
+                holderCardno: '',
+                holderCardPhoto: '',
                 formValid: false,    // 表单验证通过了吗？
-                hasSubmit:false      // 表单提交了吗?
+                hasSubmit: false      // 表单提交了吗?
             }
         },
         /* 监控数据变化 */
@@ -234,18 +216,37 @@
 
         },
         created: function () {
-            // 获取学校信息
-            this.schoolName = store.getItem('school').name;
-            this.schoolId = store.getItem('school').id;
-            // 获取产品id和名称
-            this.productId = store.getItem('product').id;
-            this.productName = store.getItem('product').title;
+            var _this = this;
+            // 从url获取订单id
+            var orderId = getUrlParam('orderId');
+            // 如果订单id存在，则从后台获取订单信息，如果订单id不存在，则从本地获取订单信息
+            if (orderId) {
+                /* 获取订单 */
+                var url = '/wego168-xsinsurance-wechat/order/confirmById.jsp'
+                $.get(url,{orderId:orderId}, function (data) {
+                    data = JSON.parse(data);
+                    if(data.errcode == 0){
+                        Object.assign(_this.$data,data.order)
+                        console.log(_this.$data);
+                    }else {
+                        showInfo(data.errMsg)
+                    }
+                })
+            } else {
+                // 获取学校信息
+                this.schoolName = store.getItem('school').name;
+                this.schoolId = store.getItem('school').id;
+                // 获取产品id和名称
+                this.productId = store.getItem('product').id;
+                this.productName = store.getItem('product').title;
 
-            if(!this.schoolName || !this.schoolId){
-                window.location.href = 'chooseSchool.html';
-            }else if(!this.productId || !this.productName){
-                window.location.href = 'index.html';
+                if (!this.schoolName || !this.schoolId) {
+                    window.location.href = 'chooseSchool.html';
+                } else if (!this.productId || !this.productName) {
+                    window.location.href = 'index.html';
+                }
             }
+
             setTimeout(function () {
                 // 初始化班级选择器
                 initClassPick();
@@ -253,28 +254,16 @@
                 // 初始化表单验证插件
                 initParsley(function () {
                     /* 当表单验证通过时 */
-                    var insurantClass = vm.protectedPerson.insurantClass.split(' ');
-                    var data = Object.assign(
-                            {
-                                productId: vm.productId,
-                                productName:vm.productName,
-                                schoolId:vm.schoolId,
-                                schoolName:vm.schoolName,
-                                gradeName:insurantClass[0].slice(0,1),
-                                className:insurantClass[1].slice(0,1),
-                            },
-                            vm.protectedPerson,
-                            vm.payProtectedPerson
-                    );
+                    var data = _this.$data;
                     console.log(data);
                     var url =  '/wego168-xsinsurance-wechat/order/save.jsp';
                     $.post(url, data, function (data) {
                         data = JSON.parse(data);
                         console.log(data);
                         if(data.errcode ==0){
-                            window.location.href = 'page2-checkMsg.html?orderId='+data.orderId;
+                            window.location.href = 'confirm.html?orderId='+data.orderId;
                         }else {
-                            console.log(data.errMsg);
+                            showInfo(data.errMsg);
                         }
                     });
                 });
@@ -287,10 +276,6 @@
     /* 提交订单 */
     function submit() {
         var form = $('#form');
-        /*  var imgInputs = $('input[accept^="image"]');
-         for(var i=0; i<imgInputs.length; i++){
-         console.log(imgInputs[i].files);
-         }*/
         form.submit();
     }
 
@@ -347,7 +332,9 @@
                 }
             ],
             onChange: function (e) {
-                vm.protectedPerson.insurantClass = e.value.join(" ");
+                vm.gradeName = e.value[0].replace(/(年级)/,'');
+                vm.className = e.value[1].replace(/(班)/,'');
+                vm.insurantClass = e.value.join(" ");
             }
         });
     }
