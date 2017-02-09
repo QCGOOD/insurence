@@ -318,9 +318,9 @@ function getSex(idCard){
     }
     var tempid=sexno%2;
     if(tempid==0){
-        sex='女'
+        sex='F'
     }else{
-        sex='男'
+        sex='M'
     }
     return sex
 }

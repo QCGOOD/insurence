@@ -93,7 +93,7 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input type="text" v-model="insurantCardNo" name="insurantCardNo" data-parsley-check-identify class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
+                    <input type="text" v-model="insurantCardNo" name="insurantCardNo" data-parsley-check-identify  class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
                 </div>
             </div>
 
@@ -107,13 +107,13 @@
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
                 <div class="weui_cell_ft">
                     <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="insurantGender" name="insurantGender" value="M" class="weui_check"
+                        <input type="radio" v-model="insurantGender" name="insurantGender" value="M"  class="weui_check"
                                id="s11" required tip="性别">
                         <span class="weui_icon_checked_primary"></span>
                         <span>男</span>
                     </label>
                     <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="insurantGender" name="insurantGender" value="F" class="weui_check"
+                        <input type="radio" v-model="insurantGender" name="insurantGender" value="F"  class="weui_check"
                                id="s12" tip="性别">
                         <span class="weui_icon_checked_primary"></span>
                         <span>女</span>
@@ -145,7 +145,7 @@
             <div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
-                    <input v-model="holderCardno" name="holderCardno" type="text" data-parsley-check-identify class="weui_input g-align-right"
+                    <input v-model="holderCardno" name="holderCardno" type="text" data-parsley-check-identify  class="weui_input g-align-right"
                            placeholder="有则填，避免纠纷"  tip="投保人身份证号">
                 </div>
             </div>
@@ -183,7 +183,7 @@
                 schoolName: '',
                 /* 被保人信息 */
                 insurantName: '',
-                insurantGender: '',
+                insurantGender: 'M',
                 insurantCardNo: '',
                 insurantClass: '',
                 gradeName:'',
@@ -201,19 +201,25 @@
         },
         /* 监控数据变化 */
         watch: {
-            protectedPerson: {
-                /* 变化时执行函数 */
-                handler: function (val) {
-                    var idCard = val.insurantCardNo;
-                    if (checkidCard(idCard).state) {
-                        val.insurantBirthday = getBirthday(idCard);
-                    }
-                },
-                deep: true
+            insurantCardNo (idCard) {
+                if (checkidCard(idCard).state) {
+                    vm.insurantBirthday = getBirthday(idCard);
+                    vm.insurantGender = getSex(idCard);
+                }
+                vm.checkUnique();
+            },
+            holderCardno () {
+                vm.checkUnique();
             }
         },
         methods: {
-
+            // 检查身份证的唯一性
+            checkUnique: function () {
+                if(vm.holderCardno == vm.insurantCardNo){
+                    showInfo('投保人与被保人身份证不能为同一人')
+                    return false
+                }
+            }
         },
         created: function () {
             var _this = this;
@@ -294,6 +300,7 @@
                 }
             }
         });
+       
         /* 表单验证 */
         Parsley.on('form:error', function (formInstance) {
             formInstance.fields.every(function (fieldInstance) {
@@ -308,6 +315,9 @@
                 }
             });
         }).on('form:success', function (formInstance) {
+            if(!vm.checkUnique()){
+                return false
+            }
             callback? callback():'';
         }).on('form:submit', function () {
             return false
