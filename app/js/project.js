@@ -86,7 +86,7 @@ function initDrag ( id ) {
     // 拖拽事件pan 快速移动事件swipe
     hammer.on("tap", function () {
         //console.log('点击事件');
-        window.location.href = 'tel:18825144569';
+        window.location.href = 'tel:075522164956';
     }).on("press", function () {
         //console.log('长按事件');
         $(id).css({

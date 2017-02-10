@@ -68,7 +68,7 @@
                         <div class="weui_cell_bd weui_cell_primary">{{order.insurantCardNo}}</div>
                     </div>
                     <div class="weui_cell  ">
-                        <div class="weui_cell_hd">出身日期:</div>
+                        <div class="weui_cell_hd">出生日期:</div>
                         <div class="weui_cell_bd weui_cell_primary">{{order.insurantBirthday}}</div>
                     </div>
                     <div class="weui_cell">
@@ -105,18 +105,18 @@
 
     <!-- checkbox -->
     <div class="weui_cells weui_cells_checkbox" style="margin-top:0;background-color: transparent; ">
-        <label class="weui_cell weui_check_label" for="s11">
+        <div class="weui_cell weui_check_label" >
             <div class="weui_cell_hd" >
                 <input type="checkbox" class="weui_check" name="checkbox1" id="s11" v-model="hasRead">
                 <i class="weui_icon_checked_primary"></i>
             </div>
             <div class="weui_cell_bd weui_cell_primary">
-                <p style="font-size: 15px;color: #333;">我已阅读并同意<a href="#" class="s-link">投保申明</a></p>
+                <p style="font-size: 15px;color: #333;"><label for="s11">我已阅读并同意</label><a href="introduce.html" class="s-link">产品介绍</a>及<a href="InsuranceInformation.html" class="s-link">投保须知</a></p>
             </div>
-        </label>
+        </div>
     </div>
 
-    <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{order.premium}}</span></div>
+    <div style="font-size: 13px;color: #8a90af;text-align: center;margin: 30px 10px 0px;">保费<span style="font-size: 30px;color: #333;">￥{{order.premiumY}}</span></div>
     <!--<div style="font-size: 13px;color: #8a90af;text-align: center;">(保费计算公式):{{order.calculatingFormula}}</div>-->
     <a onclick="pay()" class="weui_btn" :class="{'disabled': !hasRead}" style="margin: 20px 15px;">立即支付</a>
 
@@ -135,7 +135,7 @@
                     productName: '',
                     /* 保险产品 */
                     productName: "",
-                    premium: 0,
+                    premiumY: 0,
                     effectiveDateYMD: "",
                     expiryDateYMD: "",
                     policyDay: "",

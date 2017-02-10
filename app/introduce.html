@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>相书保险</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/city-picker.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/hammer.min.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body{  padding: 20px 15px 180px;  }
+        table{  box-sizing: border-box;  font-size: 14px;  }
+        /* 表格 */
+        caption{  margin-top: 20px;  background-color: #f2f3f8;  line-height: 30px;  }
+        tr{  border: 0;  }
+        th{  min-width: 60px;  max-width: 80px;  }
+        th[colspan="2"]{min-width: 90px;}
+        td{text-align: center;}
+
+        .introduce h3{margin-top: 30px;}
+        .introduce div{  text-indent: 20px;  }
+        .introduce div p{  padding:5px;  }
+        .insurance_title{font-weight: bold;}
+
+        /* 保险-布局样式以g-开头 */
+        .g-card{position: fixed;bottom: 0;left: 0;right: 0;padding: 10px;background-color: #f2f3f8;border-radius: 0;}
+        .g-card-title{font-size: 17px;line-height:1.2em;color: #000;font-weight: bold;}
+        .g-card-price{font-size: 13px;line-height:24px;color: #f14f44;}
+        .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
+        /* 投保须知、保险内容解读、理赔流程 */
+        .g-card-link-group{padding-bottom:10px;font-size:0;color: #007de2;text-align: center;width: 100%;}
+        .g-card-link-group>a{color: #007de2;width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
+        .g-card-link-group>a:visited{color: #007de2;}
+        .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
+        /* 当有两个保险产品时 */
+        .u-card-content{padding: 0;}
+        .u-card-content.weui_cell:before{display: none;}
+        .u-card-content-item{padding: 10px;border-radius: 6px;background-color: #fff;}
+        .u-card-content-item:first-of-type{margin-right: 10px;}
+        .weui_btn{line-height: 30px;margin-top: 20px;}
+    </style>
+</head>
+<body>
+<header class="fixed_top">
+    <div class="header_left back">
+        <i class="iconfont icon-back"></i>
+    </div>
+    <div class="header_title">产品介绍</div>
+</header>
+<div id="app">
+    <div class="introduce">
+    <h3>一、保险方案</h3>
+   <!-- <table border="1">
+        <caption>1.Z-100A款（保险费：100元/学年或50元/学期）</caption>
+        <tbody>
+        <tr>
+            <th>保险责任</th>
+            <th>校外保险金额</th>
+            <th>校内保险金额</th>
+            <th>保期累计限额</th>
+            <th>赔付公式</th>
+        </tr>
+        <tr>
+            <th>意外伤害医疗</th>
+            <td>0.8万</td>
+            <td>1.6万</td>
+            <td>1.6万</td>
+            <td>（医疗费用总计-非保险责任费用-本人的其他保险途径补偿费用-特需服务费用）×90%</td>
+        </tr>
+        <tr>
+            <th>意外伤害残疾</th>
+            <td rowspan="2">4万</td>
+            <td rowspan="2">6万</td>
+            <td rowspan="2">6万</td>
+            <td>对应项保险金额×伤残等级对应的给付比例</td>
+        </tr>
+        <tr>
+            <th>意外伤害身故</th>
+            <td>对应项剩余保险金额×100%</td>
+        </tr>
+        <tr>
+            <th>疾病住院医疗（60日观察期后）</th>
+            <td colspan="2">4万</td>
+            <td rowspan="2">4万</td>
+            <td>（医疗费用总计-非保险责任费用-本人的其他保险途径补偿费用-特需服务费用）×60%</td>
+        </tr>
+        <tr>
+            <th>疾病住院医疗（60日观察期内）</th>
+            <td colspan="2">1万</td>
+            <td>（医疗费用总计-非保险责任费用-本人的其他保险途径补偿费用-特需服务费用）×30%</td>
+        </tr>
+        <tr>
+            <th>疾病身故、疾病全残（60日观察期后）</th>
+            <td colspan="2">4万</td>
+            <td rowspan="2">4万</td>
+            <td>对应项保险金额×100%</td>
+        </tr>
+        <tr>
+            <th>疾病身故、疾病全残（60日观察期内）</th>
+            <td colspan="2">1万</td>
+            <td>对应项保险金额×100%</td>
+        </tr>
+        <tr>
+            <td colspan="5">保险期间：一学年或一学期</td>
+        </tr>
+        </tbody>
+    </table>
+    <table border="1">
+        <caption>产品特色</caption>
+    </table>-->
+    <div class="insurance_title">1.Z-100A款（保险费：100元/学年或50元/学期）</div>
+    <img src="./images/table_01.png?123" alt="" width="100%">
+    <div class="insurance_title">2.Z-200A款（保险费：200元/学年或100元/学期）</div>
+    <img src="./images/table_02.png" alt="" width="100%">
+
+    <h3 >二、特别约定</h3>
+    <div>
+        <p>1.意外伤害是指外来的、突发的、非本意的、非疾病的使身体受到伤害的客观事件，如摔伤、烧伤、犬伤、交通事故、食物中毒等。疾病是指机体在一定的条件下，受病因损害作用后，因自稳调节紊乱而发生的异常生命活动过程，如肺炎、阑尾炎等。</p>
+        <p>2.本保单扩展承保疾病全残责任，对应观察期为60天，保额以保单明细表中列明金额为准。</p>
+        <p>3.60日疾病观察期：被保险人在首次投保时，从合同生效之日起60日内。续保不受此规定限制。</p>
+        <p>4.就诊医疗机构规定如下：①当地社保定点医疗机构；②出险后24小时内因急救而进行门（急）诊治疗或出险后72小时内因急救而进行住院治疗的当地非社保定点医疗机构，但需提供合规资料。</p>
+        <p>5.在保险期间内，被保险人遭受意外伤害或者因患疾病，本保单在当期的意外伤害医疗保额或疾病住院医疗保额内承担被保险人自该次意外伤害或自该次疾病发生之日起1年内的意外伤害医疗费用或疾病住院医疗费用，并按保险方案载明的赔付公式进行赔付，但“内置固定物取出术”等（如拆钢板、取钢钉等）不受1年治疗期限的限制。</p>
+        <p>6.本人的其他保险途径补偿费用是指对同一被保险人承担保险责任的城镇居民基本医疗保险、农村合作医疗保险、各种商业保险就本次事故对被保险人赔偿的，同属于本条款内保险责任范围的费用。</p>
+        <p>7.本保单中的“特需服务费用”是指住院超床位费. 检查治疗加急费、自请特别护士费、家庭陪护床位费。</p>
+        <p>8.本保单中的“校内”是指被保险人就读学校的校园内、学校宿舍内、校车内、学校组织的校外活动场所内。</p>
+        <p>9.特别约定未尽事宜以众安在线财产保险股份有限公司保险条款和保险协议（含附加协议）为准。</p>
+    </div>
+
+    <h3 >三、非保险责任</h3>
+    <div>
+        <p>1.保险单生效前发生的意外伤害事故；</p>
+        <p>2.首次投保之前罹患的已知或应该知道的有关疾病或症状；</p>
+        <p>3.疾病门（急）诊费用；</p>
+        <p>4.遗传性疾病，先天性畸形、变形和染色体异常，椎间盘膨出或突出症，艾滋病，性病；</p>
+        <p>5.辅助器具费、营养费、护理费、交通费、伙食费、误工费、丧葬费；</p>
+        <p>6.洗牙、牙齿美白、正畸、烤瓷牙、种植牙或镶牙等牙齿保健和修复，（但因意外伤害引起的一般牙齿治疗或手术除外）、整容、美容或修复、疗养、康复治疗、矫形、视力矫正手术；</p>
+        <p>7.被保险人酒后驾车、无有效驾驶证驾驶或驾驶无有效行驶证的机动车期间；</p>
+        <p>8.因被保险人挑衅或故意行为而导致的打斗、被袭击或被谋杀；</p>
+        <p>9.被保险人自致伤害或自杀，但被保险人为未成年人的除外；</p>
+        <p>10.被保险人妊娠、流产、分娩、药物过敏；</p>
+        <p>11.被保险人故意犯罪或者抗拒依法采取的刑事强制措施的行为；</p>
+        <p>12.投保人的故意行为；</p>
+        <p>13.其他非保险责任及责任免除见保险条款。</p>
+    </div>
+
+    <h3 >四、温馨提示</h3>
+    <div>
+        <p>1.本保险产品由众安在线财产保险股份有限公司承保，深圳市相书保险代理有限公司专属代理。</p>
+        <p>2.以上未尽事宜，以众安在线财产保险股份有限公司保险条款和学生平安保险单为准。</p>
+    </div>
+    </div>
+    <!-- 如果有两个产品产品 -->
+    <div class="u-card g-card" style="display: block;">
+        <div class="g-card-link-group">
+            <a href="introduce.html" class="border-right">产品介绍</a>
+            <a href="InsuranceInformation.html" class="border-right">投保须知</a>
+            <a href="compensate.html">理赔服务</a>
+        </div>
+        <div class="u-card-content weui_cell">
+            <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
+                <div class="g-card-title">{{product.title}}</div>
+                <div class="g-card-price">￥{{product.showPrice}}</div>
+                <div class="g-card-num">已售:{{product.soldNum}}</div>
+                <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                pdfTitle:"",
+                products:[
+                    {
+                        title:"",
+                        showPrice:0,
+                        soldNum:0,
+                        id:''
+                    }
+                ]
+            }
+        },
+        methods: {
+            // 选择产品
+            selectProduct: function (product) {
+                console.log(product);
+                store.setItem('product',product);
+                window.location.href = 'fillInformation.html';
+            }
+        },
+        /* 初始化数据 */
+        created: function () {
+            // 获取学校信息
+            var schoolId = store.getItem('school').id;
+            if(!schoolId){
+//                window.location.href = 'chooseSchool.html';
+            }else {
+                /* 获取保险产品信息 */
+                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+schoolId;
+                $.get(getProduct, function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.errcode == 0){
+                        vm.products = data.products;
+                        console.log(vm.products);
+                    }else {
+                        showInfo(data.errMsg);
+                    }
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

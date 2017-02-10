@@ -11,7 +11,7 @@
     <script src="js/libs/jquery-weui.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/libs/parsley.min.js"></script>
-    <script src="js/project.js"></script>
+    <script src="js/project.js?123"></script>
 
     <style>
         body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 40px;}
@@ -183,7 +183,7 @@
                 schoolName: '',
                 /* 被保人信息 */
                 insurantName: '',
-                insurantGender: 'M',
+                insurantGender: '',
                 insurantCardNo: '',
                 insurantClass: '',
                 gradeName:'',
@@ -215,9 +215,11 @@
         methods: {
             // 检查身份证的唯一性
             checkUnique: function () {
-                if(vm.holderCardno == vm.insurantCardNo){
+                if(vm.holderCardno && vm.holderCardno == vm.insurantCardNo){
                     showInfo('投保人与被保人身份证不能为同一人')
                     return false
+                }else{
+                    return true
                 }
             }
         },
@@ -332,13 +334,11 @@
             cols: [
                 {
                     textAlign: 'center',
-                    values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级'],
-                    displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
+                    values: ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
                 },
                 {
                     textAlign: 'center',
-                    values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                    displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
+                    values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班']
                 }
             ],
             onChange: function (e) {

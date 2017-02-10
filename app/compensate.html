@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>相书保险</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/city-picker.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/hammer.min.js"></script>
+    <script src="js/project.js"></script>
+    <style>
+        body {  padding: 50px 15px 180px;  }
+
+        table {  font-size: 14px;  }
+
+        /* 表格 */
+        caption {
+            margin-top: 20px;
+            background-color: #f2f3f8;
+            line-height: 30px;
+            text-align: left;
+        }
+
+        tr {  border: 0;  }
+
+        th {  min-width: 60px;  }
+
+        td {  text-align: center;  }
+        tr td:last-of-type{text-align: left;padding: 0 5px;}
+
+        .table_title{display:inline-block;font-weight: bold;color: red;}
+        main .weui_cell_hd {  width: 120px;  }
+
+        main h3 {  margin-top: 20px;  }
+
+        main a {  color: #007de2;  }
+
+        /* 保险-布局样式以g-开头 */
+        .g-card{position: fixed;bottom: 0;left: 0;right: 0;padding: 10px;background-color: #f2f3f8;border-radius: 0;}
+        .g-card-title{font-size: 17px;line-height:1.2em;color: #000;font-weight: bold;}
+        .g-card-price{font-size: 13px;line-height:24px;color: #f14f44;}
+        .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
+        /* 投保须知、保险内容解读、理赔流程 */
+        .g-card-link-group{padding-bottom:10px;font-size:0;color: #007de2;text-align: center;width: 100%;}
+        .g-card-link-group>a{color: #007de2;width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
+        .g-card-link-group>a:visited{color: #007de2;}
+        .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
+        /* 当有两个保险产品时 */
+        .u-card-content{padding: 0;}
+        .u-card-content.weui_cell:before{display: none;}
+        .u-card-content-item{padding: 10px;border-radius: 6px;background-color: #fff;}
+        .u-card-content-item:first-of-type{margin-right: 10px;}
+        .weui_btn{line-height: 30px;margin-top: 20px;}
+    </style>
+</head>
+<body>
+<header class="fixed_top">
+    <div class="header_left back">
+        <i class="iconfont icon-back"></i>
+    </div>
+    <div class="header_title">理赔服务</div>
+</header>
+<div id="app">
+    <main>
+    <h3>一、理赔流程</h3>
+    <img src="./images/step.png" alt="" width="100%">
+    <div>
+        <strong>1.就医</strong>  发生保险事故后请尽快到就近的社保定点医疗机构进行治疗（公立医院及有社保定点资质的民营医院），并妥善保存好医院的原始病历、收费凭证、处方、用药清单、诊断证明、检查化验报告、出院小结等就医相关材料。<br/>
+        <strong>2.报案</strong>  被保险人因保险事故导致机体损伤，保险金申请人应于事故发生后10个工作日内通知深圳市相书保险代理有限公司；被保险人因保险事故导致身故的，保险金申请人应于身故后的24小时内报案；报案电话：<a
+            href="tel:13544129405">13544129405</a>。<br/>
+        <strong>3.理赔申请</strong><br/>
+        <strong>（1）准备资料</strong>   申请理赔时，请您参照<strong>索赔资料指引</strong>准备资料。<br/>
+        <strong>（2）核对资料</strong>   资料准备好后，请联系深圳市相书保险代理有限公司（微信客服或致电理赔服务电话 <a href="tel:075522164956">075522164956</a>或<a href="tel:13544129405">13544129405</a>）协助核对资料，确保准确无误。<br/>
+        <strong>（3）递交资料</strong>   请将完整资料快递至以下地址：<br/>
+        <div class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_hd">【单位名称】</div>
+                <div class="weui_cell_bd weui_cell_primary">深圳市相书保险代理有限公司</div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">【地&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;址】</div>
+                <div class="weui_cell_bd weui_cell_primary">深圳市龙岗区布吉街道吉华路333号上水径综合楼6C</div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">【收&#160;&#160;件&#160;&#160;人】</div>
+                <div class="weui_cell_bd weui_cell_primary">甘先生</div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">【联系电话】</div>
+                <div class="weui_cell_bd weui_cell_primary"><a href="tel:075522164956">075522164956</a>  <a href="tel:13544129405">13544129405</a></div>
+            </div>
+        </div>
+        <strong>4.查收理赔款</strong>  结案后保险公司会以银行转账的方式支付赔款并通过短信通知您,请您于收到短信之日起3到5个工作日查收理赔款。<br/>
+    </div>
+    <h3>二、索赔资料指引</h3>
+    <table border="1">
+        <caption>(一）<p class="table_title">意外伤害门诊医疗案件理赔</p>所需资料</caption>
+        <tbody>
+        <tr>
+            <th>资料目录</th>
+            <th>资料类别</th>
+            <th>资料说明</th>
+        </tr>
+        <tr>
+            <th>1.门诊病历</th>
+            <td>原件</td>
+            <td>（1）主治医生开具；（2）持“诊疗卡”须到主治医生处打印纸质病历；（3）须有记录内容，不能为空白病历；（4）须有首次就诊病历记录。</td>
+        </tr>
+        <tr>
+            <th>2.诊断证明</th>
+            <td>原件</td>
+            <td>（1）主治医生开具；（2）须加盖医院公章。</td>
+        </tr>
+        <tr>
+            <th>3.医疗收费票据</th>
+            <td>原件</td>
+            <td>（1）医院收费处开具；（2）须加盖医院收费章。</td>
+        </tr>
+        <tr>
+            <th>4.门诊费用清单</th>
+            <td>原件</td>
+            <td>（1）医院收费处打印；（2）一张发票对应一份清单。</td>
+        </tr>
+        <tr>
+            <th>5.投保人身份证明</th>
+            <td>复印件</td>
+            <td>须提供投保人身份证正反面复印件。</td>
+        </tr>
+        <tr>
+            <th>6.储蓄卡或存折</th>
+            <td>复印件</td>
+            <td>提供投保人或受益人本人有效储蓄卡或存折复印件。</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table border="1">
+        <caption>（二）<p class="table_title">住院医疗案件理赔</p>所需资料</caption>
+        <tr>
+            <th>资料目录</th>
+            <th>资料类别</th>
+            <th>资料说明</th>
+        </tr>
+        <tr>
+            <th>1.住院证明/出院证明/疾病诊断证明</th>
+            <td>原件</td>
+            <td>（1）主治医生开具；（2）须加盖医院公章。</td>
+        </tr>
+        <tr>
+            <th>2.出院记录/出院小结</th>
+            <td>原件</td>
+            <td>（1）主治医生开具；（2）若遗失可到就诊医院医务科复印并盖章。</td>
+        </tr>
+        <tr>
+            <th>3.医疗收费票据</th>
+            <td>原件</td>
+            <td>（1）医院收费处开具；（2）须加盖医院收费章。</td>
+        </tr>
+        <tr>
+            <th>4.住院费用汇总清单</th>
+            <td>原件</td>
+            <td>（1）住院结算处打印开具；（2）非每日清单。</td>
+        </tr>
+        <tr>
+            <th>5.投保人身份证明</th>
+            <td>复印件</td>
+            <td>须提供投保人身份证正反面复印件。</td>
+        </tr>
+        <tr>
+            <th>6.储蓄卡或存折</th>
+            <td>复印件</td>
+            <td>提供投保人或受益人本人有效储蓄卡或存折复印件。</td>
+        </tr>
+    </table>
+
+    <table border="1">
+        <caption>（三）<p class="table_title">伤残案件理赔</p>所需资料</caption>
+        <tr>
+            <th>资料目录</th>
+            <th>资料类别</th>
+            <th>资料说明</th>
+        </tr>
+        <tr>
+            <th>1.病历资料</th>
+            <td>原件</td>
+            <td>必要的病历资料（如出院记录、诊断证明等）；若前期医疗案件已提交理赔，此项可不用提供。</td>
+        </tr>
+        <tr>
+            <th>2.伤残鉴定报告</th>
+            <td>原件</td>
+            <td>有鉴定资质的伤残鉴定机构出具。</td>
+        </tr>
+        <tr>
+            <th>3.投保人身份证明</th>
+            <td>复印件</td>
+            <td>须提供投保人身份证正反面复印件。</td>
+        </tr>
+        <tr>
+            <th>4.储蓄卡或存折</th>
+            <td>复印件</td>
+            <td>提供投保人或受益人本人有效储蓄卡或存折复印件。</td>
+        </tr>
+    </table>
+
+    <table border="1">
+        <caption>（四）<p class="table_title">身故案件理赔</p>所需资料</caption>
+        <tr>
+            <th>资料目录</th>
+            <th>资料类别</th>
+            <th>资料说明</th>
+        </tr>
+        <tr>
+            <th>1.死亡证明</th>
+            <td>复印件</td>
+            <td>司法机关出具或医院出具。</td>
+        </tr>
+        <tr>
+            <th>2.火化证明</th>
+            <td>复印件</td>
+            <td>（1）火化地殡仪馆出具。（2）若为土葬则提供户籍所在地村委出具“土葬证明”原件。</td>
+        </tr>
+        <tr>
+            <th>3.户口注销证明</th>
+            <td>复印件</td>
+            <td>户籍所在地派出所出具。</td>
+        </tr>
+        <tr>
+            <th>4.被保险人身份证明</th>
+            <td>复印件</td>
+            <td>提供被保险人身份证或户口簿复印件。</td>
+        </tr>
+    </table>
+    </main>
+    <!-- 如果有两个产品产品 -->
+    <div class="u-card g-card" style="display: block;">
+        <div class="g-card-link-group">
+            <a href="introduce.html" class="border-right">产品介绍</a>
+            <a href="InsuranceInformation.html" class="border-right">投保须知</a>
+            <a href="compensate.html">理赔服务</a>
+        </div>
+        <div class="u-card-content weui_cell">
+            <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
+                <div class="g-card-title">{{product.title}}</div>
+                <div class="g-card-price">￥{{product.showPrice}}</div>
+                <div class="g-card-num">已售:{{product.soldNum}}</div>
+                <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                pdfTitle:"",
+                products:[
+                    {
+                        title:"",
+                        showPrice:0,
+                        soldNum:0,
+                        id:''
+                    }
+                ]
+            }
+        },
+        methods: {
+            // 选择产品
+            selectProduct: function (product) {
+                console.log(product);
+                store.setItem('product',product);
+                window.location.href = 'fillInformation.html';
+            }
+        },
+        /* 初始化数据 */
+        created: function () {
+            // 获取学校信息
+            var schoolId = store.getItem('school').id;
+            if(!schoolId){
+//                window.location.href = 'chooseSchool.html';
+            }else {
+                /* 获取保险产品信息 */
+                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+schoolId;
+                $.get(getProduct, function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.errcode == 0){
+                        vm.products = data.products;
+                        console.log(vm.products);
+                    }else {
+                        showInfo(data.errMsg);
+                    }
+                });
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -68,8 +68,8 @@ gulp.task('serve', function () {
         browser:'chrome',
         serveStatic:['./app'],
         // 代理服务器
-        //proxy:'192.168.1.69：8080',
-        proxy:'http://xsbx.wego168.com:1001/',
+        proxy:'192.168.1.69：8080',
+        //proxy:'http://xsbx.wego168.com:1001/',
     });
 });
 

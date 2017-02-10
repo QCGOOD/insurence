@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>相书保险</title>
+    <link rel="stylesheet" href="css/project.css">
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/city-picker.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/hammer.min.js"></script>
+    <script src="js/project.js"></script>
+
+    <style>
+        body{padding-top: 40px;}
+        .weui_icon_success:before{
+            color: #007DE2;
+        }
+        .status_text{
+            color: #68709a;
+            font-size: 14px;
+            margin: 20px;
+        }
+        .status_text a{color: #007de2; text-decoration: underline;}
+    </style>
+</head>
+<body>
+<div id="app">
+    <header class="fixed_top">
+        <div class="header_left back">
+            <i class="iconfont icon-back"></i>
+        </div>
+        <div v-if="status" class="header_title">投保成功</div>
+        <div v-else class="header_title">投保失败</div>
+    </header>
+    <div v-if="status" style="text-align: center;padding: 60px 0;">
+        <i class="weui_icon_success weui_icon_msg"></i>
+        <p class="status_text">您已支付成功，我们正在加紧为您生成保单</p>
+    </div>
+    <div v-else style="text-align: center;padding: 60px 0;">
+        <i class="weui_icon_msg weui_icon_warn"></i>
+        <p class="status_text"><a href="tel:075522164956">支付失败,请联系客服人员</a></p>
+    </div>
+</div>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                status: false
+            }
+        },
+        created: function () {
+            var _this = this;
+            // 获取支付状态
+            var orderId = getUrlParam('orderId');
+            var url = '/wego168-xsinsurance-wechat/order/confirmById.jsp';
+            $.post(url,{orderId:orderId}, function (data) {
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.errcode == 0){
+                   _this.status = data.order.payStatus;
+                }else {
+                    showInfo('获取订单状态失败!')
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>相书保险</title>
+    <link rel="stylesheet" href="css/project.css">
+    <style>
+        body{padding: 50px 10px 180px;}
+        .explain{  padding: 5px;
+        }
+        .explain p{  text-indent:20px;  line-height: 25px;  margin-bottom: 5px  }
+
+        /* 保险-布局样式以g-开头 */
+        .g-card{position: fixed;bottom: 0;left: 0;right: 0;padding: 10px;background-color: #f2f3f8;border-radius: 0;}
+        .g-card-title{font-size: 17px;line-height:1.2em;color: #000;font-weight: bold;}
+        .g-card-price{font-size: 13px;line-height:24px;color: #f14f44;}
+        .g-card-num{font-size: 12px; color: #8a90af;margin-bottom: 6px;}
+        /* 投保须知、保险内容解读、理赔流程 */
+        .g-card-link-group{padding-bottom:10px;font-size:0;color: #007de2;text-align: center;width: 100%;}
+        .g-card-link-group>a{color: #007de2;width: 33%;display: inline-block;font-size: 12px;line-height: 1.2em;}
+        .g-card-link-group>a:visited{color: #007de2;}
+        .g-card-link-group .border-right{border-right: solid 1px #c3c6d4;}
+        /* 当有两个保险产品时 */
+        .u-card-content{padding: 0;}
+        .u-card-content.weui_cell:before{display: none;}
+        .u-card-content-item{padding: 10px;border-radius: 6px;background-color: #fff;}
+        .u-card-content-item:first-of-type{margin-right: 10px;}
+        .weui_btn{line-height: 30px;margin-top: 20px;}
+    </style>
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
+    <script src="js/libs/jquery-weui.min.js"></script>
+    <script src="js/libs/city-picker.js"></script>
+    <script src="js/libs/vue2.0.js"></script>
+    <script src="js/libs/hammer.min.js"></script>
+    <script src="js/project.js"></script>
+
+</head>
+<body>
+<header class="fixed_top">
+    <div class="header_left back">
+        <i class="iconfont icon-back"></i>
+    </div>
+    <div class="header_title">投保须知</div>
+</header>
+<div id="app">
+    <div class="explain">
+        <p>1.本保险产品由众安在线财产保险股份有限公司承保，深圳市相书保险代理有限公司专属代理；</p>
+        <p>2.投保人应为被保险人的父母或法定监护人；</p>
+        <p>3.被保险人应为身体健康、能正常参加学习的各大专院校、中小学校、幼儿园及托儿所的全日制在校学生及幼儿；</p>
+        <p>4.本保险产品每位被保险人限投保一份，多投无效；</p>
+        <p>5.本保险产品承保的保障区域仅限于中华人民共和国境内，不包括港、澳、台地区；</p>
+        <p>6.网上投保可为您提供电子保单或纸质保单。根据《中华人民共和国合同法》第十一条规定，数据电文是合法的合同表现形式，电子保单与纸质保单具有同等法律效力。</p>
+    </div>
+    <!-- 如果有两个产品产品 -->
+    <div class="u-card g-card" style="display: block;">
+        <div class="g-card-link-group">
+            <a href="introduce.html" class="border-right">产品介绍</a>
+            <a href="InsuranceInformation.html" class="border-right">投保须知</a>
+            <a href="compensate.html">理赔服务</a>
+        </div>
+        <div class="u-card-content weui_cell">
+            <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
+                <div class="g-card-title">{{product.title}}</div>
+                <div class="g-card-price">￥{{product.showPrice}}</div>
+                <div class="g-card-num">已售:{{product.soldNum}}</div>
+                <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                pdfTitle:"",
+                products:[
+                    {
+                        title:"",
+                        showPrice:0,
+                        soldNum:0,
+                        id:''
+                    }
+                ]
+            }
+        },
+        methods: {
+            // 选择产品
+            selectProduct: function (product) {
+                console.log(product);
+                store.setItem('product',product);
+                window.location.href = 'fillInformation.html';
+            }
+        },
+        /* 初始化数据 */
+        created: function () {
+            // 获取学校信息
+            var schoolId = store.getItem('school').id;
+            if(!schoolId){
+//                window.location.href = 'chooseSchool.html';
+            }else {
+                /* 获取保险产品信息 */
+                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+schoolId;
+                $.get(getProduct, function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.errcode == 0){
+                        vm.products = data.products;
+                        console.log(vm.products);
+                    }else {
+                        showInfo(data.errMsg);
+                    }
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
