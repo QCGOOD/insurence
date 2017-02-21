@@ -77,6 +77,9 @@
                             <option value="2">初中</option>
                             <option value="3">高中</option>
                             <option value="4">大学</option>
+                            <option value="5">职中</option>
+                            <option value="6">工读</option>
+                            <option value="7">特殊</option>
                         </select>
                     </div>
                 </div>
@@ -123,7 +126,9 @@
 
                 ],
                 /* 是否显示搜索结果 */
-                showSearchResult: false
+                showSearchResult: false,
+                // 是否从信息填写页面过来
+                history: '',
             }
         },
         watch:{
@@ -196,13 +201,19 @@
                 vm.name = school.name;
                 vm.showSearchResult = false;
                 store.setItem('school',school);
+                if(this.history){
+                    window.history.go(-1);
+                }
                 window.location = 'index.html';
+
             }
         },
         /* 初始化数据 */
         created: function () {
             /* 获取城市、学校类型、学校 */
             var school = store.getItem('school');
+
+            this.history = getUrlParam('history');
 
             setTimeout(function () {
                 /* 选择城市 */

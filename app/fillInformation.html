@@ -10,8 +10,8 @@
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
-    <script src="js/libs/parsley.min.js"></script>
-    <script src="js/project.js?123"></script>
+    <!--<script src="js/libs/parsley.min.js"></script>-->
+    <script src="js/project.js?12345"></script>
 
     <style>
         body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 40px;}
@@ -47,6 +47,8 @@
             background-color: #F2DEDE;
             border: 1px solid #EED3D7;
         }
+        .font-blod{font-weight: 600;}
+
     </style>
 </head>
 <body>
@@ -58,13 +60,13 @@
         <div class="header_title">保单信息填写</div>
     </header>
 
-    <form id="form" data-parsley-validate data-parsley-ui-enabled="false" method="post">
-        <div class="weui_cells_title">信息填写</div>
+    <!--<form id="form" action="#" method="post" onsubmit="return false" data-parsley-validate data-parsley-ui-enabled="false" >-->
+        <!--<div class="weui_cells_title">信息填写</div>-->
         <div class="weui_cells weui_cells_access">
-            <div class="weui_cell qc_cell_title">
+            <!--<div class="weui_cell qc_cell_title">
                 <div class="weui_cell_hd">学校信息</div>
-            </div>
-            <a class="weui_cell noBorder" href="chooseSchool.html">
+            </div>-->
+            <a class="weui_cell noBorder" href="chooseSchool.html?history=1">
                 <div class="weui_cell_hd weui_cell_primary">学校</div>
                 <div class="weui_cell_bd">
                     <div class="g-align-right">{{schoolName}}</div>
@@ -72,40 +74,55 @@
                 <div class="weui_cell_ft"></div>
             </a>
 
-            <div class="weui_cell">
+            <div class="weui_cell" v-if="schoolType < 4">
                 <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
-                <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right" :value="gradeName ? (gradeName+'年级 '+className+'班'): ''" name="insurantClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
+                <div  class="weui_cell_bd">
+                    <input class="weui_input g-align-right" :value="/^[一二三四五六七八九]$/.test(gradeName) ? (gradeName+'年级 '+className+'班'): (className ? gradeName+' '+className+'班':'')" name="insuredClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
                 </div>
                 <!--<div class="weui_cell_ft"></div>-->
+            </div>
+
+            <div class="weui_cell" v-if="schoolType > 3">
+                <label class="weui_label weui_cell_bd weui_cell_primary">年级</label>
+                <div class="weui_cell_bd">
+                    <input v-model="gradeName" class="weui_input g-align-right" placeholder="请填写年级" />
+                </div>
+                <div class="weui_cell_bd" style="padding-left:10px;width: 50px;">年级</div>
+            </div>
+            <div class="weui_cell" v-if="schoolType > 3">
+                <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
+                <div class="weui_cell_bd">
+                    <input v-model="className" class="weui_input g-align-right" placeholder="请填写班级(**专业*班)" />
+                </div>
+                <div class="weui_cell_bd" style="padding-left:10px;width: 50px;">班</div>
             </div>
         </div>
         <div class="weui_cells weui_cells_radio">
             <div class="weui_cell qc_cell_title" >
-                <div class="weui_cell_hd weui_cell_primary">被保人信息<span
-                        style="font-size:12px;color: #007de2;">(学生)</span></div>
+                <div class="weui_cell_hd weui_cell_primary font-blod">被保人信息<span
+                       class="font-blod" style="font-size:12px;color: #007de2;">(学生)</span></div>
                 <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
                     <!--<input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
                     拍身份证录入<i class="iconfont icon-xiangji"></i>-->
                 </div>
             </div>
-
-            <div class="weui_cell noBorder">
+			<div class="weui_cell noBorder">
+                <div class="weui_cell_hd weui_cell_primary">姓名</div>
+                <div class="weui_cell_ft">
+                    <input v-model="insurantName" name="insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+                </div>
+            </div>
+            <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
                     <input type="text" v-model="insurantCardNo" name="insurantCardNo" data-parsley-check-identify  class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
                 </div>
             </div>
 
-            <div class="weui_cell ">
-                <div class="weui_cell_hd weui_cell_primary">姓名</div>
-                <div class="weui_cell_ft">
-                    <input v-model="insurantName" name="insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
-                </div>
-            </div>
+           
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">性别</div>
-                <div class="weui_cell_ft">
+                <div class="weui_cell_ft weui_cell_primary">
                     <label for="s11" style="padding-left: 20px;">
                         <input type="radio" v-model="insurantGender" name="insurantGender" value="M"  class="weui_check"
                                id="s11" required tip="性别">
@@ -135,26 +152,28 @@
 
         <div class="weui_cells">
             <div class="weui_cell qc_cell_title" >
-                <div class="weui_cell_hd weui_cell_primary">投保人信息<span
-                        style="font-size:12px;color: #007de2;">(父/母)</span></div>
+                <div class="weui_cell_hd weui_cell_primary font-blod">投保人信息<span
+                       class="font-blod" style="font-size:12px;color: #007de2;">({{ isOnePerson ? '本人':'监护人'}})</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
                     <!--<input  name="identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
                     拍身份证录入<i class="iconfont icon-xiangji"></i>-->
                 </div>
             </div>
-            <div class="weui_cell noBorder">
+			<div class="weui_cell noBorder">
+                <div class="weui_cell_hd weui_cell_primary">姓名</div>
+                <div class="weui_cell_ft">
+                    <input v-model="holderName" name="holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
+                </div>
+            </div>
+
+            <div class="weui_cell ">
                 <div class="weui_cell_hd weui_cell_primary">身份证号</div>
                 <div class="weui_cell_ft">
                     <input v-model="holderCardno" name="holderCardno" type="text" data-parsley-check-identify  class="weui_input g-align-right"
                            placeholder="有则填，避免纠纷"  tip="投保人身份证号">
                 </div>
             </div>
-            <div class="weui_cell ">
-                <div class="weui_cell_hd weui_cell_primary">姓名</div>
-                <div class="weui_cell_ft">
-                    <input v-model="holderName" name="holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
-                </div>
-            </div>
+            
             <div class="weui_cell">
                 <div class="weui_cell_hd weui_cell_primary">手机号</div>
                 <div class="weui_cell_ft">
@@ -166,9 +185,9 @@
         </div>
 
         <div style="margin: 28px 15px;">
-            <a href="javascript:;" onclick="submit()" class="weui_btn">提交订单</a>
+            <div onclick="submit()" class="weui_btn">提交订单</div>
         </div>
-    </form>
+    <!--</form>-->
 
 </div>
 <script>
@@ -178,14 +197,18 @@
             return {
                 productId: '',
                 productName: '',
+                showPrice: '',
+                policyStartTime:'',
+                policyEndTime:'',
                 /* 学校信息 */
                 schoolId: '',
                 schoolName: '',
+                schoolType:'',
                 /* 被保人信息 */
                 insurantName: '',
                 insurantGender: '',
                 insurantCardNo: '',
-                insurantClass: '',
+                insuredClass: '',
                 gradeName:'',
                 className:'',
                 insurantBirthday: '',
@@ -196,20 +219,70 @@
                 holderCardno: '',
                 holderCardPhoto: '',
                 formValid: false,    // 表单验证通过了吗？
-                hasSubmit: false      // 表单提交了吗?
+                hasSubmit: false,      // 表单提交了吗?
+                isOnePerson: false
             }
         },
         /* 监控数据变化 */
         watch: {
+            // 被保人身份证号
             insurantCardNo (idCard) {
-                if (checkidCard(idCard).state) {
+                console.log('身份证有效吗？'+ checkidCard(idCard));
+
+                if (checkidCard(idCard)) {
+                    console.log(checkidCard(idCard));
+                    saveUnsubmitOrder();
                     vm.insurantBirthday = getBirthday(idCard);
                     vm.insurantGender = getSex(idCard);
+                    var age = getAge(vm.insurantBirthday);
+                    if(age>=18){
+                        vm.isOnePerson = true;
+                        vm.holderCardno = vm.insurantCardNo;
+                        vm.holderName = vm.insurantName;
+                    }
                 }
-                vm.checkUnique();
             },
-            holderCardno () {
-                vm.checkUnique();
+            // 班级
+            insuredClass (){
+                saveUnsubmitOrder();
+            },
+            gradeName (){
+                if (this.schoolType > 3) {
+                    this.gradeName = this.gradeName.replace(/(年级)/,'');
+                    this.insuredClass = this.gradeName + '年级 ' + this.className + '班';
+                    saveUnsubmitOrder();
+                }
+            },
+            className (){
+                if (this.schoolType > 3) {
+                    this.className = this.className.replace(/(班)/,'');
+                    this.insuredClass = this.gradeName + '年级 ' + this.className + '班';
+                    saveUnsubmitOrder();
+                }
+            },
+            // 被保人姓名
+            insurantName (){
+                saveUnsubmitOrder();
+            },
+            // 性别
+            insurantGender (){
+                saveUnsubmitOrder();
+            },
+            // 出生日期
+            insurantBirthday (){
+                saveUnsubmitOrder();
+            },
+            // 投保人姓名
+            holderName (){
+                saveUnsubmitOrder();
+            },
+            // 投保人身份证
+            holderCardno (){
+                saveUnsubmitOrder();
+            },
+            // 投保人手机号
+            holderPhone (){
+                saveUnsubmitOrder();
             }
         },
         methods: {
@@ -221,12 +294,46 @@
                 }else{
                     return true
                 }
+            },
+            // 表单验证
+            checkFrom (){
+                if(!this.gradeName || !this.className){
+                    showInfo('请选择班级');
+                    return false
+                }else if(!this.insurantName){
+                    showInfo('请输入姓名');
+                    return false
+                }else if(this.insurantCardNo && !checkidCard(this.insurantCardNo)){
+                    showInfo('被保人身份证号不正确');
+                    return false
+                }else if(!this.insurantGender){
+                    showInfo('请选择性别');
+                    return false
+                }else if(!this.insurantBirthday){
+                    showInfo('请选择出身日期');
+                    return false
+                }else if(!this.holderName){
+                    showInfo('请输入投保人姓名');
+                    return false
+                }else if(this.holderCardno && !checkidCard(this.holderCardno)){
+                    showInfo('投保人身份证号不正确');
+                    return false
+                }else if(!this.holderPhone){
+                    showInfo('请输入投保人手机号');
+                    return false
+                }else if(!/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(this.holderPhone)){
+                    showInfo('投保人手机号不正确');
+                    return false
+                }else {
+                    return true
+                }
             }
         },
         created: function () {
             var _this = this;
             // 从url获取订单id
             var orderId = getUrlParam('orderId');
+            var unSubmitOrder = getUrlParam('unSubmitOrder');
             // 如果订单id存在，则从后台获取订单信息，如果订单id不存在，则从本地获取订单信息
             if (orderId) {
                 /* 获取订单 */
@@ -240,13 +347,21 @@
                         showInfo(data.errMsg)
                     }
                 })
-            } else {
+            } else if(unSubmitOrder){
+                Object.assign(this.$data, store.getItem('unSubmitOrder'));
+                console.log(this.$data);
+            }else{
                 // 获取学校信息
                 this.schoolName = store.getItem('school').name;
                 this.schoolId = store.getItem('school').id;
+                this.schoolType = store.getItem('school').type;
+
                 // 获取产品id和名称
                 this.productId = store.getItem('product').id;
                 this.productName = store.getItem('product').title;
+                this.showPrice = store.getItem('product').showPrice;
+                this.policyStartTime = store.getItem('product').policyStartTime;
+                this.policyEndTime = store.getItem('product').policyEndTime;
 
                 if (!this.schoolName || !this.schoolId) {
                     window.location.href = 'chooseSchool.html';
@@ -259,82 +374,72 @@
                 // 初始化班级选择器
                 initClassPick();
 
-                // 初始化表单验证插件
-                initParsley(function () {
-                    /* 当表单验证通过时 */
-                    var data = _this.$data;
-                    console.log(data);
-                    var url =  '/wego168-xsinsurance-wechat/order/save.jsp';
-                    $.post(url, data, function (data) {
-                        data = JSON.parse(data);
-                        console.log(data);
-                        if(data.errcode ==0){
-                            window.location.href = 'confirm.html?orderId='+data.orderId;
-                        }else {
-                            showInfo(data.errMsg);
-                        }
-                    });
-                });
             },1000);
 
             $('#app').show();
         }
     });
 
+
     /* 提交订单 */
     function submit() {
-        var form = $('#form');
-        form.submit();
-    }
-
-    /* 绑定表单验证事件
-     * @param callback 表单验证成功时的执行函数
-     * */
-    function initParsley(callback) {
-        // 身份证验证器，用法<input name='identify' data-parsley-check-identify>
-        Parsley.addValidator('checkIdentify',{
-            requirementType:'boolean',
-            validateString: function (val) {
-                if(!val.length){
-                    return true
-                }else{
-                    return checkidCard(val).state
-                }
-            }
-        });
-       
-        /* 表单验证 */
-        Parsley.on('form:error', function (formInstance) {
-            formInstance.fields.every(function (fieldInstance) {
-                var ok = fieldInstance.isValid();
-                if (!ok) {
-                    var tip = $(fieldInstance.$element).attr('tip') || "";
-                    var ErrorsMessages = fieldInstance.getErrorsMessages();
-                    showInfo(tip + ErrorsMessages);
-                    return false
-                } else {
-                    return true
+        if(vm.checkFrom()){
+            /* 当表单验证通过时 */
+            var data = vm.$data;
+            console.log(data);
+            var url =  '/wego168-xsinsurance-wechat/order/save.jsp';
+            $.post(url, data, function (data) {
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.errcode === 0){
+                    store.removeItem('unSubmitOrder');
+                    window.location.href = 'confirm.html?orderId='+data.orderId;
+                }else {
+                    showInfo(data.errMsg);
                 }
             });
-        }).on('form:success', function (formInstance) {
-            if(!vm.checkUnique()){
-                return false
-            }
-            callback? callback():'';
-        }).on('form:submit', function () {
-            return false
-        });
+        }
+
     }
 
     /* 班级改变时 */
     function initClassPick() {
+        var classVal = [];
+        var gradeVal = [];
+        switch (vm.schoolType){
+            // 幼儿园
+            case 0:
+                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前'];
+                gradeVal = [];
+                break;
+            // 小学
+            case 1:
+                classVal = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'];
+                gradeVal = [];
+                break;
+            // 初中
+            case 2:
+                classVal = ['七年级', '八年级', '九年级'];
+                gradeVal = [];
+                break;
+            // 高中
+            case 3:
+                classVal = ['高一', '高二', '高三'];
+                gradeVal = [];
+                break;
+            // 默认
+            default:
+                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级','高一', '高二', '高三'];
+                break;
+        }
         // 初始化班级选择插件
         $("#picker").picker({
             title: "请选择班级",
             cols: [
                 {
                     textAlign: 'center',
-                    values: ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
+//                    values: ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
+                    values: classVal
                 },
                 {
                     textAlign: 'center',
@@ -344,9 +449,14 @@
             onChange: function (e) {
                 vm.gradeName = e.value[0].replace(/(年级)/,'');
                 vm.className = e.value[1].replace(/(班)/,'');
-                vm.insurantClass = e.value.join(" ");
+                vm.insuredClass = e.value.join(" ");
             }
         });
+    }
+
+    /* 将未提交的订单保存到本地 */
+    function saveUnsubmitOrder() {
+        store.setItem('unSubmitOrder',vm.$data);
     }
 
 </script>

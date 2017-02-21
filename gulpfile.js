@@ -8,7 +8,7 @@ var gulpScss = require('gulp-sass');   // 编译sass文件
 var $ = require('gulp-load-plugins')();
 var path = require('path');
 // 目标文件夹
-var PATH = 'C:\\Program Files (x86)\\Apache Software Foundation\\Apache2.2\\htdocs\\';
+var PATH = 'D:\\pandora\\xsinsurance\\';
 
 
 // 图片压缩
@@ -69,7 +69,6 @@ gulp.task('serve', function () {
         serveStatic:['./app'],
         // 代理服务器
         proxy:'192.168.1.69：8080',
-        //proxy:'http://xsbx.wego168.com:1001/',
     });
 });
 

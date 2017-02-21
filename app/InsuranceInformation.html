@@ -27,6 +27,8 @@
         .u-card-content-item{padding: 10px;border-radius: 6px;background-color: #fff;}
         .u-card-content-item:first-of-type{margin-right: 10px;}
         .weui_btn{line-height: 30px;margin-top: 20px;}
+        .font-blod{font-weight: 600;}
+
     </style>
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
@@ -50,11 +52,12 @@
         <p>3.被保险人应为身体健康、能正常参加学习的各大专院校、中小学校、幼儿园及托儿所的全日制在校学生及幼儿；</p>
         <p>4.本保险产品每位被保险人限投保一份，多投无效；</p>
         <p>5.本保险产品承保的保障区域仅限于中华人民共和国境内，不包括港、澳、台地区；</p>
-        <p>6.网上投保可为您提供电子保单或纸质保单。根据《中华人民共和国合同法》第十一条规定，数据电文是合法的合同表现形式，电子保单与纸质保单具有同等法律效力。</p>
+        <p>6.每年春季投保的保单的终止日期为当年8月31日24时，每年秋季投保的保单的终止日期为次年的8月31日24时；</p>
+        <p>7.网上投保可为您提供电子保单或纸质保单。根据《中华人民共和国合同法》第十一条规定，数据电文是合法的合同表现形式，电子保单与纸质保单具有同等法律效力。</p>
     </div>
     <!-- 如果有两个产品产品 -->
     <div class="u-card g-card" style="display: block;">
-        <div class="g-card-link-group">
+        <div class="g-card-link-group font-blod">
             <a href="introduce.html" class="border-right">产品介绍</a>
             <a href="InsuranceInformation.html" class="border-right">投保须知</a>
             <a href="compensate.html">理赔服务</a>
@@ -63,7 +66,7 @@
             <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
                 <div class="g-card-title">{{product.title}}</div>
                 <div class="g-card-price">￥{{product.showPrice}}</div>
-                <div class="g-card-num">已售:{{product.soldNum}}</div>
+                <!--<div class="g-card-num">已售:{{product.soldNum}}</div>-->
                 <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
             </div>
         </div>

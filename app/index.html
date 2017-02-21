@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/project.css">
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
-    <script src="js/libs/city-picker.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/libs/hammer.min.js"></script>
     <script src="js/project.js"></script>
@@ -43,8 +42,8 @@
             margin-top: 20px;
             background-color: #f2f3f8;
             line-height: 30px;
-            font-weight: 600;
-		color:red;
+            font-weight:  bolder;
+			color:red;
 		
         }
 
@@ -53,7 +52,12 @@
         th{  min-width: 60px;  max-width: 70px;  }
         td{text-align: center;}
         .table2 td{text-align: left;padding: 0 5px;}
+        .table2 th{text-align: left;}
         tr th{text-align: left;padding: 0 5px;}
+
+		.th1{text-align: center;}
+        .font-blod{font-weight: 600;}
+        .align-center{text-align: center;}
     </style>
 </head>
 <body>
@@ -64,7 +68,7 @@
         <h1 class="letter_title">致家长的一封信</h1>
         <article class="letter">
             <section>
-                <div class="letter_recipient">尊敬的家长朋友:您好！</div>
+                <div class="letter_recipient">尊敬的家长朋友：您好！</div>
                 <div class="letter_content"> 有保险就不怕风险，买保险就是保平安！</div>
                 <div class="letter_content">孩子是每个家庭的希望，是我们生命和事业的延续。为保障孩子幸福健康地成长，给他营造一个安全无忧的学习和生活空间，我们热切希望您为孩子购买一份学生平安保险，减少因意外或疾病风险带来的经济损失。详情如下：</div>
                 <div>
@@ -72,18 +76,18 @@
                         <caption>产品方案</caption>
                         <tbody>
                             <tr>
-                                <th colspan="2">保险款式</th>
+                                <th colspan="2" class="align-center">保险款式</th>
                                 <td><strong>Z-100A</strong></td>
                                 <td><strong>Z-200A</strong></td>
                             </tr>
                             <tr>
-                                <th colspan="2">保费(学期)</th>
+                                <th colspan="2" class="align-center">保费</th>
                                 <td>100元/学年或50元/学期 </td>
                                 <td>200元/学年或100元/学期</td>
                             </tr>
                             <tr>
                                 <th rowspan="2">意外伤害医疗保额(门诊+住院)</th>
-                                <td>校内</td>
+                                <td>校外</td>
                                 <td>0.8万元</td>
                                 <td>1.8万元</td>
                             </tr>
@@ -104,7 +108,7 @@
                             <td>12万元</td>
                         </tr>
                         <tr>
-                            <th rowspan="2">意外伤害残疾/身故保额</th>
+                            <th rowspan="2">疾病住院/医疗保额</th>
                             <td>60日观察期后</td>
                             <td>4万元</td>
                             <td>8万元</td>
@@ -132,37 +136,37 @@
                         <caption>产品特色</caption>
                         <tbody>
                         <tr>
-                            <th>保障区域广</th>
+                            <th class="th1">保障区域广</th>
                             <td>不限校内校外，全国各地有效</td>
                         </tr>
                         <tr>
-                            <th>保障时间长</th>
+                            <th class="th1">保障时间长</th>
                             <td>不分寒假暑假，保期内全天24小时享受保障</td>
                         </tr>
                         <tr>
-                            <th>理赔比例高</th>
+                            <th class="th1">理赔比例高</th>
                             <td>意外伤害医疗费用按90%（Z-100A）或100%（Z-200A）报销，取消免赔额，实行0免赔</td>
                         </tr>
                         <tr>
-                            <th>理赔费用全</th>
+                            <th class="th1">理赔费用全</th>
                             <td>意外医疗或疾病住院所产生的自费部分也属于报销范围</td>
                         </tr>
                         <tr>
-                            <th>理赔流程简</th>
+                            <th class="th1">理赔流程简</th>
                             <td>理赔手续简单，省去很多不必要的繁琐流程</td>
                         </tr>
                         <tr>
-                            <th>理赔速度快</th>
+                            <th class="th1">理赔速度快</th>
                             <td>收到医疗理赔资料后5-10个工作日赔款即可到账</td>
                         </tr>
                       
                         <tr>
-                            <th>观察期能赔</th>
+                            <th class="th1">观察期能赔</th>
                             <td>在疾病观察期内仍然享受疾病住院医疗、疾病全残和疾病身故保险责任保障</td>
                         </tr>
                         </tbody>
                     </table>
-                    <p style="line-height: 1.4;font-size: 13px;margin: 10px 0;text-indent: 25px;">本保险采取自愿投保的原则。本着对孩子的安全负责，请家长朋友慎重做出自己的选择！
+                    <p style="line-height: 1.4;font-size: 13px;margin: 10px 0;text-indent: 25px;">本保险采取自愿投保的原则。本着对孩子的安全负责，请家长朋友做出明智的选择！
                     </p>
                 </div>
             </section>
@@ -170,7 +174,7 @@
 
         <!-- 如果有两个产品产品 -->
         <div class="u-card g-card" style="display: block;">
-            <div class="g-card-link-group">
+            <div class="g-card-link-group font-blod">
                 <a href="introduce.html" class="border-right">产品介绍</a>
                 <a href="InsuranceInformation.html" class="border-right">投保须知</a>
                 <a href="compensate.html">理赔服务</a>
@@ -179,7 +183,7 @@
                 <div v-for="product in products" class="u-card-content-item weui_cell_bd weui_cell_primary">
                     <div class="g-card-title">{{product.title}}</div>
                     <div class="g-card-price">￥{{product.showPrice}}</div>
-                    <div class="g-card-num">已售:{{product.soldNum}}</div>
+                    <!--<div class="g-card-num">已售:{{product.soldNum}}</div>-->
                     <a @click="selectProduct(product)" class="weui_btn">立即投保</a>
                 </div>
             </div>
@@ -216,10 +220,22 @@
             // 获取学校信息
             var schoolId = store.getItem('school').id;
             if(!schoolId){
-//                window.location.href = 'chooseSchool.html';
+                $.ajaxSetup({ async: false });
+                // 从后台获取最后一次购买的学校信息
+                var url = '/wego168-xsinsurance-wechat/order/getLastSchool.jsp';
+                $.get(url, function (data) {
+                    data = JSON.parse(data);
+                    if(data.errcode == 0){
+                        schoolId = data.lastSchool.id;
+                    }
+                })
+            }
+
+            if(!schoolId){
+                window.location.href = 'chooseSchool.html';
             }else {
                 /* 获取保险产品信息 */
-                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+schoolId;
+                var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+ schoolId;
                 $.get(getProduct, function (data) {
                     data = JSON.parse(data);
                     console.log(data);

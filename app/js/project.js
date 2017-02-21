@@ -210,7 +210,7 @@ if (!Object.assign) {
  * @param idCard [string]
  * @return {state: true, errMsg: "验证通过!"}
  */
-function checkidCard(idCard){
+function checkidCard(idCard) {
     var Errors = new Array(
         {state: true, errMsg: "验证通过!"},
         {state: false, errMsg: "身份证号码位数不对!"},
@@ -218,65 +218,7 @@ function checkidCard(idCard){
         {state: false, errMsg: "身份证号码校验错误!"},
         {state: false, errMsg: "身份证地区非法!"}
     );
-    var area={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江",
-        31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",
-        41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏",
-        61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"}
-
-    var Y,JYM,S,M,ereg;
-    var idCard_array = idCard.toString().split("");
-
-    //地区检验
-    if(area[parseInt(idCard.substr(0,2))]==null) return Errors[4];
-    //身份号码位数及格式检验
-    switch(idCard.length){
-        case 15:
-            if ( (parseInt(idCard.substr(6,2))+1900) % 4 == 0 || ((parseInt(idCard.substr(6,2))+1900) % 100 == 0 &&
-                (parseInt(idCard.substr(6,2))+1900) % 4 == 0 )){
-                ereg=/^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$/;//测试出生日期的合法性
-            } else {
-                ereg=/^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}$/;//测试出生日期的合法性
-            }
-            if(ereg.test(idCard)) return Errors[0];
-            else return Errors[2];
-
-            break;
-        case 18:
-            //18位身份号码检测
-            //出生日期的合法性检查
-            //闰年月日:((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))
-            //平年月日:((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))
-            if ( parseInt(idCard.substr(6,4)) % 4 == 0 || (parseInt(idCard.substr(6,4)) % 100 == 0 &&
-                parseInt(idCard.substr(6,4))%4 == 0 )){
-                ereg=/^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}[0-9Xx]$/;//闰年出生日期的合法性正则表达式
-            } else {
-                ereg=/^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$/;//平年出生日期的合法性正则表达式
-            }
-            if(ereg.test(idCard)){//测试出生日期的合法性
-                //计算校验位
-                S = (parseInt(idCard_array[0]) + parseInt(idCard_array[10])) * 7
-                    + (parseInt(idCard_array[1]) + parseInt(idCard_array[11])) * 9
-                    + (parseInt(idCard_array[2]) + parseInt(idCard_array[12])) * 10
-                    + (parseInt(idCard_array[3]) + parseInt(idCard_array[13])) * 5
-                    + (parseInt(idCard_array[4]) + parseInt(idCard_array[14])) * 8
-                    + (parseInt(idCard_array[5]) + parseInt(idCard_array[15])) * 4
-                    + (parseInt(idCard_array[6]) + parseInt(idCard_array[16])) * 2
-                    + parseInt(idCard_array[7]) * 1
-                    + parseInt(idCard_array[8]) * 6
-                    + parseInt(idCard_array[9]) * 3 ;
-                Y = S % 11;
-                M = "F";
-                JYM = "10X98765432";
-                M = JYM.substr(Y,1);//判断校验位
-                if(M == idCard_array[17]) return Errors[0]; //检测ID的校验位
-                else return Errors[3];
-            }
-            else return Errors[2];
-            break;
-        default:
-            return Errors[1];
-            break;
-    }
+    return idCardNoUtil.checkIdCardNo(idCard)
 }
 
 /*
@@ -286,18 +228,7 @@ function checkidCard(idCard){
 * */
 function getBirthday(idCard){
     idCard = idCard.toString();
-    var birthdayno,birthdaytemp
-    if(idCard.length==18){
-        birthdayno=idCard.substring(6,14)
-    }else if(idCard.length==15){
-        birthdaytemp=idCard.substring(6,12)
-        birthdayno="19"+birthdaytemp
-    }else{
-        alert("错误的身份证号码，请核对！")
-        return false
-    }
-    var birthday=birthdayno.substring(0,4)+"-"+birthdayno.substring(4,6)+"-"+birthdayno.substring(6,8)
-    return birthday
+    return idCardNoUtil.getIdCardInfo(idCard).birthday
 }
 
 /*
@@ -305,25 +236,247 @@ function getBirthday(idCard){
  * @param idCard 身份证号
  * @return sex 性别
  * */
-function getSex(idCard){
-    var sexno,sex;
-    idCard = idCard.toString();
-    if(idCard.length==18){
-        sexno=idCard.substring(16,17)
-    }else if(idCard.length==15){
-        sexno=idCard.substring(14,15)
-    }else{
-        alert("错误的身份证号码，请核对！")
-        return false
-    }
-    var tempid=sexno%2;
-    if(tempid==0){
-        sex='F'
-    }else{
-        sex='M'
-    }
-    return sex
+function getSex(idCard) {
+    return idCardNoUtil.getIdCardInfo(idCard).gender
 }
+
+function getAge(strBirthday){
+    var returnAge;
+    var strBirthdayArr=strBirthday.split("-");
+    var birthYear = strBirthdayArr[0];
+    var birthMonth = strBirthdayArr[1];
+    var birthDay = strBirthdayArr[2];
+
+    d = new Date();
+    var nowYear = d.getFullYear();
+    var nowMonth = d.getMonth() + 1;
+    var nowDay = d.getDate();
+
+    if(nowYear == birthYear){
+        returnAge = 0;//同年 则为0岁
+    }
+    else{
+        var ageDiff = nowYear - birthYear ; //年之差
+        if(ageDiff > 0){
+            if(nowMonth == birthMonth) {
+                var dayDiff = nowDay - birthDay;//日之差
+                if(dayDiff < 0)
+                {
+                    returnAge = ageDiff - 1;
+                }
+                else
+                {
+                    returnAge = ageDiff ;
+                }
+            }
+            else
+            {
+                var monthDiff = nowMonth - birthMonth;//月之差
+                if(monthDiff < 0)
+                {
+                    returnAge = ageDiff - 1;
+                }
+                else
+                {
+                    returnAge = ageDiff ;
+                }
+            }
+        }
+        else
+        {
+            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+        }
+    }
+
+    return returnAge;//返回周岁年龄
+
+}
+
+
+var idCardNoUtil = {
+    /*省,直辖市代码表*/
+    provinceAndCitys: {11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江",
+        31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北",43:"湖南",44:"广东",
+        45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",
+        65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"},
+
+    /*每位加权因子*/
+    powers: ["7","9","10","5","8","4","2","1","6","3","7","9","10","5","8","4","2"],
+
+    /*第18位校检码*/
+    parityBit: ["1","0","X","9","8","7","6","5","4","3","2"],
+
+    /*性别*/
+    genders: {male:"M",female:"F"},
+
+    /*校验地址码*/
+    checkAddressCode: function(addressCode){
+        var check = /^[1-9]\d{5}$/.test(addressCode);
+        if(!check) return false;
+        if(idCardNoUtil.provinceAndCitys[parseInt(addressCode.substring(0,2))]){
+            return true;
+        }else{
+            return false;
+        }
+    },
+
+    /*校验日期码*/
+    checkBirthDayCode: function(birDayCode){
+        var check = /^[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))$/.test(birDayCode);
+        if(!check) return false;
+        var yyyy = parseInt(birDayCode.substring(0,4),10);
+        var mm = parseInt(birDayCode.substring(4,6),10);
+        var dd = parseInt(birDayCode.substring(6),10);
+        var xdata = new Date(yyyy,mm-1,dd);
+        if(xdata > new Date()){
+            return false;//生日不能大于当前日期
+        }else if ( ( xdata.getFullYear() == yyyy ) && ( xdata.getMonth () == mm - 1 ) && ( xdata.getDate() == dd ) ){
+            return true;
+        }else{
+            return false;
+        }
+    },
+
+    /*计算校检码*/
+    getParityBit: function(idCardNo){
+        var id17 = idCardNo.substring(0,17);
+        /*加权 */
+        var power = 0;
+        for(var i=0;i<17;i++){
+            power += parseInt(id17.charAt(i),10) * parseInt(idCardNoUtil.powers[i]);
+        }
+        /*取模*/
+        var mod = power % 11;
+        return idCardNoUtil.parityBit[mod];
+    },
+
+    /*验证校检码*/
+    checkParityBit: function(idCardNo){
+        var parityBit = idCardNo.charAt(17).toUpperCase();
+        if(idCardNoUtil.getParityBit(idCardNo) == parityBit){
+            return true;
+        }else{
+            return false;
+        }
+    },
+
+    /*校验15位或18位的身份证号码*/
+    checkIdCardNo: function(idCardNo){
+        //15位和18位身份证号码的基本校验
+        var check = /^\d{15}|(\d{17}(\d|x|X))$/.test(idCardNo);
+        if(!check) return false;
+        //判断长度为15位或18位
+        if(idCardNo.length==15){
+            return idCardNoUtil.check15IdCardNo(idCardNo);
+        }else if(idCardNo.length==18){
+            return idCardNoUtil.check18IdCardNo(idCardNo);
+        }else{
+            return false;
+        }
+    },
+
+    //校验15位的身份证号码
+    check15IdCardNo: function(idCardNo){
+        //15位身份证号码的基本校验
+        var check = /^[1-9]\d{7}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}$/.test(idCardNo);
+        if(!check) return false;
+        //校验地址码
+        var addressCode = idCardNo.substring(0,6);
+        check = idCardNoUtil.checkAddressCode(addressCode);
+        if(!check) return false;
+        var birDayCode = '19' + idCardNo.substring(6,12);
+        //校验日期码
+        check = idCardNoUtil.checkBirthDayCode(birDayCode);
+        if(!check) return false;
+        //验证校检码
+        return idCardNoUtil.checkParityBit(idCardNo);
+    },
+
+    //校验18位的身份证号码
+    check18IdCardNo: function(idCardNo){
+        //18位身份证号码的基本格式校验
+        var check = /^[1-9]\d{5}[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}(\d|x|X)$/.test(idCardNo);
+        if(!check) return false;
+        //校验地址码
+        var addressCode = idCardNo.substring(0,6);
+        check = idCardNoUtil.checkAddressCode(addressCode);
+        if(!check) return false;
+        //校验日期码
+        var birDayCode = idCardNo.substring(6,14);
+        check = idCardNoUtil.checkBirthDayCode(birDayCode);
+        if(!check) return false;
+        //验证校检码
+        return idCardNoUtil.checkParityBit(idCardNo);
+    },
+
+    formateDateCN: function(day){
+        var yyyy =day.substring(0,4);
+        var mm = day.substring(4,6);
+        var dd = day.substring(6);
+        return yyyy + '-' + mm +'-' + dd;
+    },
+
+    //获取信息
+    getIdCardInfo: function(idCardNo){
+        var idCardInfo = {
+            gender:"",  //性别
+            birthday:"" // 出生日期(yyyy-mm-dd)
+        };
+        if(idCardNo.length==15){
+            var aday = '19' + idCardNo.substring(6,12);
+            idCardInfo.birthday=idCardNoUtil.formateDateCN(aday);
+            if(parseInt(idCardNo.charAt(14))%2==0){
+                idCardInfo.gender=idCardNoUtil.genders.female;
+            }else{
+                idCardInfo.gender=idCardNoUtil.genders.male;
+            }
+        }else if(idCardNo.length==18){
+            var aday = idCardNo.substring(6,14);
+            idCardInfo.birthday=idCardNoUtil.formateDateCN(aday);
+            if(parseInt(idCardNo.charAt(16))%2==0){
+                idCardInfo.gender=idCardNoUtil.genders.female;
+            }else{
+                idCardInfo.gender=idCardNoUtil.genders.male;
+            }
+
+        }
+        return idCardInfo;
+    },
+
+    /*18位转15位*/
+    getId15: function(idCardNo){
+        if(idCardNo.length==15){
+            return idCardNo;
+        }else if(idCardNo.length==18){
+            return idCardNo.substring(0,6) + idCardNo.substring(8,17);
+        }else{
+            return null;
+        }
+    },
+
+    /*15位转18位*/
+    getId18: function(idCardNo){
+        if(idCardNo.length==15){
+            var id17 = idCardNo.substring(0,6) + '19' + idCardNo.substring(6);
+            var parityBit = idCardNoUtil.getParityBit(id17);
+            return id17 + parityBit;
+        }else if(idCardNo.length==18){
+            return idCardNo;
+        }else{
+            return null;
+        }
+    }
+};
+
+
+
+//获取身份证信息
+//var idCardInfo = idCardNoUtil.getIdCardInfo(idCardNo);
+
+//注：录入并判断数据库中是否已存在同样的身份证时
+//(1) 若输入的是15位的身份证：先查找15位的ID是否存在，若不存在还需要将15位的身份证转成18位的身份证，仍不存在的话才可录入系统。
+//(2) 若输入的是18位的身份证：先查找18位的ID是否存在，若不存在还需要将18位的身份证转成15位的身份证，仍不存在的话才可录入系统。
+//如果找到对应的15位身份证，需要将15位的更新到18位。
 
 /* 学校类型解码
  * 0：幼儿园

@@ -9,8 +9,9 @@
     <script src="js/libs/jquery-weui.min.js"></script>
     <script src="js/libs/vue2.0.js"></script>
     <!-- 引入pdf插件 -->
-    <script src="js/libs/parsley.min.js"></script>
-    <script src="js/libs/pdf.min.js"></script>
+    <!--<script src="js/libs/parsley.min.js"></script>-->
+    <!--<script src="js/libs/pdf.min.js"></script>-->
+
     <script src="js/project.js"></script>
     <style>
         body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 50px;}
@@ -38,7 +39,7 @@
 </head>
 <body>
 <div id="app">
-    <div v-if="!showPDF">
+    <div >
         <!-- 头部 -->
         <header class="fixed_top">
             <div class="header_left" onclick="history.go(-1)">
@@ -48,45 +49,36 @@
         </header>
 
         <div class="weui_cells weui_cells_access">
-            <div class="weui_cell" onclick="initPDF('./pdf/test2.pdf','电子保单')">
+            <a @click="jumpTo(insurencePDF)" class="weui_cell" download="newfilename">
                 <div class="weui_cell_hd weui_cell_primary">电子保单</div>
                 <div class="weui_cell_ft"></div>
-            </div>
-            <div v-if="modifyPDF" class="weui_cell" onclick="initPDF('./pdf/test.pdf','批单')">
+            </a>
+            <div v-if="modifyPDF" class="weui_cell"  @click="jumpTo(modifyPDF)">
                 <div class="weui_cell_hd weui_cell_primary">批单(保单修改批复)</div>
                 <div class="weui_cell_ft"></div>
             </div>
-        </div>
-    </div>
-    <div v-else>
-        <!-- 头部 -->
-        <header class="fixed_top" v-if="showPDF">
-            <div class="header_left" @click="showPDF = false">
-                <i class="iconfont icon-back"></i>
-            </div>
-            <div class="header_title">{{PDFTitle}}</div>
-        </header>
-        <canvas id="pdf-insurence"></canvas>
 
-        <!-- 已过期保单 -->
-        <div class="qc-btn-group  u-card" v-if="overDue">
-            <a href="index.html" class="weui_btn">再次购买</a>
-        </div>
-
-        <!-- 已生效保单 -->
-        <div class="qc-btn-group weui_cell u-card" v-else>
-            <div class="weui_cell_hd">
-                <a onclick="applyModify()" class="weui_btn weui_btn_plain_default">申请修改</a>
+            <!-- 已过期保单 -->
+            <div class="qc-btn-group  u-card" v-if="overDue">
+                <a href="index.html" class="weui_btn">再次购买</a>
             </div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <a onclick="sendToEmail()" class="weui_btn">发送保单到邮箱</a>
+
+            <!-- 已生效保单 -->
+            <div class="qc-btn-group weui_cell" v-else>
+                <div class="weui_cell_hd">
+                    <!--<a onclick="applyModify()" class="weui_btn weui_btn_plain_default">申请修改</a>-->
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <a onclick="sendToEmail()" class="weui_btn">发送保单到邮箱</a>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 <script>
 
-
+    var orderId = '';
     var vm = new Vue({
         el: '#app',
         data: function () {
@@ -98,8 +90,28 @@
                 modifyPDF:''
             }
         },
-        methods: {},
+        methods: {
+            jumpTo (url){
+                if(!url){
+                    showInfo('正在生成电子保单，请稍后再试');
+                    return false
+                }
+                window.location.href = url;
+            }
+        },
         created: function () {
+            var _this = this;
+            orderId = getUrlParam('orderId');
+            var url = '/wego168-xsinsurance-wechat/policy/getPolicyPdfById.jsp';
+            $.get(url,{orderId:orderId}, function (data) {
+                data = JSON.parse(data);
+                if(data.errcode === 0){
+                    _this.insurencePDF = data.insurencePDF;
+                    _this.modifyPDF = data.modifyPDF;
+                }else {
+                    showInfo(data.errMsg)
+                }
+            })
         }
     });
 
@@ -125,6 +137,22 @@
             empty: false, // 是否允许为空
             onOK: function (input) {
                 //点击确认
+                var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+                if(!reg.test(input)){
+                    showInfo('邮箱格式错误');
+                    return false
+                }else {
+                    var url = '/wego168-xsinsurance-wechat/policy/sendPolicyEmail.jsp';
+                    $.post(url,{orderId:orderId,email:input}, function (data) {
+                        data = JSON.parse(data);
+                        if(data.errcode === 0){
+                            showInfo('电子保单发送成功！')
+                        }else {
+                            showInfo(data.errorMsg)
+                        }
+                    })
+                }
+                console.log(input);
             },
             onCancel: function () {
                 //点击取消
@@ -132,28 +160,6 @@
         });
     }
 
-    /* 渲染PDF文件 */
-    function initPDF ( url , title) {
-        vm.showPDF = true;
-        vm.PDFTitle = title;
-        PDFJS.workerSrc = 'js/libs/pdf.worker.min.js';
-        PDFJS.getDocument( url ).then( function getPdfHelloWorld ( pdf ) {
-            pdf.getPage( 1 ).then( function getPageHelloWorld ( page ) {
-                var scale = 1.5;
-                var viewport = page.getViewport( scale );
-                console.log(viewport.width,viewport.height);
-                var canvas = document.getElementById( 'pdf-insurence' );
-                var context = canvas.getContext( '2d' );
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                page.render( renderContext );
-            });
-        } );
-    }
 </script>
 
 </body>

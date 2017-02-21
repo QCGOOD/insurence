@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>多级地址选择器</title>
+    <!--<script src="./vue.min.js"></script>-->
+    <script src="//cdn.bootcss.com/vue/2.1.10/vue.js"></script>
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
+
+</head>
+<body>
+<div id="app">
+    <div class="col-md-4">
+        <select class="form-control" v-model="province">
+            <option :value="{id: '',name: ''}">请选择省</option>
+            <option v-for="item in provinces" :value="item">{{item.name}}</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control" v-model="city">
+            <option :value="{id: '',name: ''}">全境</option>
+            <option v-for="item in citys" :value="item">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+<script>
+
+
+    var addressData1 = [
+        {
+            id:1,
+            name:'河北',
+            city:[
+                {id: 2, name: '石家庄'},
+                {id: 3, name: '保定'}
+            ]
+        },
+        {
+            id:2,
+            name:'山东',
+            city:[
+                {id: 2, name: '济南'},
+                {id: 3, name: '合肥'}
+            ]
+        },
+        {
+            id:3,
+            name:'安徽',
+            city:[
+                {id: 2, name: '阜阳'},
+                {id: 3, name: '咸阳'}
+            ]
+        }
+        ,
+        {
+            id:3,
+            name:'河南',
+            city:[
+                {id: 2, name: '安阳市'},
+                {id: 3, name: '郑州市'}
+            ]
+        }
+    ]
+
+    function get_citys(province){
+        var citys = [];
+        for(var i in addressData1){
+            if(addressData1[i].id === province){
+                citys = addressData1[i].city
+            }
+        }
+        return citys;
+    }
+
+    function get_provinces(data){
+        var provinces = [];
+        for(var i in data){
+            provinces.push({id: data[i].id, name:data[i].name,});
+        }
+        return provinces;
+    }
+
+    var vm = new Vue({
+        el: '#app',
+        data (){
+            return {
+                provinces:get_provinces(addressData1),
+                citys: [],
+                province: {
+                    id: '',
+                    name: ''
+                },
+                city: {
+                    id: '',
+                    name: ''
+                }
+            }
+        },
+        watch: {
+            // 省变化,则重新计算区
+            province: {
+                handler (province){
+                    // 计算this.citys，同时让this.city = ''
+                    this.citys = get_citys(province.id);
+                    this.city.id = ''
+                },
+                deep: true
+            },
+            city : {
+                handler (city){
+                    console.log('省:',this.province,'市:',this.city);
+                },
+                deep: true
+            }
+        }
+
+    })
+
+
+
+</script>
+</body>
+</html>

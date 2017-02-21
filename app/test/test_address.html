@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>多级地址选择器</title>
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/vue/2.1.10/vue.js"></script>
+    <script src="./addressData.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="col-md-4">
+            <select class="form-control" v-model="province">
+                <option v-for="item in provinces" :value="item.value">{{item.value}}</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" v-model="city">
+                <option v-for="item in citys" :value="item.value">{{item.value}}</option>
+            </select>
+        </div>
+    </div>
+    <script>
+
+        // 计算省provinces
+        function formatData(data){
+            var result = [];
+            for(var key in data){
+                result.push({
+                    value: key
+                })
+            }
+            return result
+        }
+
+        var vm = new Vue({
+            el: '#app',
+            data (){
+                return {
+                    provinces:formatData(addressData),
+                    citys:[],
+                    province:'',
+                    city:''
+                }
+            },
+            watch: {
+                // 省变化,则重新计算区
+                province (val){
+                    // 计算this.citys，同时让this.city = ''
+                    var data = formatData(addressData[this.province]);
+                    for(var i =0; i<data.length; i++){
+                        this.$set(this.citys,i,data[i]);
+                    }
+                    this.city = ''
+                }
+            }
+        })
+    </script>
+</body>
+</html>

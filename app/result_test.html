@@ -42,6 +42,7 @@
         <i class="weui_icon_msg weui_icon_warn"></i>
         <p class="status_text"><a href="tel:075522164956">支付失败,请联系客服人员</a></p>
     </div>
+    <a @click="handlerClose" class="weui_btn" style="margin: 15px;">关闭浏览器</a>
 </div>
 
 <script>
@@ -50,6 +51,11 @@
         data: function () {
             return {
                 status: false
+            }
+        },
+        methods: {
+            handlerClose (){
+                WeixinJSBridge.call('closeWindow');
             }
         },
         created: function () {
