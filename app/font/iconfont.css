@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1484122596363'); /* IE9*/
-  src: url('iconfont.eot?t=1484122596363#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1484122596363') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1484122596363') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1484122596363#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1487842152975'); /* IE9*/
+  src: url('iconfont.eot?t=1487842152975#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1487842152975') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1487842152975') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1487842152975#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -38,4 +38,6 @@
 .icon-radio-checked:before { content: "\e616"; }
 
 .icon-checkbox-checked:before { content: "\e61e"; }
+
+.icon-delete:before { content: "\e601"; }
 

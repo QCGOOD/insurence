@@ -102,10 +102,11 @@
                 <div class="weui_cell_hd weui_cell_primary font-blod">被保人信息<span
                        class="font-blod" style="font-size:12px;color: #007de2;">(学生)</span></div>
                 <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
-                    <!--<input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*" >
-                    拍身份证录入<i class="iconfont icon-xiangji"></i>-->
+                    <input @change="insurantPhotoChange" id="upload" v-model="insurantPhoto" class="weui_uploader_input" type="file" accept="image/*" >
+                    拍身份证录入<i class="iconfont icon-xiangji"></i>
                 </div>
             </div>
+
 			<div class="weui_cell noBorder">
                 <div class="weui_cell_hd weui_cell_primary">姓名</div>
                 <div class="weui_cell_ft">
@@ -155,8 +156,8 @@
                 <div class="weui_cell_hd weui_cell_primary font-blod">投保人信息<span
                        class="font-blod" style="font-size:12px;color: #007de2;">({{ isOnePerson ? '本人':'监护人'}})</span></div>
                 <div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
-                    <!--<input  name="identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
-                    拍身份证录入<i class="iconfont icon-xiangji"></i>-->
+                    <input @change="holderPhotoChange" name="identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
+                    拍身份证录入<i class="iconfont icon-xiangji"></i>
                 </div>
             </div>
 			<div class="weui_cell noBorder">
@@ -283,6 +284,9 @@
             // 投保人手机号
             holderPhone (){
                 saveUnsubmitOrder();
+            },
+            insurantPhoto (file){
+                console.log('被保人照片',file);
             }
         },
         methods: {
@@ -327,6 +331,43 @@
                 }else {
                     return true
                 }
+            },
+            holderPhotoChange (e){
+                window.URL = window.URL || window.webkitURL;
+                var ImgUrl = window.URL.createObjectURL(e.target.files[0]);
+                convertImgToBase64(ImgUrl, function (ImgData) {
+                    console.log(ImgData);
+                    vm.base64ToText(ImgData, 'holder')
+                })
+            },
+            insurantPhotoChange (e){
+                window.URL = window.URL || window.webkitURL;
+                var ImgUrl = window.URL.createObjectURL(e.target.files[0]);
+                convertImgToBase64(ImgUrl, function (ImgData) {
+                    vm.base64ToText(ImgData, 'insurant')
+                })
+            },
+            base64ToText (base64,type){
+                base64 = base64.replace(/^data:image\/png;base64,/,'');
+                $.post('/wego168-xsinsurance-wechat/index/getIdCardInfo.jsp',{base64ImageString:base64}, function (data) {
+                    data = JSON.parse(data);
+                    if(data.errcode == 0){
+                        showInfo('身份证识别成功！');
+                        switch (type){
+                            case 'insurant':
+                                vm.insurantName = data.info.name;
+                                vm.insurantGender = data.info.sex;
+                                vm.insurantBirthday = data.info.birth;
+                                vm.insurantCardNo = data.info.cardNum;
+                                break;
+                            default:
+                                vm.holderName = data.info.name;
+                                vm.holderCardno = data.info.cardNum;
+                        }
+                    }else {
+                        showInfo(data.errMsg)
+                    }
+                })
             }
         },
         created: function () {
@@ -419,7 +460,7 @@
                 break;
             // 初中
             case 2:
-                classVal = ['七年级', '八年级', '九年级'];
+                classVal = ['初一', '初二', '初三'];
                 gradeVal = [];
                 break;
             // 高中
@@ -429,7 +470,7 @@
                 break;
             // 默认
             default:
-                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级','高一', '高二', '高三'];
+                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级','初一', '初二', '初三','高一', '高二', '高三'];
                 break;
         }
         // 初始化班级选择插件

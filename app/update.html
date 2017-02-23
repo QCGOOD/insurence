@@ -9,36 +9,50 @@
 
     <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js/libs/jquery-weui.min.js"></script>
-    <script src="js/libs/parsley.min.js"></script>
 
     <script src="js/libs/vue2.0.js"></script>
     <script src="js/project.js"></script>
 
     <style>
-        body{background-color: #f2f3f8;padding-top: 44px;}
-        .weui_cells{font-size: 16px;margin-top: 20px;}
+        body{background-color: #f2f3f8;padding-top: 44px;padding-bottom: 40px;}
+        .weui_cells{font-size: 16px;}
+        /* 内容区标题--学校信息、投保人信息、被保人信息 */
+        .qc_cell_title{  align-items: baseline;border-bottom: solid 1px #d4d4d4;  }
         /* 投保计划 */
-        .weui_cells_title + .weui_cells{margin-top: 0;}
-       .weui_cells:after{border: none;}
+        .weui_cells:after{border: none;}
         .weui_cells.plan{padding: 10px 0px 30px;}
-        .weui_cells.plan .weui_cell:before{display: none;}
+        .weui_cells.plan .weui_cell:before,.noBorder.weui_cell:before{display: none;}
         .weui_cells.plan .weui_cell{padding: 4px 15px;}
         .weui_cells.plan .weui_cell_ft{color: #333;}
-
-        /* 禁止修改 */
-        .weui_cell.disabled{background-color:#f7f7f7; }
-        .weui_cell.disabled div{color: rgba(0, 0, 0, 0.298039);}
+        /* 投保计划 */
 
         /* 信息填写 */
         .weui_icon_checked{margin-right: 10px;}
         .weui_cell_select {  padding: 0 15px;  }
         .weui_cell_ft{color: #333;}
         .toolbar .picker-button{color: #007de2;}
+        .weui_cell_hd{white-space: nowrap;}
+        /* 出身日期填写 */
+        .hidden{opacity: 0;}
+        .placeholder{position: absolute;right: 15px;top:0;line-height: 42px;color: #8a90af;}
+
+        /* 表单结果信息提示 */
+        .validate-success{
+            color: #468847;
+            background-color: #DFF0D8;
+            border: 1px solid #D6E9C6;
+        }
+        .validate-error{
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border: 1px solid #EED3D7;
+        }
+        .font-blod{font-weight: 600;}
+
     </style>
 </head>
 <body>
 <div id="app" style="display: none;">
-
     <!-- 头部 -->
     <header class="fixed_top">
         <div class="header_left back">
@@ -52,266 +66,312 @@
         <div style="font-size: 12px;color: #8a90af;">保单将以修改后的内容为准，请准确填写！</div>
     </div>
 
-    <form id="form" data-parsley-validate data-parsley-ui-enabled="false">
-        <div class="weui_cells_title">信息填写</div>
-        <!-- 学校信息 -->
-        <div class="weui_cells weui_cells_access" v-if="schoolName != null || insurantClass != null">
-            <div class="weui_cell qc_cell_title">
-                <div class="weui_cell_hd">学校信息</div>
-            </div>
-            <a class="weui_cell noBorder" href="chooseSchool.html" v-if="schoolName != null">
-                <div class="weui_cell_hd weui_cell_primary">学校</div>
-                <div class="weui_cell_bd">
-                    <div class="g-align-right">{{schoolName}}</div>
-                </div>
-                <div class="weui_cell_ft"></div>
-            </a>
+    <div class="weui_cells weui_cells_access">
 
-            <div class="weui_cell" v-if="insurantClass != null">
-                <label for="picker" class="weui_label weui_cell_bd weui_cell_primary">班级</label>
-                <div class="weui_cell_bd">
-                    <input class="weui_input g-align-right"
-                           name="insurantClass" placeholder="请选择班级" type="text" id="picker">
-                </div>
-                <div class="weui_cell_ft"></div>
+        <div class="weui_cell" v-if="insuredSchoolType < 4 && insuredClassShow">
+            <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
+            <div  class="weui_cell_bd">
+                <input class="weui_input g-align-right" :value="/^[一二三四五六七八九]$/.test(gradeName) ? (gradeName+'年级 '+className+'班'): (className ? gradeName+' '+className+'班':'')" name="insuredClass" placeholder="请选择班级" type="text" id='picker' required tip="班级">
+            </div>
+            <!--<div class="weui_cell_ft"></div>-->
+        </div>
+
+        <div class="weui_cell" v-if="insuredSchoolType > 3 && insuredClassShow">
+            <label class="weui_label weui_cell_bd weui_cell_primary">年级</label>
+            <div class="weui_cell_bd">
+                <input v-model="gradeName" class="weui_input g-align-right" placeholder="请填写年级" />
+            </div>
+            <div class="weui_cell_bd" style="padding-left:10px;width: 50px;">年级</div>
+        </div>
+        <div class="weui_cell" v-if="insuredSchoolType > 3 && insuredClassShow">
+            <label class="weui_label weui_cell_bd weui_cell_primary">班级</label>
+            <div class="weui_cell_bd">
+                <input v-model="className" class="weui_input g-align-right" placeholder="请填写班级(**专业*班)" />
+            </div>
+            <div class="weui_cell_bd" style="padding-left:10px;width: 50px;">班</div>
+        </div>
+    </div>
+    <div class="weui_cells weui_cells_radio">
+        <div class="weui_cell qc_cell_title" >
+            <div class="weui_cell_hd weui_cell_primary font-blod">被保人信息<span
+                    class="font-blod" style="font-size:12px;color: #007de2;">(学生)</span></div>
+           <!-- <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;" >
+                <input @change="insurantPhotoChange" id="upload" v-model="insurantPhoto" class="weui_uploader_input" type="file" accept="image/*" >
+                拍身份证录入<i class="iconfont icon-xiangji"></i>
+            </div>-->
+        </div>
+
+        <div class="weui_cell noBorder" v-if="insurantNameShow">
+            <div class="weui_cell_hd weui_cell_primary">姓名</div>
+            <div class="weui_cell_ft">
+                <input v-model="insurantName" name="insurantName" class="weui_input g-align-right" placeholder="必填" required tip="姓名">
+            </div>
+        </div>
+        <div class="weui_cell " v-if="insurantCertiNoShow">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input type="text" v-model="insurantCertiNo" name="insurantCertiNo" data-parsley-check-identify  class="weui_input g-align-right" placeholder="有则填，避免纠纷"   tip="身份证号">
             </div>
         </div>
 
-        <!-- 被保人信息 -->
-        <div class="weui_cells weui_cells_radio">
 
-            <div class="weui_cell qc_cell_title">
-                <div class="weui_cell_hd weui_cell_primary">被保人信息<span
-                        style="font-size:12px;color: #007de2;">(学生)</span></div>
-                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;">
-                    <input id="fileupload" name="files[]" class="weui_uploader_input" type="file" accept="image/*">
-                    拍身份证录入<i class="iconfont icon-xiangji"></i>
-                </div>
+        <div class="weui_cell" v-if="insurantGenerShow">
+            <div class="weui_cell_hd weui_cell_primary">性别</div>
+            <div class="weui_cell_ft weui_cell_primary">
+                <label for="s11" style="padding-left: 20px;">
+                    <input type="radio" v-model="insurantGener" name="insurantGener" value="M"  class="weui_check"
+                           id="s11" required tip="性别">
+                    <span class="weui_icon_checked_primary"></span>
+                    <span>男</span>
+                </label>
+                <label for="s12" style="padding-left: 20px;">
+                    <input type="radio" v-model="insurantGener" name="insurantGener" value="F"  class="weui_check"
+                           id="s12" tip="性别">
+                    <span class="weui_icon_checked_primary"></span>
+                    <span>女</span>
+                </label>
             </div>
-
-            <div class="weui_cell noBorder" v-if="insurantCardNo != null">
-                <div class="weui_cell_hd weui_cell_primary">身份证号</div>
-                <div class="weui_cell_ft">
-                    <input type="text" v-model="insurantCardNo" name="insurantCardNo"
-                           class="weui_input g-align-right" placeholder="有则填，避免纠纷"
-                           pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/"
-                           tip="身份证号">
-                </div>
-            </div>
-
-            <div class="weui_cell" v-if="insurantName != null">
-                <div class="weui_cell_hd weui_cell_primary">姓名</div>
-                <div class="weui_cell_ft">
-                    <input v-model="insurantName" name="insurantName"
-                           class="weui_input g-align-right" placeholder="必填" tip="姓名">
-                </div>
-            </div>
-
-            <div class="weui_cell" v-if="insurantGender != null">
-                <div class="weui_cell_hd weui_cell_primary">性别</div>
-                <div class="weui_cell_ft">
-                    <label for="s11" style="padding-left: 20px;">
-                        <input type="radio" v-model="insurantGender"
-                               name="insurantGender" value="M" class="weui_check"
-                               id="s11">
-                        <span class="weui_icon_checked_primary"></span>
-                        <span>男</span>
-                    </label>
-                    <label for="s12" style="padding-left: 20px;">
-                        <input type="radio" v-model="insurantGender"
-                               name="insurantGender" value="F" class="weui_check"
-                               id="s12">
-                        <span class="weui_icon_checked_primary"></span>
-                        <span>女</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="weui_cell" v-if="insurantBirthday !=null">
-                <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
-                <div class="weui_cell_ft" style="min-width: 100px;">
-                    <label v-show="!insurantBirthday" for="date-picker"
-                           class="placeholder">请选择出生日期</label>
-                    <input id="date-picker" type="date" v-model="insurantBirthday"
-                           name="insurantBirthday" class="weui_input"
-                           :class="{'hidden': !insurantBirthday}" tip="出生日期">
-                </div>
-            </div>
-
         </div>
 
-        <!-- 投保人信息 -->
-        <div class="weui_cells"
-             v-if="holderCardNo!= null || holderName != null || holderPhone != null">
-            <div class="weui_cell qc_cell_title">
-                <div class="weui_cell_hd weui_cell_primary">投保人信息<span
-                        style="font-size:12px;color: #007de2;">(家长)</span></div>
-                <div class="weui_cell_ft" style="font-size: 12px;line-height: 24px;">
-                    <input name="identifyPhoto" class="weui_uploader_input" type="file"
-                           accept="image/*">
-                    拍身份证录入<i class="iconfont icon-xiangji"></i></div>
-            </div>
 
-            <div class="weui_cell noBorder" v-if="holderCardNo!= null">
-                <div class="weui_cell_hd weui_cell_primary">身份证号</div>
-                <div class="weui_cell_ft">
-                    <input v-model="holderCardNo" name="holderCardNo" type="text"
-                           class="weui_input g-align-right"
-                           placeholder="有则填，避免纠纷"
-                           pattern="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/" tip="身份证号">
-                </div>
+        <div class="weui_cell" v-if="insurantBirthdayShow">
+            <label for="date-picker" class="weui_cell_hd weui_cell_primary">出生日期</label>
+            <div class="weui_cell_ft" style="min-width: 100px;">
+                <label v-show="!insurantBirthday" for="date-picker" class="placeholder">请选择出生日期</label>
+                <input id="date-picker" type="date" v-model="insurantBirthday" name="insurantBirthday" class="weui_input"
+                       :class="{'hidden': !insurantBirthday}" required tip="出生日期">
             </div>
-
-            <div class="weui_cell " v-if="holderName != null">
-                <div class="weui_cell_hd weui_cell_primary">姓名</div>
-                <div class="weui_cell_ft">
-                    <input v-model="holderName" name="holderName"
-                           class="weui_input g-align-right" placeholder="必填" tip="姓名">
-                </div>
-            </div>
-
-            <div class="weui_cell" v-if="holderPhone != null">
-                <div class="weui_cell_hd weui_cell_primary">手机号</div>
-                <div class="weui_cell_ft">
-                    <input v-model="holderPhone" name="holderPhone" type="number"
-                           class="weui_input g-align-right"
-                           placeholder="必填"
-                           pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="手机号">
-                </div>
-            </div>
-
         </div>
-    </form>
-    <a onclick="submit()" class="weui_btn" style="margin: 28px 15px;">提交申请</a>
+
+    </div>
+
+    <div class="weui_cells">
+        <div class="weui_cell qc_cell_title" >
+            <div class="weui_cell_hd weui_cell_primary font-blod">投保人信息<span
+                    class="font-blod" style="font-size:12px;color: #007de2;">({{ isOnePerson ? '本人':'监护人'}})</span></div>
+            <!--<div class="weui_cell_ft"  style="font-size: 12px;line-height: 24px;">
+                <input @change="holderPhotoChange" name="identifyPhoto" class="weui_uploader_input" type="file" accept="image/*">
+                拍身份证录入<i class="iconfont icon-xiangji"></i>
+            </div>-->
+        </div>
+        <div class="weui_cell noBorder" v-if="holderNameShow">
+            <div class="weui_cell_hd weui_cell_primary">姓名</div>
+            <div class="weui_cell_ft">
+                <input v-model="holderName" name="holderName" class="weui_input g-align-right" placeholder="必填" required tip="投保人姓名">
+            </div>
+        </div>
+
+        <div class="weui_cell " v-if="holderCertiNoShow">
+            <div class="weui_cell_hd weui_cell_primary">身份证号</div>
+            <div class="weui_cell_ft">
+                <input v-model="holderCertiNo" name="holderCertiNo" type="text" data-parsley-check-identify  class="weui_input g-align-right"
+                       placeholder="有则填，避免纠纷"  tip="投保人身份证号">
+            </div>
+        </div>
+
+        <!--<div class="weui_cell">
+            <div class="weui_cell_hd weui_cell_primary">手机号</div>
+            <div class="weui_cell_ft">
+                <input v-model="holderPhone" name="holderPhone" type="number" class="weui_input g-align-right"
+                       placeholder="必填" required pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" tip="投保人手机号">
+            </div>
+        </div>-->
+
+    </div>
+
+    <div style="margin: 28px 15px;">
+        <div onclick="submit()" class="weui_btn">提交申请</div>
+    </div>
+    <!--</form>-->
 
 </div>
 <script>
+    var orderId = '';
     var vm = new Vue({
         el: '#app',
         data: function () {
             return {
-                /* 保单号 */
-                policyNo:'',
                 /* 学校信息 */
-                schoolId: '',
-                schoolName: '',
+                insuredSchoolType:'',
                 /* 被保人信息 */
-                insurantName: '',
-                insurantGender: '',
-                insurantCardNo: '',
-                insurantClass: '',
+                insurantName: '1234',
+                insurantNameShow: false,
+                insurantGener: '',
+                insurantGenerShow: false,
+                insurantCertiNo: '',
+                insurantCertiNoShow: false,
+                insuredClass: '',
+                insuredClassShow: false,
                 gradeName:'',
                 className:'',
                 insurantBirthday: '',
-                insurantPhoto: '',
+                insurantBirthdayShow: false,
                 /* 投保人信息 */
                 holderName: '',
+                holderNameShow: false,
                 holderPhone: '',
-                holderCardNo: '',
-                holderCardPhoto: ''
+                holderCertiNo: '',
+                holderCertiNoShow: false,
+                formValid: false,    // 表单验证通过了吗？
+                hasSubmit: false,      // 表单提交了吗?
+                isOnePerson: false
             }
         },
         /* 监控数据变化 */
         watch: {
-            protectedPerson: {
-                /* 变化时执行函数 */
-                handler: function (val, oldVal) {
-                    console.log(val);
-                },
-                deep: true
+            // 被保人身份证号
+            insurantCardNo (idCard) {
+                console.log('身份证有效吗？'+ checkidCard(idCard));
+                if (checkidCard(idCard)) {
+
+                    this.insurantBirthday = getBirthday(idCard);
+                    this.insurantGender = getSex(idCard);
+                    var age = getAge(this.insurantBirthday);
+                    if(age>=18){
+                        this.isOnePerson = true;
+                        this.holderCardno = this.insurantCardNo;
+                        this.holderName = this.insurantName;
+                    }
+                }
+            },
+            gradeName (){
+                if (this.insuredSchoolType > 3) {
+                    this.gradeName = this.gradeName.replace(/(年级)/,'');
+                    this.insuredClass = this.gradeName + '年级 ' + this.className + '班';
+                }
+            },
+            className (){
+                if (this.insuredSchoolType > 3) {
+                    this.className = this.className.replace(/(班)/,'');
+                    this.insuredClass = this.gradeName + '年级 ' + this.className + '班';
+                }
             }
         },
         methods: {
-
+            // 检查身份证的唯一性
+            checkUnique: function () {
+                if(vm.holderCardno && vm.holderCardno == vm.insurantCardNo){
+                    showInfo('投保人与被保人身份证不能为同一人')
+                    return false
+                }else{
+                    return true
+                }
+            },
+            // 表单验证
+            checkFrom (){
+                if (this.insurantCertiNo && !checkidCard(this.insurantCertiNo)) {
+                    showInfo('被保人身份证号不正确');
+                    return false
+                } else if (this.holderCertiNo && !checkidCard(this.holderCertiNo)) {
+                    showInfo('投保人身份证号不正确');
+                    return false
+                } else if (!/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(this.holderPhone) && this.holderPhone) {
+                    showInfo('投保人手机号不正确');
+                    return false
+                } else {
+                    return true
+                }
+            }
         },
         created: function () {
-            // TODO:获取允许修改的项目
-//            var url = '/wego168-xsinsurance-wechat/order/listJson.jsp';
-            var url = './data/allowData.json';
-            $.get(url, function (data) {
-//                data = JSON.parse(data);
+            var _this = this;
+            orderId = getUrlParam('orderId');
+//            var url = './data/allowData.json';
+            var url = '/wego168-xsinsurance-wechat/policy/getRevisableOrderPolicy.jsp?orderId='+orderId;
+            $.get(url,function (data) {
+                data = JSON.parse(data);
                 console.log(data);
                 if(data.errcode == 0){
+                    for(var key in data){
+                        vm[key+'Show'] = key !== undefined ? true : false ;
+                    }
                     Object.assign(vm.$data,data);
                 }else {
-                    console.log(data.errMsg);
+                    showInfo(data.errMsg)
                 }
             });
 
             setTimeout(function () {
-                /* 初始化班级选择期 */
-                $("#picker").picker({
-                    title: "请选择班级",
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'],
-                            displayValues:['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三']
-                        },
-                        {
-                            textAlign: 'center',
-                            values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                            displayValues: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班'],
-                        }
-                    ],
-                    onChange: function (e) {
-                        vm.className = e.value.join(" ");
-                    }
-                });
+                // 初始化班级选择器
+                initClassPick();
 
-                // 初始化表单验证插件
-                initParsley(function () {
-                    $.alert(' 您的申请已经提交，我们将在 **时间内给您回复','温馨提示', function () {
-
-                    });
-                });
             },1000);
-
-            $('#app').show();
-
         }
     });
 
     /* 提交订单 */
     function submit() {
-        var form = $('#form');
-        var imgInputs = $('input[accept^="image"]');
-        for(var i=0; i<imgInputs.length; i++){
-//            console.log(imgInputs[i].files);
+        if(vm.checkFrom()){
+            /* 当表单验证通过时 */
+            var data = vm.$data;
+            console.log(data);
+            var url =  '/wego168-xsinsurance-wechat/policy/postPolicyUpdate.jsp';
+            $.post(url, data, function (data) {
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.errcode === 0){
+                    showInfo('申请已提交,等待审核');
+                    window.location.href = 'policyDetail.html?orderId='+orderId;
+                }else {
+                    showInfo(data.errMsg);
+                }
+            });
         }
-        form.submit();
+
     }
 
     /* 班级改变时 */
-    function classNameChange(val) {
-        console.log(val);
-    }
-
-    /* 绑定表单验证事件
-     * @param callback 表单验证成功时的执行函数
-     * */
-    function initParsley(callback) {
-        /* 表单验证 */
-        Parsley.on('form:error', function (formInstance) {
-            formInstance.fields.every(function (fieldInstance) {
-                var ok = fieldInstance.isValid();
-                if (!ok) {
-                    var tip = $(fieldInstance.$element).attr('tip') || "";
-                    var ErrorsMessages = fieldInstance.getErrorsMessages();
-                    showInfo(tip + ErrorsMessages);
-                    return false
-                } else {
-                    return true
+    function initClassPick() {
+        var classVal = [];
+        var gradeVal = [];
+        switch (vm.insuredSchoolType){
+            // 幼儿园
+            case 0:
+                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前'];
+                gradeVal = [];
+                break;
+            // 小学
+            case 1:
+                classVal = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'];
+                gradeVal = [];
+                break;
+            // 初中
+            case 2:
+                classVal = ['初一', '初二', '初三'];
+                gradeVal = [];
+                break;
+            // 高中
+            case 3:
+                classVal = ['高一', '高二', '高三'];
+                gradeVal = [];
+                break;
+            // 默认
+            default:
+                classVal = ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级','初一', '初二', '初三','高一', '高二', '高三'];
+                break;
+        }
+        // 初始化班级选择插件
+        $("#picker").picker({
+            title: "请选择班级",
+            cols: [
+                {
+                    textAlign: 'center',
+//                    values: ['幼儿园小小','幼儿园小','幼儿园中','幼儿园大','学前','一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级']
+                    values: classVal
+                },
+                {
+                    textAlign: 'center',
+                    values: ['1班', '2班', '3班', '4班', '5班', '6班', '7班', '8班', '9班', '10班','11班', '12班', '13班', '14班', '15班', '16班', '17班', '18班', '19班', '20班']
                 }
-            });
-        }).on('form:success', function (formInstance) {
-
-//            console.log(formInstance.$element.serialize());
-            callback? callback():'';
-        }).on('form:submit', function () {
-            return false
+            ],
+            onChange: function (e) {
+                vm.gradeName = e.value[0].replace(/(年级)/,'');
+                vm.className = e.value[1].replace(/(班)/,'');
+                vm.insuredClass = e.value.join(" ");
+            }
         });
     }
+
 
 </script>
 

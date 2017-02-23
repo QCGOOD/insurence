@@ -62,13 +62,21 @@ gulp.task('font', function () {
     .pipe(gulp.dest(PATH+'dist/font/'))
 })
 
+
+/*gulp.task('serve', function() {
+    browserSync.init({
+        server: {
+            baseDir: "./app"
+        }
+    });
+});*/
 // 自动刷新
 gulp.task('serve', function () {
     browserSync.init({
         browser:'chrome',
         serveStatic:['./app'],
         // 代理服务器
-        proxy:'192.168.1.69：8080',
+        proxy:'192.168.1.69:8080',
     });
 });
 

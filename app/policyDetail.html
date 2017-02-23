@@ -66,7 +66,7 @@
             <!-- 已生效保单 -->
             <div class="qc-btn-group weui_cell" v-else>
                 <div class="weui_cell_hd">
-                    <!--<a onclick="applyModify()" class="weui_btn weui_btn_plain_default">申请修改</a>-->
+                    <a onclick="applyModify()" class="weui_btn weui_btn_plain_default">申请修改</a>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <a onclick="sendToEmail()" class="weui_btn">发送保单到邮箱</a>
@@ -117,7 +117,8 @@
 
     /* 申请修改 */
     function applyModify() {
-        $.modal({
+        window.location.href = 'update.html?orderId='+orderId;
+       /* $.modal({
             title: "温馨提示",
             text: "请拍摄您的身份证照片作为修改人证明",
             buttons: [
@@ -127,7 +128,7 @@
                     window.location.href = 'update.html';
                 } }
             ]
-        });
+        });*/
     }
 
     /* 发送保单到邮箱 */
@@ -143,12 +144,12 @@
                     return false
                 }else {
                     var url = '/wego168-xsinsurance-wechat/policy/sendPolicyEmail.jsp';
-                    $.post(url,{orderId:orderId,email:input}, function (data) {
+                    $.post(url,{ orderId:orderId, email:input}, function (data) {
                         data = JSON.parse(data);
                         if(data.errcode === 0){
                             showInfo('电子保单发送成功！')
                         }else {
-                            showInfo(data.errorMsg)
+                            showInfo(data.errMsg)
                         }
                     })
                 }

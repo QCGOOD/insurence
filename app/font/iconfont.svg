@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Wed Jan 11 16:16:36 2017
+Created by FontForge 20120731 at Thu Feb 23 17:29:12 2017
  By admin
 </metadata>
 <defs>
@@ -16,7 +16,7 @@ Created by FontForge 20120731 at Wed Jan 11 16:16:36 2017
     ascent="896"
     descent="-128"
     x-height="792"
-    bbox="0 -127 1023 896"
+    bbox="0 -127 1025 896"
     underline-thickness="0"
     underline-position="0"
     unicode-range="U+0078-E6E0"
@@ -82,5 +82,7 @@ d="M513 893q-103 0 -197 -40.5t-161.5 -108.5t-108 -162t-40.5 -197t40.5 -197t108 -
 t36 176t96.5 144.5t144.5 97t176.5 36t176 -36t144.5 -97t97 -144.5t36 -176t-36 -176.5t-97 -144.5t-144.5 -96.5t-176 -36zM728 384q0 -89 -63 -151.5t-151.5 -62.5t-151.5 62.5t-63 151.5t63 152t151.5 63t151.5 -63t63 -152z" />
     <glyph glyph-name="checkbox-checked" unicode="&#xe61e;" 
 d="M996 889h-980v-1000h1000v1000h-20zM976 -71h-920v920h920v-920zM911 626l-53 53l-456 -474l-193 193l-53 -53l246 -245z" />
+    <glyph glyph-name="delete" unicode="&#xe601;" 
+d="M220 896l805 -805v805h-805zM899 564l-30 -30l-95 96l-96 -96l-30 30l96 96l-96 95l30 30l95 -95l95 95l30 -30l-95 -95z" />
   </font>
 </defs></svg>

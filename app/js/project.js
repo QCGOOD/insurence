@@ -549,3 +549,26 @@ function transformSex(val) {
     }
     return result;
 }
+
+/* 图片转base64 */
+function convertImgToBase64(url, callback, outputFormat){
+    var canvas = document.createElement('CANVAS'),
+        ctx = canvas.getContext('2d'),
+        img = new Image;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function(){
+        var width = img.width;
+        var height = img.height;
+        // 压缩比例
+        var rate = (width<height ? width/height : height/width)/1;
+        canvas.width = width*rate;
+        canvas.height = height*rate;
+
+        ctx.drawImage(img,0,0,width,height,0,0,width*rate,height*rate);
+        var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+        callback.call(this, dataURL);
+        canvas = null;
+    };
+    img.src = url;
+}
+

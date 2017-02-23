@@ -24,6 +24,17 @@
         .weui_cell .weui_cell_primary{  overflow: hidden;  -webkit-line-clamp: 1;  display: -webkit-box;  -webkit-box-orient: vertical;  }
         .weui_cell_ft{overflow: hidden;white-space: nowrap;}
 
+        /* 删除按钮 */
+        .weui_cells{position: relative;}
+        .weui_cells .icon-delete{
+            position: absolute;
+            top:-6px;
+            right: 0;
+            font-size: 30px;
+            color: #666;
+            z-index: 100;
+        }
+
         .has-order .weui_cells:before, .weui_cells:after{ display: none; }
         .has-order .u-card{ margin: 10px 10px; }
         .has-order .weui_cells_title{ font-size: 12px; color: #8a90af; margin-top: 15px; }
@@ -45,7 +56,7 @@
 <div id="app">
 
     <!-- 有保单/订单/未提交订单时 -->
-    <div v-if="effectList.length || noEffectList.length || unPayList.length || unSubmitList.length">
+    <div v-if="effectList.length || noEffectList.length || unPayList.length || unSubmitList[0].productName">
         <div v-if="effectList.length">
             <div class="weui_cells_title">已生效</div>
             <div class="weui_cells u-card" style="background-color: #fff;" v-for="item in effectList"
@@ -87,8 +98,10 @@
         <div v-if="unPayList.length" class="has-order">
             <div class="weui_cells_title">待支付</div>
             <div class="weui_cells u-card" style="background-color: #fff;"
-                 v-for="item in unPayList" @click="jumpToBuy(item.id)">
-                <div class="weui_cell top" style="padding-bottom: 4px;">
+                 v-for="item in unPayList">
+                <i class="iconfont icon-delete" @click="handlerDelete(item.id)"></i>
+
+                <div class="weui_cell top" style="padding-bottom: 4px;" @click="jumpToBuy(item.id)">
                     <div class="weui_cell_hd icon" style="margin-right: 15px;"><i class="z-order-unPay"></i></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <div class="order_id">订单号:{{item.id}}</div>
@@ -121,7 +134,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- 没有保单时 -->
@@ -151,13 +163,6 @@
 
                 ],
                 unSubmitList: [
-                   /* {
-                        productName: '学生平安保险Z-100A',
-                        insurantName: '阿萨德',
-                        showPrice: 50,
-                        policyStartTime:'17.02.13',
-                        policyEndTime:'18.02.12'
-                    }*/
                 ]
             }
         },
@@ -171,6 +176,27 @@
                 }else {
                     window.location.href = 'fillInformation.html?orderId='+orderId;
                 }
+            },
+            handlerDelete(id){
+                console.log(id);
+                $.confirm({
+                    title: '删除未支付订单',
+                    text: '确认删除?',
+                    onOK: function () {
+                        //点击确认
+                        var url = '/wego168-xsinsurance-wechat/order/deleteOrder.jsp?orderId='+id;
+                        $.get(url, function (data) {
+                            data = JSON.parse(data);
+                            console.log(data);
+                            if(data.errcode == 0){
+                                showInfo('订单删除成功');
+                                window.location.reload();
+                            }else {
+                                showInfo(data.errMsg);
+                            }
+                        })
+                    }
+                });
             }
         },
         created: function () {
@@ -228,6 +254,7 @@
                 unSubmitOrder.policyEndTime = String(unSubmitOrder.policyEndTime).slice(2).replace(/-/g,".");
             }
             this.unSubmitList.push(unSubmitOrder);
+            console.log(this.effectList.length , this.noEffectList.length , this.unPayList.length , this.unSubmitList.length);
         }
     })
 </script>
