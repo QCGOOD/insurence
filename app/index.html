@@ -210,13 +210,26 @@
         methods: {
             // 选择产品
             selectProduct: function (product) {
-                console.log(product);
                 store.setItem('product',product);
                 window.location.href = 'fillInformation.html';
             }
         },
         /* 初始化数据 */
         created: function () {
+            // 获取未支付订单
+            var seft = this;
+            var unSubmitOrder = store.getItem('unSubmitOrder');
+            if (unSubmitOrder.productName) {
+                $.modal({
+                    title: "提示",
+                    text: "您有订单未完成,是否继续?",
+                    buttons: [
+                        { text: "不了", className:'default',onClick: function(){ } },
+                        { text: "继续", className:'primary', onClick: function(){  window.location.href = 'fillInformation.html?unSubmitOrder=1'; } }
+                    ]
+                });
+            }
+
             // 获取学校信息
             var schoolId = store.getItem('school').id;
             if(!schoolId){
@@ -227,6 +240,7 @@
                     data = JSON.parse(data);
                     if(data.errcode == 0){
                         schoolId = data.lastSchool.id;
+                        store.setItem('school',data.lastSchool);
                     }
                 })
             }
@@ -238,10 +252,8 @@
                 var getProduct = '/wego168-xsinsurance-wechat/product/schoolProductsJson.jsp?schoolId='+ schoolId;
                 $.get(getProduct, function (data) {
                     data = JSON.parse(data);
-                    console.log(data);
                     if(data.errcode == 0){
-                        vm.products = data.products;
-                        console.log(vm.products);
+                        seft.products = data.products;
                     }else {
                         showInfo(data.errMsg);
                     }

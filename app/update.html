@@ -186,11 +186,11 @@
 
 </div>
 <script>
-    var orderId = '';
     var vm = new Vue({
         el: '#app',
         data: function () {
             return {
+                orderId: '',
                 /* 学校信息 */
                 insuredSchoolType:'',
                 /* 被保人信息 */
@@ -275,9 +275,9 @@
         },
         created: function () {
             var _this = this;
-            orderId = getUrlParam('orderId');
+            this.orderId = getUrlParam('orderId');
 //            var url = './data/allowData.json';
-            var url = '/wego168-xsinsurance-wechat/policy/getRevisableOrderPolicy.jsp?orderId='+orderId;
+            var url = '/wego168-xsinsurance-wechat/policy/getRevisableOrderPolicy.jsp?orderId='+this.orderId;
             $.get(url,function (data) {
                 data = JSON.parse(data);
                 console.log(data);
@@ -301,10 +301,10 @@
 
     /* 提交订单 */
     function submit() {
+        var orderId = vm.orderId;
         if(vm.checkFrom()){
             /* 当表单验证通过时 */
             var data = vm.$data;
-            console.log(data);
             var url =  '/wego168-xsinsurance-wechat/policy/postPolicyUpdate.jsp';
             $.post(url, data, function (data) {
                 data = JSON.parse(data);
@@ -317,7 +317,6 @@
                 }
             });
         }
-
     }
 
     /* 班级改变时 */

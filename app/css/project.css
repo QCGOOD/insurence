@@ -204,6 +204,9 @@ header .header_right {
 
 /* 微信alert弹框--start */
 .weui_dialog {
+  width: 270px;
+  left: 50%;
+  transform: translateX(-50%) !important;
   border-radius: 6px;
   overflow: hidden;
   /* .weui_dialog_ft{position: absolute;bottom: 0;left: 0;right: 0;} */ }

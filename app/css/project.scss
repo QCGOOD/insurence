@@ -137,6 +137,9 @@ header .header_right {
 }
 /* 微信alert弹框--start */
 .weui_dialog {
+	width: 270px;
+	left: 50%;
+	transform: translateX(-50%)!important;
 	border-radius: 6px;
 	overflow: hidden;
 	.weui_dialog_title { font-size: 20px; color: #1a1e36; font-weight: 600; }
